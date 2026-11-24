@@ -10,7 +10,7 @@ Interactive anatomy case studies for high school students. Take the history, che
 - Unit 3: The cardiovascular system: a 12-patient ER shift (heart attack, aortic dissection, heart failure, arrhythmias, clots, anemia)
 - Unit 4: The digestive system: a 12-patient ER shift (bleeding ulcer, swallowed battery, appendicitis, hepatitis, reflux)
 - Unit 5: The respiratory system: a 12-patient ER shift (asthma, anaphylaxis, pulmonary embolism, carbon monoxide, croup, TB)
-- **Crisis ER: Full Moon Shift**: 12 random patients from every system, surprise ambulances, one shared CT scanner, and shareable 4-character shift codes so a whole class can play the same shift
+- **Crisis ER: Full Moon Shift**: 12 random patients from every system, surprise ambulances (not every ambulance is an emergency), one shared CT scanner, and shareable 4-character shift codes so a whole class can play the same shift
 
 Students turn in a PDF case report (Refresher cases) or shift report (system units) through Google Classroom.
 

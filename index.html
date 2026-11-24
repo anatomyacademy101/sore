@@ -323,7 +323,7 @@ pre{overflow-x:auto;background:var(--bg);padding:14px;border-radius:8px;font-siz
           <tr><td><span class="lv lv4">4 Non-urgent</span></td><td>360 min</td><td>Walking, mild pain, a problem for days or weeks</td></tr>
         </tbody>
       </table>
-      <p><b>Crisis ER: Full Moon Shift</b> mixes 12 random patients from every system you've studied. Expect surprise ambulances mid-shift and one shared CT scanner: if it's busy, you wait. Your teacher can give the whole class a <b>shift code</b> so everyone gets the same patients.</p>
+      <p><b>Crisis ER: Full Moon Shift</b> mixes 12 random patients from every system you've studied. Expect surprise ambulances mid-shift (not every ambulance is an emergency) and one shared CT scanner: if it's busy, you wait. Your teacher can give the whole class a <b>shift code</b> so everyone gets the same patients.</p>
       <p class="note">Real emergency departments use scales like the Emergency Severity Index (ESI). The game's levels and times are simplified and run on game minutes.</p>
     </div>
     <div>
@@ -2560,7 +2560,7 @@ function crisisCard(){
       <div>
         <div class="moon" aria-hidden="true"></div>
         <h2>Crisis ER: Full Moon Shift</h2>
-        <p>Twelve random patients from <b>every body system</b>. No briefing, so recognize the system from the triage card. <b>Surprise ambulances</b> roll in mid-shift, and the hospital has <b>one CT scanner</b>. If it's busy, you wait.</p>
+        <p>Twelve random patients from <b>every body system</b>. No briefing, so recognize the system from the triage card. <b>Surprise ambulances</b> roll in mid-shift (not all of them are emergencies), and the hospital has <b>one CT scanner</b>. If it's busy, you wait.</p>
         ${st ? `<p class="crisis-status">${live ? `Shift <b>${st.code}</b> in progress: ${Object.keys(st.seen).length} seen · clock ${fmtClock(st.clock)}` : `Last shift <b>${st.code}</b>: ${sc.total}/100`}</p><div class="faces">${faces}</div>` : ""}
       </div>
       <div class="crisis-actions">
@@ -2883,9 +2883,13 @@ function buildCrisis(code){
   }
   for (const c of shuffled){ if (pick.length >= 12) break; if (!pick.includes(c) && need[c.triage.level] > 0){ pick.push(c); need[c.triage.level]--; } }
   const arrive = {};
-  const amb1 = pick.filter(c => c.triage.level === 1)[1], amb2 = pick.filter(c => c.triage.level === 2)[2];
-  if (amb1) arrive[amb1.id] = 70 + Math.floor(R() * 110);
-  if (amb2) arrive[amb2.id] = 100 + Math.floor(R() * 120);
+  /* Ambulance 1 is always serious (Immediate or Emergent). Ambulance 2 can be anyone, usually a low-priority patient:
+     arriving by ambulance doesn't make a patient urgent; their condition does. */
+  const lvA = R() < .5 ? 1 : 2, x = R(), lvB = x < .15 ? 1 : x < .35 ? 2 : x < .65 ? 3 : 4;
+  const ambA = mix(pick.filter(c => c.triage.level === lvA))[0];
+  const ambB = mix(pick.filter(c => c.triage.level === lvB && c !== ambA))[0];
+  if (ambA) arrive[ambA.id] = 70 + Math.floor(R() * 110);
+  if (ambB) arrive[ambB.id] = 100 + Math.floor(R() * 120);
   const ct = []; let t = 25 + Math.floor(R() * 35);
   for (let i = 0; i < 4; i++){ const len = 20 + Math.floor(R() * 21); ct.push([t, t + len]); t += len + 45 + Math.floor(R() * 50); }
   const walkins = mix(pick.filter(c => !arrive[c.id])).map(c => c.id), later = pick.filter(c => arrive[c.id]).sort((a, b) => arrive[a.id] - arrive[b.id]).map(c => c.id);
@@ -2952,11 +2956,11 @@ function renderShift(){
     + (SH.phase === "treat" ? `<div><b style="color:${late ? "#ff7b72" : "#fff"}">${late}</b>past target</div>` : `<div><b>${triN}/${initial.length}</b>triaged</div>`)
     + (crisis && SH.phase !== "done" ? `<div><b style="font-size:20px">${ctStatus()}</b>CT scanner</div>` : "");
   const legend = `<div class="legend">${[1,2,3,4].map(n => `<div>${lvBadge(n)}<p>See within ${LEVELS[n].target} min</p></div>`).join("")}</div>`;
-  const crisisNote = crisis ? ` <b>Crisis rules:</b> patients come from every body system, ambulances can arrive at any moment, and the hospital has <b>one CT scanner</b> shared with the whole building. If it's busy, you wait.` : "";
+  const crisisNote = crisis ? ` <b>Crisis rules:</b> patients come from every body system, ambulances can arrive at any moment, and the hospital has <b>one CT scanner</b> shared with the whole building. If it's busy, you wait. <b>Not every ambulance is an emergency:</b> triage the patient, not the ride.` : "";
   const triButtons = c => `<div class="lvbtns" role="group" aria-label="Triage level for ${c.patient.name}">${[1,2,3,4].map(n => `<button class="l${n} ${SH.tri[c.id] === n ? "on" : ""}" aria-pressed="${SH.tri[c.id] === n}" data-tri="${c.id}:${n}">${n} ${LEVELS[n].name}</button>`).join("")}</div>`;
   const tcard = c => { const T = c.triage, a = SH.tri[c.id];
     return `<article class="tcard ${a ? "l" + a : ""}">
-      <div class="thead"><div class="pic">${avatar(look(c), "hurt")}</div><div><h3>${c.patient.name}</h3><div class="note">${c.patient.age} years · ${c.patient.sex === "F" ? "Female" : "Male"} · ${T.arrival}</div></div></div>
+      <div class="thead"><div class="pic">${avatar(look(c), "hurt")}</div><div><h3>${c.patient.name}</h3><div class="note">${c.patient.age} years · ${c.patient.sex === "F" ? "Female" : "Male"} · ${arr(c.id) > 0 ? "Arrived by ambulance" : T.arrival}</div></div></div>
       <p class="quote">${T.complaint}</p>
       <div class="tv"><b>Triage vitals:</b> ${T.vitals}</div>
       <div style="font-size:15px"><b>You see:</b> ${T.sign}</div>
@@ -3021,7 +3025,7 @@ function renderShiftReport(){
       <p>${weak.length ? `<b>Study next:</b> ${weak.map(r => `${r.sys} (${r.why.join(", ")})`).join("; ")}. Reread ${weak.length > 1 ? "those unit briefings" : "that unit briefing"} and replay the shift.` : "<b>Strong across every system.</b> Nice work."} <span class="note">Shift code ${SH.code}: anyone who enters this code gets the same patients.</span></p>`; })() : ""}
       <h3 style="margin-top:20px">Triage review</h3>
       <table class="stack rtable"><thead><tr><th>Patient</th><th>Your level</th><th>Correct level</th><th>Why</th></tr></thead><tbody>
-        ${cs.map(c => `<tr><td><b>${c.patient.name}</b></td><td>${lvBadge(SH.tri[c.id])}</td><td>${lvBadge(c.triage.level)}${SH.tri[c.id] === c.triage.level ? " ✓" : ""}</td><td>${c.triage.why}</td></tr>`).join("")}
+        ${cs.map(c => `<tr><td><b>${c.patient.name}</b></td><td>${lvBadge(SH.tri[c.id])}</td><td>${lvBadge(c.triage.level)}${SH.tri[c.id] === c.triage.level ? " ✓" : ""}</td><td>${c.triage.why}${arr(c.id) > 0 && c.triage.level >= 3 ? ` <b>Arrived by ambulance, but that alone doesn't make a patient urgent. Their condition does.</b>` : ""}</td></tr>`).join("")}
       </tbody></table>
       <h3 style="margin-top:20px">Patients</h3>
       <table class="stack rtable"><thead><tr><th>Patient</th><th>Waited</th><th>Target</th><th>Arrived at</th><th>Result</th></tr></thead><tbody>
