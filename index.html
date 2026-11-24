@@ -162,6 +162,42 @@ pre{overflow-x:auto;background:var(--bg);padding:14px;border-radius:8px;font-siz
 [hidden]{display:none!important}
 @media(max-width:760px){.hero .wrap,.play{grid-template-columns:minmax(0,1fr)}.bar{grid-template-columns:7em minmax(0,1fr) 3em}.chart-head{grid-template-columns:80px minmax(0,1fr)}.room .row-p{grid-template-columns:repeat(3,minmax(0,1fr))}.room{background:linear-gradient(180deg,#dfe6f1 0%,#cfd9e8 80%,#0b162a 80%)}.judge{grid-template-columns:minmax(0,1fr)}}
 @media(max-width:600px){table{font-size:14px}.stack thead{display:none}.stack tr{display:grid;padding-block:10px;border-bottom:1px solid var(--line)}.stack td{display:flow-root;border:0;padding:3px 0;padding-inline-start:7.5em;text-align:start}.stack td::before{content:attr(data-l);float:inline-start;width:7em;margin-inline-start:-7.5em;font-weight:700;color:var(--muted);white-space:normal}.stack td:empty{display:none}.unit-head{grid-template-columns:minmax(0,1fr)}}
+/* shift & triage */
+.lv{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:13px;padding:3px 10px;border-radius:99px;white-space:nowrap}
+.lv1{background:#c62828;color:#fff}.lv2{background:#ef6c00;color:#fff}.lv3{background:#f9c02e;color:#0b162a}.lv4{background:#2e7d32;color:#fff}.lv0{background:var(--line);color:var(--muted)}
+.shiftbar{background:var(--navy);color:#fff;border-bottom:5px solid var(--orange)}
+.shiftbar .wrap{display:flex;flex-wrap:wrap;gap:14px 28px;align-items:end;justify-content:space-between}
+.clock{font:800 clamp(40px,6vw,60px)/1 "Barlow Condensed",sans-serif;color:#ff6a2b}
+.clock small{display:block;font:600 14px/1.3 "Source Sans 3",sans-serif;color:#c9d3e3}
+.stats{display:flex;gap:22px;flex-wrap:wrap;font-size:14px;color:#c9d3e3}.stats b{display:block;font:700 26px/1 "Barlow Condensed",sans-serif;color:#fff}
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin:14px 0 20px}
+.legend div{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:14px}
+.legend p{margin:6px 0 0;color:var(--muted)}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,350px),1fr));gap:14px}
+.tcard{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:8px;border-top:6px solid var(--line)}
+.tcard.l1{border-top-color:#c62828}.tcard.l2{border-top-color:#ef6c00}.tcard.l3{border-top-color:#f9c02e}.tcard.l4{border-top-color:#2e7d32}
+.thead{display:grid;grid-template-columns:64px minmax(0,1fr);gap:12px;align-items:center}
+.thead .pic{border-radius:50%;overflow:hidden;background:var(--blue-soft);aspect-ratio:1}.thead svg{display:block;width:100%;height:100%}
+.thead h3{margin:0;font:700 21px/1.1 "Barlow Condensed",sans-serif}
+.quote{font-family:"Source Serif 4",Georgia,serif;font-size:16px;margin:0}
+.tv{font-size:14px;background:var(--bg);border-radius:8px;padding:6px 10px;white-space:normal}
+.lvbtns{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:auto}
+.lvbtns button{padding:6px 4px;font-size:14px;font-weight:700;min-height:44px}
+.lvbtns button.on.l1{background:#c62828;border-color:#c62828;color:#fff}.lvbtns button.on.l2{background:#ef6c00;border-color:#ef6c00;color:#fff}
+.lvbtns button.on.l3{background:#f9c02e;border-color:#f9c02e;color:#0b162a}.lvbtns button.on.l4{background:#2e7d32;border-color:#2e7d32;color:#fff}
+.sticky{position:sticky;bottom:0;z-index:5;background:var(--bg);padding:12px 0;margin-top:16px;border-top:1px solid var(--line)}
+.board{display:grid;gap:10px}
+.brow{background:var(--paper);border:1px solid var(--line);border-left:8px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;grid-template-columns:60px minmax(0,1.3fr) minmax(0,1fr) auto;gap:14px;align-items:center}
+.brow.l1{border-left-color:#c62828}.brow.l2{border-left-color:#ef6c00}.brow.l3{border-left-color:#f9c02e}.brow.l4{border-left-color:#2e7d32}
+.brow.seen{opacity:.8}
+.brow .pic{border-radius:50%;overflow:hidden;background:var(--blue-soft);aspect-ratio:1}.brow svg{display:block;width:100%;height:100%}
+.brow h3{margin:0;font:700 20px/1.1 "Barlow Condensed",sans-serif}
+.wait{font-size:14px}.wait i{display:block;height:8px;border-radius:4px;background:var(--line);overflow:hidden;margin-top:4px}.wait i b{display:block;height:100%;background:var(--ok)}
+.wait.late{color:var(--red);font-weight:700}.wait.late i b{background:var(--red)}.wait.close i b{background:var(--amber)}
+.shiftcard{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:16px;align-items:center}
+.faces{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px}.faces span{width:44px;height:44px;border-radius:50%;overflow:hidden;background:var(--blue-soft)}.faces svg{display:block;width:100%;height:100%}
+.rtable td,.rtable th{font-size:14px}
+@media(max-width:760px){.brow{grid-template-columns:52px minmax(0,1fr)}.brow .wait,.brow>.act{grid-column:1/-1}.shiftcard{grid-template-columns:minmax(0,1fr)}}
 </style>
 <script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script>
 </head>
@@ -238,6 +274,25 @@ pre{overflow-x:auto;background:var(--bg);padding:14px;border-radius:8px;font-siz
       <li><b>Lawsuit</b>: wrong diagnosis, or you harmed the patient badly. One strike.</li>
       <li>Three strikes and your license is <b>suspended</b>. Come back to this page to be reinstated.</li>
     </ul>
+    <h3>Shifts & triage (system units)</h3>
+    <p>System units, like the skeletal system, are played as a full ER shift. Twelve patients arrive at 7:00 AM, and the waiting room is overcrowded and understaffed.</p>
+    <ol>
+      <li><b>Triage first.</b> Read each patient's triage card (what they say, their triage vitals, what you can see) and give them a level. Each triage takes 1 minute of the shift clock.</li>
+      <li><b>Then see patients.</b> Pick who to see next from the board. Each question, exam and test takes game time, shown when you review it. Reading and thinking are free; the clock only moves when you order something.</li>
+      <li><b>Every level must be seen within a set time.</b> Patients who wait longer get worse, and they start their visit in poorer condition. Watch their faces on the board.</li>
+      <li>Triage carefully. If you rank a dangerous patient too low, they'll get worse while you treat someone who could have waited.</li>
+    </ol>
+    <table class="stack">
+      <thead><tr><th>Level</th><th>See within</th><th>Examples</th></tr></thead>
+      <tbody>
+        <tr><td><span class="lv lv1">1 Immediate</span></td><td>45 min</td><td>Heavy bleeding, head injury with confusion, can't breathe</td></tr>
+        <tr><td><span class="lv lv2">2 Emergent</span></td><td>135 min</td><td>Severe pain, a limb at risk, high-risk older adults</td></tr>
+        <tr><td><span class="lv lv3">3 Urgent</span></td><td>240 min</td><td>Probable fracture with good circulation, stable vitals</td></tr>
+        <tr><td><span class="lv lv4">4 Non-urgent</span></td><td>360 min</td><td>Walking, mild pain, problem for days or weeks</td></tr>
+      </tbody>
+    </table>
+    <p class="note">Real emergency departments use scales like the Emergency Severity Index (ESI). The game's levels and times are simplified, and the clock runs on game minutes.</p>
+    <p><b>Shift score (100):</b> triage accuracy 20, patient outcomes 60 (each case score, reduced if the patient got worse while waiting), seen on time 20. At the end of the shift, download your <b>shift report</b> PDF for Google Classroom.</p>
     <h3>6. Turn it in</h3>
     <p>After each case, enter your name and press <b>Download PDF report</b>. Upload the PDF to the matching assignment in Google Classroom (<b>Add or create → File</b>) and press <b>Turn in</b>. If the download doesn't work on your device, press <b>Copy my results</b> and paste them into the assignment instead.</p>
     <h3>Tips from the attending</h3>
@@ -259,8 +314,17 @@ pre{overflow-x:auto;background:var(--bg);padding:14px;border-radius:8px;font-siz
   <div class="sheet" id="briefBody"></div>
 </div></main>
 
+<main id="shift" hidden>
+  <div class="shiftbar band"><div class="wrap">
+    <div><button class="link" data-home style="color:#c9d3e3">← All assignments</button><h2 id="shTitle" style="color:#fff"></h2><div id="shPhase" style="color:#c9d3e3"></div></div>
+    <div class="stats" id="shStats"></div>
+    <div class="clock" id="shClock"></div>
+  </div></div>
+  <div class="band"><div class="wrap" id="shBody"></div></div>
+</main>
+
 <main class="band" id="game" hidden><div class="wrap">
-  <button class="link" data-home>← All assignments</button>
+  <button class="link" data-home id="gameBack">← All assignments</button>
   <div class="play">
     <article class="chart">
       <div class="chart-head">
@@ -279,7 +343,7 @@ pre{overflow-x:auto;background:var(--bg);padding:14px;border-radius:8px;font-siz
 <script>
 {
 /* ---------- Shared action library (label, group, what it checks, risk) ---------- */
-const H="History", V="Vital signs", E="Physical exam", T="Tests & imaging";
+const H="History", V="Vital signs", E="Physical exam", F="First aid", T="Tests & imaging";
 const LIB = {
   cc:{group:H,label:"Chief complaint & onset",about:"Ask what's wrong, in the patient's own words, and when it started."},
   hpi:{group:H,label:"Describe it (OLDCARTS)",about:"Onset, location, duration, character, aggravating/alleviating factors, radiation, timing, severity."},
@@ -347,8 +411,8 @@ const UNITS = [
   <h3>What to look for in this unit</h3>
   <p>In each case, one vital sign is the most important clue. Take a full set of vitals, compare each to the normal range, and use the history to explain <i>why</i> it's abnormal.</p>`
 },
-{ id:"u2", name:"Unit 2: The skeletal system",
-  blurb:"Bones, joints and fractures: how injuries happen, how to examine them safely, and how to tell one break from another.",
+{ id:"u2", name:"Unit 2: The skeletal system", mode:"shift", shiftName:"Skeletal ER shift",
+  blurb:"A full ER shift: 12 patients with bone and joint injuries arrive at once. Triage them, then see them before they get worse.",
   brief:`<h2>Unit 2 briefing: the skeletal system</h2>
   <p>The adult skeleton has <b>206 bones</b>. They support the body, protect organs, work with muscles to move us, make blood cells in the red marrow, and store calcium.</p>
   <h3>Two divisions</h3>
@@ -463,7 +527,8 @@ const CASES = [
     mistake:"Not asking about medications, or trusting one reading. A rechecked reading plus a good medication history solves this case."}
 },
 /* ===== UNIT 2 ===== */
-{ id:"wrist", unit:"u2", title:"Skateboard fall", level:"Case 2.1",
+{ id:"wrist", unit:"u2", title:"Skateboard fall", level:"Patient 2.1",
+  triage:{level:3, arrival:"Walked in with a friend", complaint:"“I fell off my skateboard. My wrist is wrecked.”", vitals:"Pulse 92 · BP 124/78 · O₂ 99% · Pain 8/10", sign:"Holding a swollen, bent-looking wrist against her chest.", why:"A painful deformity, but circulation to the hand looks fine. Needs care soon, but it isn't life- or limb-threatening right now."},
   patient:{name:"Ava L.", age:24, sex:"F"},
   story:"Ava fell off her skateboard and landed on her outstretched right hand. Her wrist is swollen, and she's holding it against her chest. She says it hurts to move her fingers.",
   actions:[
@@ -490,7 +555,8 @@ const CASES = [
     clue:"A fall onto an outstretched hand, pain just above the wrist on the thumb side, and a visible deformity.",
     mistake:"Moving the injured joint to “test” it. A suspected fracture is splinted in the position it's found, then X-rayed."}
 },
-{ id:"hip", unit:"u2", title:"Slip in the kitchen", level:"Case 2.2",
+{ id:"hip", unit:"u2", title:"Slip in the kitchen", level:"Patient 2.2",
+  triage:{level:2, arrival:"Ambulance", complaint:"“I fell in my kitchen and I can't get up.”", vitals:"Pulse 96, irregular · BP 146/88 · O₂ 96% · Pain 9/10", sign:"81 years old, on a stretcher. Her left leg looks shorter. Takes a blood thinner.", why:"An older adult in severe pain with a likely hip fracture, on a blood thinner. High risk of complications, so she needs to be seen quickly."},
   patient:{name:"Eleanor P.", age:81, sex:"F"},
   story:"Eleanor slipped on her kitchen floor and landed on her left side. She couldn't get up, so her neighbor called an ambulance. She's lying on the stretcher in pain.",
   actions:[
@@ -517,7 +583,8 @@ const CASES = [
     clue:"An older adult with osteoporosis falls onto her side, can't bear weight, and has a shortened, outward-turned leg.",
     mistake:"Asking her to stand “to see if she can walk.” Never test weight-bearing on a suspected hip fracture."}
 },
-{ id:"shin", unit:"u2", title:"The runner's shin", level:"Case 2.3",
+{ id:"shin", unit:"u2", title:"The runner's shin", level:"Patient 2.3",
+  triage:{level:4, arrival:"Walked in after school", complaint:"“My shin has hurt for three weeks when I run.”", vitals:"Pulse 58 · BP 118/70 · O₂ 99% · Pain 3/10", sign:"Walking normally, carrying his backpack.", why:"A weeks-long problem with normal vitals and normal walking. Important, but he can safely wait."},
   patient:{name:"Marcus D.", age:17, sex:"M"},
   story:"Marcus runs cross-country and doubled his weekly miles to get ready for the state meet. For three weeks his left shin has hurt during runs. Now it aches even when he's walking to class.",
   actions:[
@@ -543,6 +610,250 @@ const CASES = [
     body:"Bone is always remodeling: small damage from exercise gets repaired during rest. When training increases faster than bone can repair itself, tiny cracks add up into a stress fracture.",
     clue:"Pain at one fingertip-sized spot (not a long sore stretch), getting worse over weeks, after a sudden jump in mileage. A normal X-ray doesn't rule it out.",
     mistake:"Calling it shin splints. Shin splints hurt along a long stretch of the bone. A stress fracture hurts at one point."}
+},
+{ id:"open-tib", unit:"u2", title:"Motorcycle crash", level:"Patient 2.4",
+  patient:{name:"Derek S.", age:34, sex:"M"},
+  triage:{level:1, arrival:"Ambulance, from a motorcycle crash", complaint:"“My leg! My leg!”", vitals:"Pulse 118 · BP 104/68 · O₂ 98% · Pain 10/10", sign:"Bone visible through a bleeding wound on his right shin.", why:"An open fracture with active bleeding and signs of blood loss (fast pulse, lowish blood pressure). Life- and limb-threatening: immediate."},
+  story:"Derek was thrown from his motorcycle when a car pulled out in front of him. Paramedics wrapped his right lower leg, but blood is soaking through the bandage. He's pale, sweaty and in severe pain.",
+  actions:[
+    A("mech","key","“A car pulled out in front of me. My leg smashed into its bumper.”"),
+    A("where","ok","His right shin, “all of it.” Pain 10 out of 10."),
+    A("meds","key","No daily medications. Allergic to sulfa drugs. Last tetanus shot: “No idea. Maybe high school?”",{label:"Medications, allergies & tetanus",about:"An open wound needs tetanus protection and antibiotics, so allergies matter."}),
+    A("vitals","key","Pulse 118, BP 104/68, breathing 22, oxygen 98%, temp 36.6 °C. The fast pulse and lowish blood pressure point to blood loss."),
+    {id:"inspect",group:E,label:"Look at the wound",about:"Uncover the dressing and look for bone, bleeding and deformity.",kind:"key",result:"A 4 cm wound on the front of the shin with the end of a bone showing. Steady bleeding. The leg is bent at an abnormal angle."},
+    {id:"pressure",group:F,label:"Control bleeding & cover the wound",about:"Firm direct pressure on the bleeding, then a sterile, moist dressing over the exposed bone.",kind:"key",result:"The bleeding slows to a trickle, and the wound is covered."},
+    {id:"cms",group:E,label:"Check circulation, movement & sensation",about:"Feel the foot pulses, and check color, warmth and feeling in the toes.",kind:"key",result:"Foot pulse present but weaker than on the left. Toes warm. He can wiggle them and feel touch."},
+    {id:"push",group:F,label:"Push the bone back under the skin",about:"Get the exposed bone back inside the leg.",risk:"Drags dirt and bacteria deep into the bone, and can tear blood vessels and nerves.",kind:"harm",result:"Derek screams. The bone slips back in, carrying road grit with it. His risk of a serious bone infection just went way up."},
+    {id:"xray",group:T,label:"X-ray of the lower leg",about:"The first imaging test for a suspected fracture.",risk:"Small radiation dose.",kind:"key",result:"Complete fractures of both the tibia and the fibula in the middle of the lower leg. The tibia's ends are pulled apart."},
+    {id:"mri",group:T,label:"MRI of the leg",about:"Detailed images of bone and soft tissue.",risk:"Takes about an hour. Not used for an obvious fracture in an emergency.",kind:"extra",result:"It shows the same fractures, after a long delay with an open wound."}
+  ],
+  q1:{short:"Bone", prompt:"Which bone is the main injury?", options:[
+    {text:"Tibia", info:"The shinbone. Its front edge sits just under the skin with almost no muscle over it, so it's the long bone most often broken open."},
+    {text:"Femur", info:"The thigh bone, from hip to knee, buried in thick muscle."},
+    {text:"Patella", info:"The kneecap, in the tendon at the front of the knee."},
+    {text:"Talus", info:"The ankle bone that connects the leg to the foot."},
+    {text:"Calcaneus", info:"The heel bone. Usually broken by landing on the feet from a height."}], answer:"Tibia"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Open (compound) tibia fracture"},{text:"Closed tibia fracture"},{text:"Knee dislocation"},{text:"Deep cut (laceration) only"},{text:"Stress fracture"}], answer:"Open (compound) tibia fracture"},
+  debrief:{
+    body:"The front of the tibia sits just under the skin. A strong force can break it and push a bone end out through the skin: an open fracture. Once bone is exposed to the outside, bacteria can get in and cause a bone infection (osteomyelitis).",
+    clue:"Bone visible in the wound after a high-energy crash. Open fractures need bleeding control, a sterile cover, antibiotics and a tetanus check, then surgery.",
+    mistake:"Pushing the bone back in. Cover it as it lies. Surgeons clean it in the operating room."}
+},
+{ id:"kid-elbow", unit:"u2", title:"Monkey bars", level:"Patient 2.5",
+  patient:{name:"Sofia G.", age:7, sex:"F"},
+  triage:{level:2, arrival:"Carried in by her dad", complaint:"“She fell off the monkey bars and her elbow looks wrong.”", vitals:"Pulse 120 · Breathing 24 · O₂ 99% · Pain 8/10 (faces scale)", sign:"Swollen, oddly bent elbow. She says her fingers feel tingly.", why:"A child with a likely elbow fracture and tingling fingers: nerves or blood vessels may be pinched. The limb is at risk, so she should be seen quickly."},
+  story:"Sofia fell from the top of the monkey bars at recess and landed on her outstretched right hand. Her dad carried her in. She's holding her right arm still and crying, and won't let anyone touch it.",
+  actions:[
+    A("mech","key","Her dad says: “She fell off the top bar and landed on her hand with her arm straight out.”",{about:"For young children, the parent often gives the history. Ask exactly how the fall happened."}),
+    A("where","key","She points to her elbow. On the faces pain scale she picks the second-saddest face (8 out of 10)."),
+    A("meds","ok","No medicines. No allergies. Vaccines up to date."),
+    A("vitals","ok","Pulse 120, breathing 24, oxygen 99%, temp 37.0 °C. For a crying 7-year-old, that pulse is normal to slightly fast: children's normal heart rates are higher than adults'."),
+    {id:"inspect",group:E,label:"Look at the elbow",about:"Inspect for swelling, bruising, deformity or broken skin before touching.",kind:"key",result:"The elbow is very swollen, with an S-shaped bend just above it. The skin is intact."},
+    {id:"cms",group:E,label:"Check circulation, movement & sensation",about:"Feel the wrist pulse, and check hand color, warmth and feeling in each finger.",kind:"key",result:"Radial pulse present. Hand pink and warm. Her thumb and index finger feel “tingly.”"},
+    {id:"straighten",group:E,label:"Straighten the elbow to check it",about:"Gently extend the arm to see how the elbow moves.",risk:"Can trap or injure the artery and nerves that run right next to a fracture here.",kind:"harm",result:"Sofia screams. Her hand turns pale and her pulse becomes hard to feel. You stop at once; the artery may be pinched."},
+    {id:"xray",group:T,label:"X-ray of the elbow",about:"The first imaging test for a suspected fracture.",risk:"Small radiation dose.",kind:"key",result:"A fracture of the humerus just above the elbow (supracondylar), with the lower piece shifted backward."},
+    {id:"ct",group:T,label:"CT scan of the elbow",about:"Detailed X-ray images in slices.",risk:"A much higher radiation dose, which matters more in children.",kind:"extra",result:"The same fracture the X-ray already showed, with extra radiation for a child."}
+  ],
+  q1:{short:"Bone", prompt:"Which bone is broken?", options:[
+    {text:"Humerus", info:"The upper arm bone. Just above the elbow it becomes thin and flat, the weakest spot in a child's arm."},
+    {text:"Radius", info:"The forearm bone on the thumb side."},
+    {text:"Ulna", info:"The forearm bone on the pinky side. It forms the point of the elbow."},
+    {text:"Clavicle", info:"The collarbone."},
+    {text:"Scapula", info:"The shoulder blade."}], answer:"Humerus"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Supracondylar humerus fracture"},{text:"Elbow sprain"},{text:"Nursemaid's elbow (pulled elbow)"},{text:"Wrist fracture"},{text:"Shoulder dislocation"}], answer:"Supracondylar humerus fracture"},
+  debrief:{
+    body:"In children, the humerus just above the elbow is thin and flat, so a fall on a straight arm can snap it there. The brachial artery and the median nerve run right beside this spot, which explains the tingling in her thumb and index finger.",
+    clue:"A young child falls from a height onto a straight arm, then has a swollen, deformed elbow and tingling fingers.",
+    mistake:"Straightening the arm to look at it. Splint it in the position it's found and keep checking the pulse."}
+},
+{ id:"skull", unit:"u2", title:"Line drive", level:"Patient 2.6",
+  patient:{name:"Tyler W.", age:16, sex:"M"},
+  triage:{level:1, arrival:"His coach drove him from a baseball game", complaint:"“My head is killing me and I keep throwing up.”", vitals:"Pulse 58 · BP 158/90 · O₂ 98% · Drowsy", sign:"A swollen bump above his left ear. He was knocked out for a few seconds.", why:"A head injury with loss of consciousness, then a worsening headache, vomiting and drowsiness. There may be bleeding inside the skull: immediate."},
+  story:"Tyler was hit on the left side of the head by a line drive during a baseball game. Teammates say he was out cold for a few seconds, then seemed fine. An hour later, his headache is getting worse, he's vomited twice, and he keeps closing his eyes.",
+  actions:[
+    A("mech","key","“A line drive got me right here.” He touches above his left ear. “The guys say I was out for a few seconds.”"),
+    A("hpi","key","The headache has gotten steadily worse over the last hour. He's vomited twice and feels very sleepy."),
+    A("meds","ok","No medications. No allergies."),
+    A("vitals","key","Pulse 58, BP 158/90, breathing 14, oxygen 98%. A slowing pulse with rising blood pressure after a head injury can mean pressure is building inside the skull."),
+    {id:"neuro",group:E,label:"Neuro check (pupils, alertness, strength)",about:"Check the pupils, how awake the patient is, and the strength in the arms and legs.",kind:"key",result:"His left pupil is slightly larger than the right and slow to react. He's drowsy but answers questions. His right-hand grip is a little weaker."},
+    {id:"inspect",group:E,label:"Look at and feel the scalp",about:"Look for swelling, cuts or a dent in the skull.",kind:"key",result:"A soft, swollen bump above the left ear, with a dip you can feel underneath it."},
+    {id:"wait",group:F,label:"Let him rest in the waiting room",about:"See whether the symptoms clear with time.",risk:"Bleeding inside the skull can get worse quickly. He needs close watching.",kind:"harm",min:15,result:"Twenty minutes later, a nurse finds Tyler hard to wake in his chair. He's rushed back."},
+    {id:"ct",group:T,label:"CT scan of the head",about:"The fastest way to see skull fractures and bleeding around the brain.",risk:"A radiation dose, worth it when bleeding is possible.",kind:"key",result:"A depressed fracture of the left temporal bone, with blood collecting between the skull and the brain's outer covering (an epidural hematoma)."},
+    {id:"skullxr",group:T,label:"Skull X-ray",about:"Plain X-ray pictures of the skull.",risk:"Can show some fractures, but not bleeding.",kind:"extra",result:"It shows a possible fracture line but can't show bleeding, so a CT was needed anyway."}
+  ],
+  q1:{short:"Bone", prompt:"Which bone is injured?", options:[
+    {text:"Temporal bone", info:"The side of the skull, above the ear. It's one of the thinnest parts of the skull, and the middle meningeal artery runs just inside it."},
+    {text:"Frontal bone", info:"The forehead."},
+    {text:"Occipital bone", info:"The back of the skull, around the base of the head."},
+    {text:"Mandible", info:"The lower jaw, the only skull bone that moves."},
+    {text:"Cervical vertebra", info:"One of the seven bones of the neck."}], answer:"Temporal bone"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Skull fracture with bleeding inside the skull (epidural hematoma)"},{text:"Concussion only"},{text:"Migraine"},{text:"Broken jaw"},{text:"Neck sprain"}], answer:"Skull fracture with bleeding inside the skull (epidural hematoma)"},
+  debrief:{
+    body:"The temporal bone is one of the thinnest parts of the skull, and an artery runs just inside it. When the bone breaks, it can tear that artery. Blood then collects between the skull and the brain's covering and squeezes the brain.",
+    clue:"A blow to the side of the head and a brief knockout, then a worsening headache, vomiting, drowsiness and one enlarged pupil.",
+    mistake:"Calling it “just a concussion” and letting him wait. Worsening symptoms after a head injury mean an immediate CT scan."}
+},
+{ id:"clavicle", unit:"u2", title:"Over the handlebars", level:"Patient 2.7",
+  patient:{name:"Nina C.", age:27, sex:"F"},
+  triage:{level:4, arrival:"Walked in", complaint:"“I crashed my bike and landed on my shoulder.”", vitals:"Pulse 88 · BP 120/76 · O₂ 99% · Pain 6/10", sign:"Holding her right arm close to her body. A bump on her collarbone.", why:"Painful but stable: breathing comfortably, good circulation to the arm, skin intact. She can wait."},
+  story:"Nina went over her handlebars on a bike trail and landed on her right shoulder. She rode the rest of the way home one-handed, then came in. She's holding her right arm against her body with her left hand.",
+  actions:[
+    A("mech","key","“I went over the handlebars and landed right on my shoulder.”"),
+    A("where","key","She points to the middle of her right collarbone. Pain 6 out of 10, worse when she moves her arm."),
+    A("meds","ok","Takes a birth control pill. No allergies."),
+    A("pinj","ok","No earlier broken bones."),
+    {id:"inspect",group:E,label:"Look at the shoulder & collarbone",about:"Compare both sides for bumps, bruising and skin that's pushed tight from underneath.",kind:"key",result:"A bump in the middle of the collarbone, with bruising. The skin is intact and not stretched over the bone."},
+    {id:"cms",group:E,label:"Check circulation, movement & sensation",about:"Check the wrist pulse, hand warmth and feeling, and her breathing.",kind:"key",result:"Strong radial pulse, warm hand, normal feeling. She's breathing comfortably."},
+    {id:"lift",group:E,label:"Raise her arm overhead",about:"Test how far the shoulder moves.",risk:"Can push the broken ends toward the blood vessels and nerves under the collarbone.",kind:"harm",result:"Nina cries out and the bump shifts. Her fingers tingle for a minute afterward."},
+    {id:"xray",group:T,label:"X-ray of the collarbone",about:"The first imaging test for a suspected fracture.",risk:"Small radiation dose.",kind:"key",result:"A break through the middle third of the clavicle, with the ends slightly overlapping."},
+    {id:"ct",group:T,label:"CT scan of the chest",about:"Detailed X-ray images in slices.",risk:"Much more radiation than a plain X-ray.",kind:"extra",result:"The same break the X-ray showed. Nothing new."}
+  ],
+  q1:{short:"Bone", prompt:"Which bone is broken?", options:[
+    {text:"Clavicle", info:"The collarbone: an S-shaped strut from the sternum to the shoulder blade. Its middle third is the thinnest part."},
+    {text:"Scapula", info:"The shoulder blade, a flat bone protected by thick muscle. Rarely broken."},
+    {text:"Humerus", info:"The upper arm bone."},
+    {text:"First rib", info:"The short, curved top rib, tucked under the collarbone."},
+    {text:"Sternum", info:"The breastbone in the middle of the chest."}], answer:"Clavicle"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Clavicle fracture (broken collarbone)"},{text:"Shoulder dislocation"},{text:"Rotator cuff tear"},{text:"Rib fracture"},{text:"Shoulder bruise only"}], answer:"Clavicle fracture (broken collarbone)"},
+  debrief:{
+    body:"The clavicle works like a strut that holds the shoulder away from the chest. A fall onto the shoulder drives force along it, and it usually snaps in the middle third, where it's thinnest and has the least muscle around it.",
+    clue:"A fall straight onto the shoulder, with pain and a bump in the middle of the collarbone.",
+    mistake:"Over-testing. One X-ray confirms it, and most heal in a sling. That's why she could safely wait."}
+},
+{ id:"ankle", unit:"u2", title:"Pickup game", level:"Patient 2.8",
+  patient:{name:"Kai H.", age:20, sex:"M"},
+  triage:{level:4, arrival:"Limped in from a pickup basketball game", complaint:"“I rolled my ankle.”", vitals:"Pulse 76 · BP 122/74 · O₂ 99% · Pain 4/10", sign:"Walking with a limp. The outer ankle is swollen.", why:"He can walk, his vitals are normal and the pain is mild. Lowest priority."},
+  story:"Kai came down on another player's foot during a pickup basketball game, and his left ankle rolled inward. He limped off the court, and his friends talked him into getting it checked.",
+  actions:[
+    A("mech","key","“I came down on someone's foot and my ankle rolled in.”"),
+    A("where","key","Pain over the soft area in front of and just below the outer ankle bone. 4 out of 10."),
+    {id:"steps",group:H,label:"Could you walk on it?",about:"Whether the patient could take four steps right after the injury, and can now, is part of the Ottawa ankle rules.",kind:"key",result:"“I limped off the court and walked in from the parking lot.” He takes four steps in front of you, limping."},
+    A("meds","ok","No medications. No allergies."),
+    {id:"palp",group:E,label:"Press on the ankle & foot bones",about:"Press along the back edge and tip of both ankle bones (the malleoli) and the foot bones. Tenderness on bone suggests a fracture.",kind:"key",result:"No tenderness on any bone. He's tender only over the ligament in front of the outer ankle bone, where it's swollen."},
+    {id:"cms",group:E,label:"Check circulation, movement & sensation",about:"Check the foot pulses, warmth and feeling.",kind:"ok",result:"Normal foot pulses, warm toes, normal feeling."},
+    {id:"jump",group:E,label:"Have him jump and land on it",about:"Test the ankle's stability under load.",risk:"Can turn a stretched ligament into a torn one.",kind:"harm",result:"He lands, winces and grabs his ankle. The swelling gets worse."},
+    {id:"xray",group:T,label:"X-ray of the ankle",about:"Pictures of the ankle bones.",risk:"Small radiation dose. Not needed when the Ottawa ankle rules say no.",kind:"extra",result:"Normal bones. No fracture."},
+    {id:"mri",group:T,label:"MRI of the ankle",about:"Detailed images of ligaments and cartilage.",risk:"Expensive. Not needed for a simple sprain.",kind:"extra",result:"A stretched ligament on the outer ankle. Sometimes useful later, but not needed today."}
+  ],
+  q1:{short:"Structure", prompt:"What is injured?", options:[
+    {text:"A ligament (no broken bone)", info:"Ligaments are tough bands that connect bone to bone. The one in front of the outer ankle bone (the anterior talofibular ligament) is the most often sprained ligament in the body."},
+    {text:"Fibula (outer ankle bone)", info:"Its lower end forms the bump on the outside of the ankle. A fracture there is tender right on the bone."},
+    {text:"Tibia (inner ankle bone)", info:"Its lower end forms the bump on the inside of the ankle."},
+    {text:"Talus", info:"The ankle bone that sits between the leg bones and the heel."},
+    {text:"Calcaneus", info:"The heel bone."}], answer:"A ligament (no broken bone)"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Ankle sprain (stretched or torn ligament)"},{text:"Ankle fracture"},{text:"Achilles tendon rupture"},{text:"Stress fracture"},{text:"Gout"}], answer:"Ankle sprain (stretched or torn ligament)"},
+  debrief:{
+    body:"The ligaments on the outside of the ankle stop it from rolling inward too far. When the foot rolls in hard, the front ligament stretches or tears. The bones are fine, so the pain is over soft tissue, not bone.",
+    clue:"He can walk four steps, and none of the bones are tender. Under the Ottawa ankle rules, he doesn't need an X-ray.",
+    mistake:"X-raying every ankle injury. The Ottawa rules exist so doctors can safely skip X-rays that won't change treatment."}
+},
+{ id:"vertebra", unit:"u2", title:"The heavy bag", level:"Patient 2.9",
+  patient:{name:"Rosa M.", age:74, sex:"F"},
+  triage:{level:3, arrival:"Driven in by her son", complaint:"“My back cracked when I lifted a heavy bag.”", vitals:"Pulse 88 · BP 140/84 · O₂ 97% · Pain 7/10", sign:"Moving very stiffly. Her legs work normally.", why:"Significant pain and a possible fracture in an older adult, but her legs work normally and her vitals are stable. Urgent, not immediate."},
+  story:"Rosa was lifting a bag of potting soil out of her car trunk when she felt a sharp “crack” in her mid-back. The pain is worst when she sits up or stands, and she's been lying flat on the couch all morning.",
+  actions:[
+    A("mech","key","“I lifted a bag of potting soil and felt something crack in my back.”"),
+    A("where","key","The middle of her back, about at bra-strap level. 7 out of 10, worse when she sits up or stands."),
+    A("meds","key","Takes calcium and a steroid pill (prednisone) for arthritis. No allergies. (Long-term steroid use weakens bones.)"),
+    A("pmh","ok","Rheumatoid arthritis. Thinning bones (osteopenia) found 3 years ago."),
+    {id:"neuro",group:E,label:"Neuro check of the legs",about:"Check strength, feeling and reflexes in the legs, and ask about bladder and bowel control. Problems there mean the spinal cord or nerves may be pinched.",kind:"key",result:"Normal strength and feeling in both legs. Normal bladder and bowel control."},
+    {id:"palp",group:E,label:"Press along the spine",about:"Feel each bone of the spine for tenderness.",kind:"key",result:"Sharp tenderness over one bone in the mid-back, where the ribs end (T12)."},
+    {id:"twist",group:E,label:"Twist and bend her spine",about:"Test how far her back moves.",risk:"Can push a broken vertebra further and pinch the spinal cord.",kind:"harm",result:"Rosa gasps and grabs the bed rail. The pain shoots around to her ribs."},
+    {id:"xray",group:T,label:"X-ray of the spine",about:"The first imaging test for back pain after an injury.",risk:"Small radiation dose.",kind:"key",result:"The front of the T12 vertebra is squashed into a wedge shape: a compression fracture. The back of the bone is intact."},
+    {id:"dexa",group:T,label:"Bone density scan (DEXA)",about:"Measures how dense the bones are, to diagnose osteoporosis.",risk:"Not urgent. It doesn't show a fresh fracture.",kind:"extra",result:"It confirms thin bones. Useful at a follow-up visit, but it didn't help today."}
+  ],
+  q1:{short:"Bone", prompt:"Which bone is broken?", options:[
+    {text:"Thoracic vertebra", info:"The 12 vertebrae of the mid-back, which attach to the ribs. The lowest ones, where the mid-back meets the lower back, take the most stress."},
+    {text:"Lumbar vertebra", info:"The 5 large vertebrae of the lower back, below the ribs."},
+    {text:"Rib", info:"The curved bones around the chest. A rib fracture is tender on the side or front, not on the spine."},
+    {text:"Sternum", info:"The breastbone, at the front of the chest."},
+    {text:"Pelvis", info:"The ring of hip bones below the spine."}], answer:"Thoracic vertebra"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Vertebral compression fracture"},{text:"Pulled back muscle"},{text:"Kidney stone"},{text:"Herniated disc"},{text:"Rib fracture"}], answer:"Vertebral compression fracture"},
+  debrief:{
+    body:"Each vertebra has a thick, spongy front section, the vertebral body, that carries the body's weight. When bones are weak (osteoporosis, made worse by long-term steroids), lifting something heavy can crush the front of a vertebra into a wedge.",
+    clue:"An older woman on steroids, sudden back pain after lifting, and tenderness right over one vertebra.",
+    mistake:"Calling it a pulled muscle. Pain right over the bone in someone with weak bones means an X-ray."}
+},
+{ id:"ribs", unit:"u2", title:"Off the ladder", level:"Patient 2.10",
+  patient:{name:"Frank O.", age:49, sex:"M"},
+  triage:{level:3, arrival:"Walked in, holding his side", complaint:"“I fell off a ladder. It hurts to breathe.”", vitals:"Pulse 96 · Breathing 20 · O₂ 96% · Pain 7/10", sign:"Taking short, shallow breaths. Speaking in full sentences.", why:"Possible rib fractures. His oxygen is fine and he isn't struggling to breathe, so he's urgent. If his oxygen were dropping, he'd move up."},
+  story:"Frank was cleaning his gutters when the ladder slipped. He fell about six feet and hit the deck railing with his right side. Every breath hurts, and coughing is worse.",
+  actions:[
+    A("mech","key","“I fell about six feet and hit the deck railing with my right side.”"),
+    A("where","key","The right side of his chest. Sharp, 7 out of 10, much worse with a deep breath or a cough."),
+    A("meds","ok","No medications. No allergies."),
+    A("vitals","key","Pulse 96, BP 138/86, breathing 20 and shallow, oxygen 96%, temperature normal."),
+    {id:"palp",group:E,label:"Press on the ribs",about:"Feel along each rib for a tender spot.",kind:"key",result:"Sharp, pinpoint pain over ribs 6, 7 and 8 on the right side."},
+    {id:"lungs",group:E,label:"Listen to both lungs",about:"Compare breath sounds on each side, and tap the chest to hear how hollow it sounds. This checks for a collapsed lung.",kind:"key",result:"Breath sounds are equal on both sides. Tapping sounds normal, not hollow."},
+    {id:"bind",group:F,label:"Wrap his chest tightly",about:"A tight binder around the chest to stop the ribs from moving.",risk:"Stops the chest from expanding, so the lungs don't fully inflate. That raises the risk of pneumonia.",kind:"harm",result:"Frank's breathing gets even shallower, and his oxygen drops to 93%. You take the binder off."},
+    A("cxr","key","Fractures of ribs 6, 7 and 8 on the right. No collapsed lung and no blood around the lungs."),
+    {id:"ct",group:T,label:"CT scan of the chest",about:"Detailed X-ray images in slices.",risk:"Much more radiation. Used for major trauma, but his exam and X-ray are reassuring.",kind:"extra",result:"The same three rib fractures. Nothing new."}
+  ],
+  q1:{short:"Bone", prompt:"Which bones are broken?", options:[
+    {text:"Ribs", info:"Twelve pairs of curved bones that protect the heart and lungs and move with every breath. The middle ribs break most often."},
+    {text:"Sternum", info:"The breastbone, at the front of the chest."},
+    {text:"Clavicle", info:"The collarbone, above the ribs."},
+    {text:"Thoracic vertebrae", info:"The mid-back bones the ribs attach to."},
+    {text:"Scapula", info:"The shoulder blade, over the upper back."}], answer:"Ribs"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Rib fractures (no collapsed lung)"},{text:"Collapsed lung (pneumothorax)"},{text:"Heart attack"},{text:"Pneumonia"},{text:"Chest muscle strain"}], answer:"Rib fractures (no collapsed lung)"},
+  debrief:{
+    body:"Ribs flex slightly with every breath, so a broken rib's ends move each time you inhale. That's why deep breaths hurt so much. A broken rib can poke the lung underneath, so checking both lungs is part of the exam.",
+    clue:"A fall onto the side, pain with breathing, pinpoint tenderness on the ribs, and normal breath sounds on both sides.",
+    mistake:"Wrapping the chest. People with broken ribs need to breathe deeply, with pain control, to keep their lungs open."}
+},
+{ id:"shoulder", unit:"u2", title:"The tackle", level:"Patient 2.11",
+  patient:{name:"Diego R.", age:19, sex:"M"},
+  triage:{level:2, arrival:"Brought in by his coach", complaint:"“My shoulder popped out!”", vitals:"Pulse 104 · BP 132/80 · O₂ 99% · Pain 9/10", sign:"Holding his arm away from his body. The shoulder looks squared off.", why:"Severe pain and a dislocated joint. The sooner it goes back in, the easier it is and the lower the risk to nerves and blood vessels."},
+  story:"Diego reached out to make a tackle at football practice, and his right arm was yanked backward. He felt it “pop out.” He's sitting very still, holding his right forearm with his left hand.",
+  actions:[
+    A("mech","key","“I reached out to tackle a guy and my arm got yanked back.”"),
+    A("where","key","His right shoulder. 9 out of 10. He won't let his arm move toward his body."),
+    A("pinj","ok","“It happened once before, last season.”"),
+    A("meds","ok","No medications. No allergies."),
+    {id:"inspect",group:E,label:"Look at both shoulders",about:"Compare the shoulders' shape from the front and side.",kind:"key",result:"The right shoulder looks squared off, with a hollow under the bony tip and a bulge in front."},
+    {id:"cms",group:E,label:"Check the arm's nerves & circulation",about:"Check the pulse and hand color, and feeling on the outer upper arm, which is supplied by the axillary nerve.",kind:"key",result:"Strong pulse, warm hand, and normal feeling on the outer upper arm."},
+    {id:"yank",group:F,label:"Pop it back in right away",about:"Pull on the arm to put the joint back in place before any other checks.",risk:"Without a nerve check and an X-ray first, you can miss a fracture and make it worse.",kind:"harm",result:"Clunk: it goes back in, but now his upper arm hurts in a new spot. The X-ray afterward shows a bone chip you may have shifted."},
+    {id:"xray",group:T,label:"X-ray of the shoulder",about:"Shows where the head of the humerus is, and any fracture.",risk:"Small radiation dose.",kind:"key",result:"The head of the humerus sits in front of the shoulder socket, not in it. No fracture."},
+    {id:"mri",group:T,label:"MRI of the shoulder",about:"Detailed images of the soft rim of the socket and the tendons.",risk:"Not needed in the emergency.",kind:"extra",result:"It shows a torn rim of cartilage around the socket, which matters for follow-up, not for today."}
+  ],
+  q1:{short:"Structure", prompt:"What is injured?", options:[
+    {text:"Shoulder joint (humerus out of its socket)", info:"The ball-shaped head of the humerus sits in a shallow socket on the scapula (the glenoid). A shallow socket allows lots of movement, but it dislocates easily."},
+    {text:"Clavicle", info:"The collarbone. A fracture causes a bump in the middle of the collarbone."},
+    {text:"Humerus shaft", info:"The middle of the upper arm bone."},
+    {text:"Scapula", info:"The shoulder blade, a flat bone over the upper back."},
+    {text:"Elbow joint", info:"Where the humerus meets the radius and ulna."}], answer:"Shoulder joint (humerus out of its socket)"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Anterior shoulder dislocation"},{text:"Clavicle fracture"},{text:"Rotator cuff tear"},{text:"Broken upper arm"},{text:"Shoulder sprain"}], answer:"Anterior shoulder dislocation"},
+  debrief:{
+    body:"The shoulder is the body's most mobile joint because its socket is so shallow. When the arm is forced out and back, the head of the humerus can pop out the front of the socket. Once it's happened, it's more likely to happen again.",
+    clue:"An arm forced backward, a squared-off shoulder, and a patient holding the arm away from his body.",
+    mistake:"Putting it back before checking the nerves and getting an X-ray. Check, image, then put it back."}
+},
+{ id:"scaphoid", unit:"u2", title:"On the ice", level:"Patient 2.12",
+  patient:{name:"Lena V.", age:31, sex:"F"},
+  triage:{level:4, arrival:"Walked in", complaint:"“I fell skating. My wrist hurts near my thumb.”", vitals:"Pulse 78 · BP 116/72 · O₂ 99% · Pain 4/10", sign:"Mild swelling at the base of her thumb. No deformity.", why:"Mild pain, no deformity, normal vitals. She can wait, but she shouldn't go home without a careful check."},
+  story:"Lena slipped at the ice rink yesterday and caught herself with her right hand. It hurt, but she figured it was a sprain. Today, gripping her coffee mug and turning a key both hurt at the base of her thumb.",
+  actions:[
+    A("mech","key","“I slipped on the ice and caught myself with my hand flat.”"),
+    A("where","key","The base of her thumb, at the wrist. 4 out of 10. Gripping makes it worse."),
+    A("meds","ok","No medications. No allergies."),
+    {id:"inspect",group:E,label:"Look at the wrist",about:"Inspect for swelling, bruising and deformity.",kind:"ok",result:"Mild swelling at the base of the thumb. No deformity."},
+    {id:"snuff",group:E,label:"Press the anatomical snuffbox",about:"The small hollow at the base of the thumb lies right over the scaphoid bone.",kind:"key",result:"Sharp tenderness right in the snuffbox hollow."},
+    {id:"palprad",group:E,label:"Press along the radius",about:"Feel the lower end of the forearm bone for tenderness.",kind:"ok",result:"No tenderness on the radius."},
+    {id:"force",group:E,label:"Bend the wrist through its full range",about:"Move the joint as far as it goes in every direction.",risk:"Moving a possibly broken bone can shift the pieces.",kind:"harm",result:"Pain spikes at the base of her thumb, and she pulls her hand away. A small crack may have shifted."},
+    {id:"xray",group:T,label:"X-ray of the wrist",about:"The first imaging test for a suspected fracture.",risk:"Small radiation dose.",kind:"key",result:"No fracture is clearly visible. Scaphoid fractures often don't show up on the first X-ray."},
+    {id:"mri",group:T,label:"MRI of the wrist",about:"Shows small cracks and bone swelling that X-rays miss.",risk:"No radiation. More expensive.",kind:"key",result:"A crack through the middle (the waist) of the scaphoid."}
+  ],
+  q1:{short:"Bone", prompt:"Which bone is broken?", options:[
+    {text:"Scaphoid", info:"A boat-shaped wrist bone at the base of the thumb, right under the snuffbox. It's the most commonly broken wrist bone."},
+    {text:"Radius", info:"The forearm bone on the thumb side, just above the wrist."},
+    {text:"Ulna", info:"The forearm bone on the pinky side."},
+    {text:"First metacarpal", info:"The bone of the thumb inside the hand, between the wrist and the thumb's knuckle."},
+    {text:"Lunate", info:"A half-moon-shaped wrist bone in the middle of the wrist."}], answer:"Scaphoid"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Scaphoid fracture"},{text:"Wrist sprain"},{text:"Distal radius fracture"},{text:"Thumb ligament sprain"},{text:"Tendinitis"}], answer:"Scaphoid fracture"},
+  debrief:{
+    body:"The scaphoid bridges the two rows of wrist bones, so it takes the force in a fall. Its blood supply enters at the far end, so a break through the middle can cut blood off from part of the bone. A missed fracture can lead to that part of the bone dying (avascular necrosis).",
+    clue:"Snuffbox tenderness after a fall on an outstretched hand, even with a normal X-ray.",
+    mistake:"Trusting a normal first X-ray. Snuffbox tenderness means a thumb splint and more imaging."}
 },
 /* ===== PREVIEW: ORGAN SYSTEMS ===== */
 { id:"ruq-pain", unit:"u3", title:"Pain after dinner", level:"Digestive",
@@ -630,6 +941,15 @@ const LOOKS = {
   "ruq-pain":     {skin:"#c99273", hair:"long",  hc:"#5a3a22", shirt:"#3a6ea5"},
   "chest-pressure":{skin:"#b97f5a",hair:"short", hc:"#5b5b5b", shirt:"#8b2b2b", stache:true},
   "sudden-breath":{skin:"#e2b48f", hair:"curly", hc:"#6b4a2b", shirt:"#555f6e"},
+  "open-tib":    {skin:"#c08a63", hair:"short", hc:"#2a1d14", shirt:"#2a2a2a"},
+  "kid-elbow":   {skin:"#d9a07a", hair:"long",  hc:"#3b2416", shirt:"#e0679a"},
+  "skull":       {skin:"#f1c7a5", hair:"crop",  hc:"#c8994a", shirt:"#1c3d73"},
+  "clavicle":    {skin:"#b5764f", hair:"long",  hc:"#1d1d1d", shirt:"#2fa38a"},
+  "ankle":       {skin:"#c68e64", hair:"short", hc:"#111111", shirt:"#f2b632"},
+  "vertebra":    {skin:"#d6a27a", hair:"curly", hc:"#bdbdbd", shirt:"#9c5b8a", glasses:true},
+  "ribs":        {skin:"#ecbfa0", hair:"bald",  hc:"#8a6a4a", shirt:"#4b6a88", stache:true},
+  "shoulder":    {skin:"#b07a52", hair:"crop",  hc:"#1a120c", shirt:"#7a1f2b"},
+  "scaphoid":    {skin:"#f3d0b5", hair:"bun",   hc:"#d9ad55", shirt:"#3a7bd5"},
   okafor:         {skin:"#5a3620", hair:"bun",   hc:"#111111", shirt:"#ffffff", coat:true}
 };
 function shade(hex, f){ const n = parseInt(hex.slice(1),16); const c = [n>>16, n>>8&255, n&255].map(v => Math.max(0, Math.min(255, Math.round(v*f)))); return "#" + c.map(v => v.toString(16).padStart(2,"0")).join(""); }
@@ -670,6 +990,22 @@ function avatar(L, mood = "hurt"){
 const look = c => LOOKS[c.id] || {skin:"#d9a77f", hair:"short", hc:"#3a2a20", shirt:"#1c3d73"};
 const moodFor = cond => cond >= 80 ? "hurt" : cond >= 50 ? "worse" : "critical";
 const tag = c => c.unit === "u3" ? c.level : c.level.replace("Case", "Assignment");
+const isShiftUnit = uid => (UNITS.find(u => u.id === uid) || {}).mode === "shift";
+
+/* ---------- Triage levels & game clock ---------- */
+const LEVELS = {
+  1:{name:"Immediate", target:45, rate:12},
+  2:{name:"Emergent", target:135, rate:8},
+  3:{name:"Urgent", target:240, rate:5},
+  4:{name:"Non-urgent", target:360, rate:3}
+};
+const ID_MIN = {vitals:3, xray:8, cxr:8, skullxr:8, ct:15, mri:25, dexa:15, lp:20, surgery:60, stress:10, us:10, ecg:3, cbc:10, trop:10, lipase:10, ddimer:10, spiro:5, allergy:15};
+const GROUP_MIN = {"History":2, "Vital signs":1, "Physical exam":3, "First aid":3, "Tests & imaging":10};
+const mins = a => a.min != null ? a.min : ID_MIN[a.id] != null ? ID_MIN[a.id] : (GROUP_MIN[a.group] || 3);
+const TRIAGE_MIN = 1, NOTES_MIN = 3;
+const fmtClock = m => { const t = 7*60 + Math.round(m), h = Math.floor(t/60) % 24, mm = t % 60; return `${((h + 11) % 12) + 1}:${String(mm).padStart(2,"0")} ${h >= 12 ? "PM" : "AM"}`; };
+const startCond = (level, wait) => { const L = LEVELS[level], over = Math.max(0, wait - L.target); return Math.max(20, 100 - Math.ceil(over/10) * L.rate); };
+const lvBadge = n => n ? `<span class="lv lv${n}">${n} · ${LEVELS[n].name}</span>` : `<span class="lv lv0">Not triaged</span>`;
 
 /* ---------- Judgement lines ---------- */
 const LINES = {
@@ -710,29 +1046,44 @@ function renderLicense(){
   $("#reinstate").hidden = strikes < 3;
 }
 function show(view){
-  for (const id of ["home","how","brief","game"]) $("#" + id).hidden = id !== view;
+  for (const id of ["home","how","brief","game","shift"]) $("#" + id).hidden = id !== view;
   window.scrollTo({top:0});
 }
 
 function renderHome(){
   const best = store.get("dtp-best", {}), verd = store.get("dtp-verdict", {});
-  const seated = CASES.filter(c => c.unit !== "u3");
-  $("#bench").innerHTML = seated.map(c => `<div class="seat">${avatar(look(c), best[c.id] != null ? (verd[c.id] === "hero" ? "happy" : verd[c.id] === "fail" ? "critical" : "ok") : "hurt")}<b>${c.patient.name}</b></div>`).join("");
-  const next = seated.find(c => best[c.id] == null);
-  $("#nextBtn").textContent = next ? `Start ${tag(next)}` : "Replay an assignment";
-  $("#nextBtn").dataset.target = next ? next.id : seated[0].id;
+  const vMood = v => v === "hero" ? "happy" : v === "fail" ? "critical" : v ? "ok" : "hurt";
+  const shiftU = UNITS.find(u => u.mode === "shift");
+  const shSt = shiftU ? store.get("sore-shift-" + shiftU.id, null) : null;
+  const benchCases = shiftU ? CASES.filter(c => c.unit === shiftU.id).slice(0, 6) : CASES.slice(0, 6);
+  $("#bench").innerHTML = benchCases.map(c => { const s = shSt && shSt.seen[c.id]; return `<div class="seat">${avatar(look(c), s ? vMood(s.tier) : "hurt")}<b>${c.patient.name}</b></div>`; }).join("");
+  const training = CASES.filter(c => c.unit === "u1");
+  const next = training.find(c => best[c.id] == null);
+  if (next){ $("#nextBtn").textContent = `Start ${tag(next)}`; $("#nextBtn").dataset.target = next.id; $("#nextBtn").dataset.shift = ""; }
+  else if (shiftU){ $("#nextBtn").textContent = shSt && shSt.phase !== "done" ? "Resume your ER shift" : shSt ? "View your shift report" : `Start the ${shiftU.shiftName}`; $("#nextBtn").dataset.shift = shiftU.id; }
   $("#units").innerHTML = UNITS.map(u => {
-    const cs = CASES.filter(c => c.unit === u.id), done = cs.filter(c => best[c.id] != null).length;
-    return `<section class="unit">
-      <div class="unit-head">
-        <div><h2>${u.name}</h2><p>${u.blurb}</p>
-          <div class="prog"><i><b style="width:${done/cs.length*100}%"></b></i>${done} of ${cs.length} complete</div></div>
+    const cs = CASES.filter(c => c.unit === u.id);
+    const head = (prog) => `<div class="unit-head">
+        <div><h2>${u.name}</h2><p>${u.blurb}</p>${prog}</div>
         ${u.brief ? `<button data-brief="${u.id}">Read the unit briefing</button>` : ""}
-      </div>
+      </div>`;
+    if (u.mode === "shift"){
+      const st = store.get("sore-shift-" + u.id, null);
+      const seenN = st ? Object.keys(st.seen).length : 0;
+      const status = !st ? "Shift not started. 12 patients are waiting." : st.phase === "triage" ? `Triage in progress: ${Object.keys(st.tri).length} of ${cs.length} triaged.` : st.phase === "treat" ? `Shift in progress: ${seenN} of ${cs.length} seen · clock ${fmtClock(st.clock)}` : `Shift complete · score ${shiftScore(u.id, st).total}/100`;
+      return `<section class="unit">${head(`<div class="prog"><i><b style="width:${seenN/cs.length*100}%"></b></i>${seenN} of ${cs.length} patients seen</div>`)}
+        <div class="shiftcard"><div><h3 style="margin:0;font:700 24px/1.1 'Barlow Condensed',sans-serif">${u.shiftName}</h3><div>${status}</div>
+          <div class="faces">${cs.map(c => `<span title="${c.patient.name}">${avatar(look(c), st && st.seen[c.id] ? vMood(st.seen[c.id].tier) : "hurt")}</span>`).join("")}</div></div>
+          <div class="hbtns"><button class="primary" data-shift="${u.id}">${!st ? "Start shift" : st.phase === "done" ? "View shift report" : "Resume shift"}</button>
+          ${st ? `<button class="danger" data-newshift="${u.id}">Start a new shift</button>` : ""}</div></div>
+      </section>`;
+    }
+    const done = cs.filter(c => best[c.id] != null).length;
+    return `<section class="unit">${head(`<div class="prog"><i><b style="width:${done/cs.length*100}%"></b></i>${done} of ${cs.length} complete</div>`)}
       <div class="cases">${cs.map(c => {
         const v = verd[c.id];
         return `<button class="card" data-id="${c.id}">
-          <div class="pic">${avatar(look(c), v === "hero" ? "happy" : v === "fail" ? "critical" : v ? "ok" : "hurt")}</div>
+          <div class="pic">${avatar(look(c), vMood(v))}</div>
           <div><span class="tag">${tag(c)}</span><h3>${c.title}</h3>
           <div>${c.patient.name}, ${c.patient.age}${c.patient.sex}</div>
           <span class="chip ${v || "none"}">${best[c.id] != null ? CHIPS[v] + " · best " + best[c.id] + "/100" : "Not started"}</span></div>
@@ -742,9 +1093,11 @@ function renderHome(){
   show("home");
 }
 
-function start(id){
+function start(id, inShift){
   const c = CASES.find(x => x.id === id);
-  S = {c, ordered:[], review:null, stage:"investigate", q1:null, q2:null, cond:100};
+  S = {c, ordered:[], review:null, stage:"investigate", q1:null, q2:null, cond:100, shift:!!inShift};
+  if (inShift){ S.wait = SH.clock; S.startCond = startCond(c.triage.level, S.wait); S.cond = S.startCond; }
+  $("#gameBack").hidden = !!inShift;
   $("#debrief").hidden = true;
   $("#pname").textContent = c.patient.name;
   $("#pmeta").textContent = `${tag(c)} · ${c.patient.age} years · ${c.patient.sex === "F" ? "Female" : "Male"}`;
@@ -758,7 +1111,8 @@ function renderChart(mood){
   const word = pct >= 80 ? "Stable" : pct >= 50 ? "Worsening" : "Critical";
   $("#ppic").innerHTML = avatar(look(S.c), mood || moodFor(pct));
   $("#cond").className = "cond " + cls;
-  $("#cond").innerHTML = `<span>Patient condition</span><span><b>${word}</b> · ${pct}%</span><i><b style="width:${pct}%"></b></i>`;
+  $("#cond").innerHTML = `<span>Patient condition</span><span><b>${word}</b> · ${pct}%</span><i><b style="width:${pct}%"></b></i>`
+    + (S.shift ? `<span style="grid-column:1/-1;opacity:.85">Waited ${S.wait} min${S.startCond < 100 ? ` (past target: arrived in worse condition)` : ""} · Shift clock ${fmtClock(SH.clock)}</span>` : "");
   const items = S.ordered.map(id => S.c.actions.find(t => t.id === id));
   $("#findings").innerHTML = items.length
     ? items.map(t => `<li class="${t.kind === "harm" ? "hurt" : ""}"><div class="lab">${t.label}${t.kind === "harm" ? " · patient harmed" : ""}</div>${t.result}</li>`).join("")
@@ -779,7 +1133,7 @@ function renderPanel(){
     const r = S.review && c.actions.find(t => t.id === S.review);
     p.innerHTML = stepBar() + `
       <div><h3>Investigate</h3><p class="note" style="margin:0">Click anything to review it first. Ordering is what counts.</p>
-      ${r ? `<div class="review" id="review" tabindex="-1" style="margin-top:12px"><b>${r.label}</b><p>${r.about}</p>${r.risk ? `<p class="risk"><b>Risk:</b> ${r.risk}</p>` : ""}
+      ${r ? `<div class="review" id="review" tabindex="-1" style="margin-top:12px"><b>${r.label}</b><p>${r.about}</p>${r.risk ? `<p class="risk"><b>Risk:</b> ${r.risk}</p>` : ""}${S.shift ? `<p class="note"><b>Time:</b> about ${mins(r)} min of your shift</p>` : ""}
         <div class="row" style="margin-top:10px"><button class="link" data-cancel>Cancel</button><button class="primary" data-order="${r.id}">Order this</button></div></div>` : ""}
       ${groups.map(g => `<p class="group">${g}</p><div class="tests">${c.actions.filter(t => t.group === g).map(t => {
         const done = S.ordered.includes(t.id);
@@ -806,6 +1160,7 @@ function order(id){
   S.ordered.push(id); S.review = null;
   if (t.kind === "extra") S.cond -= 10;
   if (t.kind === "harm") S.cond -= 30;
+  if (S.shift){ SH.clock += mins(t); saveShift(); }
   renderChart(); renderPanel();
 }
 
@@ -827,6 +1182,11 @@ function finish(){
   const c = S.c, r = scoreCase();
   const best = store.get("dtp-best", {}), verd = store.get("dtp-verdict", {});
   if (best[c.id] == null || r.total > best[c.id]) { best[c.id] = r.total; verd[c.id] = r.tier; store.set("dtp-best", best); store.set("dtp-verdict", verd); }
+  if (S.shift){
+    SH.clock += NOTES_MIN;
+    SH.seen[c.id] = {wait:S.wait, startCond:S.startCond, total:r.total, tier:r.tier, cond:Math.max(0, S.cond), at:SH.clock, harm:r.harm.length, extra:r.extra.length, q1:!!r.q1Pts, q2:!!r.q2Pts, orders:S.ordered.length};
+    saveShift();
+  }
   if (r.tier === "fail") strikes++;
   if (r.tier === "hero" && strikes > 0 && strikes < 3) strikes--;
   store.set("dtp-strikes", strikes); renderLicense();
@@ -843,6 +1203,8 @@ function finish(){
   if (r.missed.length) notes.push(`Skipped key steps: ${r.missed.map(label).join(", ")}.`);
   if (r.extra.length) notes.push(`Unnecessary orders: ${r.extra.map(label).join(", ")}.`);
   if (S.cond < 50 && r.q2Pts) notes.push("Right diagnosis, but the patient's condition fell to critical on your watch.");
+  if (S.shift && S.startCond < 100) notes.unshift(`${c.patient.name} waited ${S.wait} minutes. The target for a level ${c.triage.level} (${LEVELS[c.triage.level].name.toLowerCase()}) patient is ${LEVELS[c.triage.level].target}, so they arrived at ${S.startCond}% condition.`);
+  if (S.shift && SH.tri[c.id] !== c.triage.level) notes.push(`You triaged ${c.patient.name} as level ${SH.tri[c.id]}. The correct level was ${c.triage.level}.`);
   if (!notes.length) notes.push("Clean, careful work. No notes.");
   const licLine = strikes >= 3 ? `<p style="font-family:inherit;font-size:15px"><b>Your medical license is suspended.</b> Review How to Play to be reinstated.</p>`
     : r.tier === "fail" ? `<p style="font-family:inherit;font-size:15px"><b>Strike ${strikes} of 3</b> on your medical license.</p>`
@@ -887,7 +1249,7 @@ function finish(){
       <div><h3>The key clue</h3><p>${c.debrief.clue}</p></div>
       <div><h3>Common wrong turn</h3><p>${c.debrief.mistake}</p></div>
     </div>
-    <div class="turnin">
+    ${S.shift ? "" : `    <div class="turnin">
       <h3 style="margin:0 0 4px">Turn in this assignment</h3>
       <ol class="note" style="margin:0 0 12px;padding-left:1.2em;font-size:14px"><li>Check your name, then download your case report (PDF).</li><li>Open the matching assignment in Google Classroom.</li><li>Choose <b>Add or create → File</b>, upload the PDF, and press <b>Turn in</b>.</li></ol>
       <div class="namebox" style="margin:0 0 10px"><label for="rname" style="max-width:360px">Your name<input id="rname" autocomplete="name" placeholder="First and last name" value="${esc(store.get("dtp-name", ""))}" style="background:var(--paper);color:var(--ink);border-color:var(--line)"></label></div>
@@ -895,7 +1257,10 @@ function finish(){
       <p class="note" id="dlMsg" role="status" style="margin:8px 0 0"></p>
       <details style="margin-top:12px;padding:10px 14px"><summary>Show results as text</summary><textarea id="resText" readonly>${esc(report)}</textarea></details>
     </div>
-    <div class="row" style="margin-top:22px"><button data-retry>Try this case again</button><button class="primary" data-home>Back to all assignments</button></div>`;
+`}
+    ${S.shift
+      ? `<div class="row" style="margin-top:22px"><span class="note">Shift clock: ${fmtClock(SH.clock)} · ${Object.keys(SH.seen).length} of 12 seen</span><button class="primary" data-board>${Object.keys(SH.seen).length >= CASES.filter(x => x.unit === SU).length ? "Finish shift & see report" : "Back to the waiting room"}</button></div>`
+      : `<div class="row" style="margin-top:22px"><button data-retry>Try this case again</button><button class="primary" data-home>Back to all assignments</button></div>`}`;
   $("#debrief").hidden = false;
   $("#panel").innerHTML = stepBar(true) + `<p style="margin:0"><b>Case submitted.</b> The attending's judgement and your debrief are below.</p>`;
   $("#debrief").scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"});
@@ -1002,14 +1367,213 @@ async function savePDF(btn){
   msg.textContent = ok ? `Saved as ${file}. Now upload it to your Google Classroom assignment.` : "Download isn't available here. Use Copy my results and paste into Classroom.";
 }
 
+
+/* ---------- ER shift: triage, board, report ---------- */
+let SH = null, SU = null;
+const saveShift = () => { if (SU) store.set("sore-shift-" + SU, SH); };
+const unitCases = uid => CASES.filter(c => c.unit === uid);
+
+function shiftScore(uid, st){
+  const cs = unitCases(uid);
+  let tri = 0;
+  cs.forEach(c => { const a = st.tri[c.id], tl = c.triage.level; if (a === tl) tri += 1; else if (a && Math.abs(a - tl) === 1) tri += .5; });
+  const seen = cs.filter(c => st.seen[c.id]);
+  const onTime = seen.filter(c => st.seen[c.id].wait <= LEVELS[c.triage.level].target).length;
+  const triPts = Math.round(20 * tri / cs.length);
+  const outPts = Math.round(60 * seen.reduce((s, c) => s + st.seen[c.id].total * st.seen[c.id].startCond / 100, 0) / (100 * cs.length));
+  const timePts = Math.round(20 * onTime / cs.length);
+  return {triPts, outPts, timePts, total: triPts + outPts + timePts, triExact: cs.filter(c => st.tri[c.id] === c.triage.level).length, onTime, seenN: seen.length, n: cs.length};
+}
+
+function openShift(uid){
+  SU = uid;
+  SH = store.get("sore-shift-" + uid, null) || {phase:"triage", tri:{}, clock:0, seen:{}};
+  saveShift(); renderShift(); show("shift");
+}
+
+function renderShift(){
+  const u = UNITS.find(x => x.id === SU), cs = unitCases(SU);
+  const seenN = Object.keys(SH.seen).length, triN = Object.keys(SH.tri).length;
+  $("#shTitle").textContent = u.shiftName;
+  $("#shPhase").textContent = SH.phase === "triage" ? "Step 1: Triage every patient" : SH.phase === "treat" ? "Step 2: See your patients" : "Shift complete";
+  $("#shClock").innerHTML = `${fmtClock(SH.clock)}<small>Shift clock · started 7:00 AM</small>`;
+  const late = cs.filter(c => !SH.seen[c.id] && SH.tri[c.id] && SH.clock > LEVELS[SH.tri[c.id]].target).length;
+  $("#shStats").innerHTML = `<div><b>${cs.length - seenN}</b>waiting</div><div><b>${seenN}</b>seen</div>` + (SH.phase === "treat" ? `<div><b style="color:${late ? "#ff7b72" : "#fff"}">${late}</b>past target</div>` : `<div><b>${triN}/${cs.length}</b>triaged</div>`);
+  const legend = `<div class="legend">${[1,2,3,4].map(n => `<div>${lvBadge(n)}<p>See within ${LEVELS[n].target} min</p></div>`).join("")}</div>`;
+
+  if (SH.phase === "triage"){
+    $("#shBody").innerHTML = `
+      <div class="callout"><b>The waiting room is full and you're the only doctor.</b> Read each triage card and assign a level. Each triage takes ${TRIAGE_MIN} minute. Patients who wait past their level's target get worse, so put the most dangerous patients first. The correct levels are revealed in your shift report.</div>
+      ${legend}
+      <div class="tgrid">${cs.map(c => { const T = c.triage, a = SH.tri[c.id];
+        return `<article class="tcard ${a ? "l" + a : ""}">
+          <div class="thead"><div class="pic">${avatar(look(c), "hurt")}</div><div><h3>${c.patient.name}</h3><div class="note">${c.patient.age} years · ${c.patient.sex === "F" ? "Female" : "Male"} · ${T.arrival}</div></div></div>
+          <p class="quote">${T.complaint}</p>
+          <div class="tv"><b>Triage vitals:</b> ${T.vitals}</div>
+          <div style="font-size:15px"><b>You see:</b> ${T.sign}</div>
+          <div class="lvbtns" role="group" aria-label="Triage level for ${c.patient.name}">${[1,2,3,4].map(n => `<button class="l${n} ${a === n ? "on" : ""}" aria-pressed="${a === n}" data-tri="${c.id}:${n}">${n} ${LEVELS[n].name}</button>`).join("")}</div>
+        </article>`; }).join("")}</div>
+      <div class="sticky row"><span>${triN} of ${cs.length} triaged · clock ${fmtClock(SH.clock)}</span><button class="primary" data-endtriage ${triN < cs.length ? "disabled" : ""}>Finish triage & open the board →</button></div>`;
+    return;
+  }
+
+  if (SH.phase === "treat"){
+    const order = [...cs].sort((x, y) => (SH.tri[x.id] - SH.tri[y.id]) || (cs.indexOf(x) - cs.indexOf(y)));
+    const unseen = order.filter(c => !SH.seen[c.id]);
+    $("#shBody").innerHTML = `
+      <div class="callout">Pick who to see next. The board is sorted by <b>your</b> triage levels. Every order you make moves the clock for everyone still waiting. Watch their faces: a patient who's sweating or worse is getting sicker.</div>
+      ${legend}
+      <div class="board">${order.map(c => {
+        const a = SH.tri[c.id], s = SH.seen[c.id];
+        if (s) return `<div class="brow seen l${a}"><div class="pic">${avatar(look(c), s.tier === "hero" ? "happy" : s.tier === "fail" ? "critical" : "ok")}</div>
+          <div><h3>${c.patient.name}</h3><div class="note">${c.triage.complaint}</div></div>
+          <div class="wait">Seen at ${fmtClock(s.at - NOTES_MIN)} · waited ${s.wait} min</div>
+          <div class="act"><span class="chip ${s.tier}">${CHIPS[s.tier]} · ${s.total}/100</span></div></div>`;
+        const tgt = LEVELS[a].target, w = SH.clock, cond = startCond(c.triage.level, w);
+        const cls = w > tgt ? "late" : w > tgt * .75 ? "close" : "";
+        return `<div class="brow l${a}"><div class="pic">${avatar(look(c), moodFor(cond))}</div>
+          <div><h3>${c.patient.name} <span class="note" style="font:400 14px 'Source Sans 3'">${c.patient.age}${c.patient.sex}</span></h3><div class="note">${c.triage.complaint}</div><div style="margin-top:4px">${lvBadge(a)}</div></div>
+          <div class="wait ${cls}">${w > tgt ? `Over target by ${w - tgt} min` : `Waiting ${w} min · see within ${tgt}`}<i><b style="width:${Math.min(100, w / tgt * 100)}%"></b></i></div>
+          <div class="act"><button class="primary" data-see="${c.id}">See patient</button></div></div>`;
+      }).join("")}</div>
+      <div class="sticky row"><span>${unseen.length ? `${unseen.length} still waiting` : "Everyone has been seen."}</span>
+        <button class="${unseen.length ? "danger" : "primary"}" data-endshift>${unseen.length ? (SH.confirmEnd ? `Really end? ${unseen.length} unseen patient(s) score 0` : "End shift early") : "Finish shift & see report"}</button></div>`;
+    return;
+  }
+  renderShiftReport();
+}
+
+function renderShiftReport(){
+  const cs = unitCases(SU), sc = shiftScore(SU, SH), name = store.get("dtp-name", "");
+  const bar = (nm, v, max) => `<div class="bar"><span>${nm}</span><i><b style="width:${v/max*100}%"></b></i><span>${v} / ${max}</span></div>`;
+  const tier = sc.total >= 85 ? ["hero","Outstanding shift!","The chief of medicine wants to know your secret. The nurses want you on every shift."] : sc.total >= 60 ? ["mixed","Solid shift, with some rough patches","Most patients went home happy. A few will be writing letters to the hospital."] : ["fail","A rough shift","The waiting room nearly rioted, and the legal department has started a file with your name on it. Review your triage and try again."];
+  $("#shBody").innerHTML = `
+    <div class="debrief" style="margin-top:0">
+      <div class="judge ${tier[0]}"><div class="duo"><div>${avatar(LOOKS.okafor, tier[0] === "hero" ? "happy" : tier[0] === "mixed" ? "ok" : "hurt")}Dr. Okafor</div></div>
+        <div><div class="who">The attending physician's shift review</div><h3>${tier[1]}</h3><p>${tier[2]}</p></div></div>
+      <div class="score"><div><div class="big">${sc.total}</div><div class="note">out of 100</div></div>
+        <div class="bars">${bar("Triage", sc.triPts, 20)}${bar("Outcomes", sc.outPts, 60)}${bar("On time", sc.timePts, 20)}</div></div>
+      <p>You triaged <b>${sc.triExact} of ${sc.n}</b> patients exactly right, saw <b>${sc.seenN} of ${sc.n}</b>, and <b>${sc.onTime}</b> were seen within their target time. Shift ended at <b>${fmtClock(SH.clock)}</b>.</p>
+      <h3 style="margin-top:20px">Triage review</h3>
+      <table class="stack rtable"><thead><tr><th>Patient</th><th>Your level</th><th>Correct level</th><th>Why</th></tr></thead><tbody>
+        ${cs.map(c => `<tr><td><b>${c.patient.name}</b></td><td>${lvBadge(SH.tri[c.id])}</td><td>${lvBadge(c.triage.level)}${SH.tri[c.id] === c.triage.level ? " ✓" : ""}</td><td>${c.triage.why}</td></tr>`).join("")}
+      </tbody></table>
+      <h3 style="margin-top:20px">Patients</h3>
+      <table class="stack rtable"><thead><tr><th>Patient</th><th>Waited</th><th>Target</th><th>Arrived at</th><th>Result</th></tr></thead><tbody>
+        ${cs.map(c => { const s = SH.seen[c.id], tg = LEVELS[c.triage.level].target;
+          return `<tr><td><b>${c.patient.name}</b> · ${c.title}</td><td>${s ? s.wait + " min" : "Not seen"}</td><td>${tg} min</td><td>${s ? s.startCond + "%" : ""}</td><td>${s ? `<span class="chip ${s.tier}">${CHIPS[s.tier]} · ${s.total}/100</span>` : `<span class="chip fail">Not seen · 0</span>`}</td></tr>`; }).join("")}
+      </tbody></table>
+      <div class="turnin">
+        <h3 style="margin:0 0 4px">Turn in your shift</h3>
+        <ol class="note" style="margin:0 0 12px;padding-left:1.2em;font-size:14px"><li>Check your name, then download your shift report (PDF).</li><li>Open the shift assignment in Google Classroom.</li><li>Choose <b>Add or create → File</b>, upload the PDF, and press <b>Turn in</b>.</li></ol>
+        <div class="namebox" style="margin:0 0 10px"><label for="shName" style="max-width:360px">Your name<input id="shName" autocomplete="name" placeholder="First and last name" value="${esc(name)}" style="background:var(--paper);color:var(--ink);border-color:var(--line)"></label></div>
+        <div class="hbtns"><button class="primary" id="shPdf">Download shift report (PDF)</button><button id="shCopy">Copy my results</button><a href="https://classroom.google.com" target="_blank" rel="noopener" style="font-weight:700;color:var(--blue);padding:10px 4px">Open Google Classroom ↗</a></div>
+        <p class="note" id="shMsg" role="status" style="margin:8px 0 0"></p>
+        <details style="margin-top:12px;padding:10px 14px"><summary>Show results as text</summary><textarea id="shText" readonly>${esc(shiftText())}</textarea></details>
+      </div>
+      <div class="row" style="margin-top:22px"><button class="danger" data-newshift="${SU}">Start a new shift</button><button class="primary" data-home>Back to all assignments</button></div>
+    </div>`;
+}
+
+function shiftText(){
+  const cs = unitCases(SU), sc = shiftScore(SU, SH), u = UNITS.find(x => x.id === SU);
+  return ["SORE! Second Opinion Required: Emergency", `Student: ${store.get("dtp-name", "") || "(no name entered)"}`, `${u.name}: ${u.shiftName}`,
+    `Shift score: ${sc.total}/100 (Triage ${sc.triPts}/20, Outcomes ${sc.outPts}/60, On time ${sc.timePts}/20)`,
+    `Triaged exactly right: ${sc.triExact}/${sc.n} · Seen: ${sc.seenN}/${sc.n} · On time: ${sc.onTime} · Shift ended ${fmtClock(SH.clock)}`, "",
+    ...cs.map(c => { const s = SH.seen[c.id]; return `${c.patient.name}: triaged ${SH.tri[c.id] || "-"} (correct ${c.triage.level}); ${s ? `waited ${s.wait} min, ${CHIPS[s.tier]}, ${s.total}/100` : "not seen"}`; }),
+    "", `Completed: ${new Date().toLocaleString()}`].join("\n");
+}
+
+async function saveBlob(blob, file){
+  try {
+    if (window.claude && typeof window.claude.use === "function"){
+      const dl = await window.claude.use("downloads");
+      if (dl){ await dl.save({filename:file, data:blob}); return "ok"; }
+    }
+  } catch(e){ return e && e.code === "declined" ? "declined" : "fail"; }
+  try { const url = URL.createObjectURL(blob); const a = document.createElement("a"); a.href = url; a.download = file; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 5000); return "ok"; } catch(e){ return "fail"; }
+}
+
+async function buildShiftPDF(){
+  const J = window.jspdf && window.jspdf.jsPDF; if (!J) throw new Error("nolib");
+  const cs = unitCases(SU), sc = shiftScore(SU, SH), u = UNITS.find(x => x.id === SU), name = store.get("dtp-name", "");
+  const doc = new J({unit:"pt", format:"letter"}), W = 612, M = 44, TW = W - 2*M;
+  const T = (s, x, y, o) => doc.text(pdfSafe(s), x, y, o);
+  doc.setFillColor(11,22,42); doc.rect(0,0,W,74,"F"); doc.setFillColor(200,56,3); doc.rect(0,74,W,6,"F");
+  doc.setFont("helvetica","bold"); doc.setFontSize(30); doc.setTextColor(255,255,255); T("SORE!", M, 48);
+  doc.setFont("helvetica","normal"); doc.setFontSize(11); T("Second Opinion Required: Emergency", M + 104, 46); T("Shift report", W - M, 46, {align:"right"});
+  let y = 110;
+  [["Student", name || "(no name entered)"], ["Unit", `${u.name}`], ["Shift", `${u.shiftName} · ended ${fmtClock(SH.clock)}`], ["Completed", new Date().toLocaleString()]].forEach(([k, v]) => {
+    doc.setFont("helvetica","bold"); doc.setFontSize(11); doc.setTextColor(86,97,118); T(k, M, y); doc.setFont("helvetica","normal"); doc.setTextColor(11,22,42); T(v, M + 80, y); y += 17; });
+  y += 8;
+  doc.setFont("helvetica","bold"); doc.setFontSize(40); doc.setTextColor(200,56,3); T(String(sc.total), M, y + 30);
+  const sw = doc.getTextWidth(String(sc.total)); doc.setFontSize(14); doc.setTextColor(86,97,118); T("/ 100", M + sw + 6, y + 30);
+  doc.setFont("helvetica","normal"); doc.setFontSize(11); doc.setTextColor(11,22,42);
+  [["Triage", sc.triPts, 20], ["Patient outcomes", sc.outPts, 60], ["Seen on time", sc.timePts, 20]].forEach(([n, v, mx], i) => {
+    const yy = y + 6 + i*16, bx = M + 150; T(n, bx, yy); doc.setFillColor(217,223,232); doc.rect(bx + 100, yy - 8, 170, 8, "F");
+    doc.setFillColor(11,22,42); if (v) doc.rect(bx + 100, yy - 8, 170 * v / mx, 8, "F"); T(`${v} / ${mx}`, W - M, yy, {align:"right"}); });
+  y += 62;
+  doc.setFontSize(11); T(`Triaged exactly right: ${sc.triExact} of ${sc.n}.  Seen: ${sc.seenN} of ${sc.n}.  Seen within target: ${sc.onTime}.`, M, y); y += 22;
+  const LVC = {1:[198,40,40], 2:[239,108,0], 3:[249,192,46], 4:[46,125,50]};
+  const cols = [M, M + 120, M + 175, M + 230, M + 290, M + 350];
+  doc.setFont("helvetica","bold"); doc.setFontSize(10); doc.setTextColor(86,97,118);
+  ["Patient", "Your level", "Correct", "Waited", "Arrived at", "Result"].forEach((h, i) => T(h, cols[i], y)); y += 6;
+  doc.setDrawColor(217,223,232); doc.line(M, y, W - M, y); y += 14;
+  doc.setFont("helvetica","normal");
+  cs.forEach(c => {
+    if (y > 735){ doc.addPage(); y = 60; }
+    const s = SH.seen[c.id], a = SH.tri[c.id];
+    doc.setTextColor(11,22,42); T(c.patient.name, cols[0], y);
+    if (a){ doc.setFillColor(...LVC[a]); doc.circle(cols[1] + 4, y - 3.5, 4, "F"); T(String(a), cols[1] + 12, y); }
+    doc.setFillColor(...LVC[c.triage.level]); doc.circle(cols[2] + 4, y - 3.5, 4, "F"); T(String(c.triage.level) + (a === c.triage.level ? "  ok" : ""), cols[2] + 12, y);
+    T(s ? `${s.wait} min` : "-", cols[3], y); T(s ? `${s.startCond}%` : "-", cols[4], y);
+    if (!s) doc.setTextColor(179,38,30); else if (s.tier === "fail") doc.setTextColor(179,38,30); else if (s.tier === "hero") doc.setTextColor(29,107,69); else doc.setTextColor(138,83,0);
+    T(s ? `${CHIPS[s.tier]} · ${s.total}/100` : "Not seen · 0", cols[5], y);
+    y += 17;
+  });
+  y += 10; doc.setTextColor(86,97,118); doc.setFontSize(9);
+  doc.splitTextToSize(`Levels: ${[1,2,3,4].map(n => `${n} ${LEVELS[n].name} (see within ${LEVELS[n].target} min)`).join(", ")}. Arrived at = patient condition when seen; patients who wait past target get worse, and their outcome points shrink to match. Game times are simplified.`, TW).forEach(l => { T(l, M, y); y += 12; });
+  const pages = doc.getNumberOfPages();
+  for (let p = 1; p <= pages; p++){ doc.setPage(p); doc.setFontSize(8); doc.setTextColor(120,130,145); T(`SORE! - educational simulation, not medical advice - page ${p} of ${pages}`, W/2, 770, {align:"center"}); }
+  return doc.output("blob");
+}
+
+async function saveShiftPDF(btn){
+  const msg = $("#shMsg"), nm = ($("#shName").value || "").trim();
+  if (!nm){ msg.textContent = "Type your name first so your teacher knows whose report it is."; $("#shName").focus(); return; }
+  store.set("dtp-name", nm); btn.disabled = true; msg.textContent = "Building your shift report…";
+  let blob; try { blob = await buildShiftPDF(); } catch(e){ btn.disabled = false; msg.textContent = "The PDF tool didn't load (check your internet). Use Copy my results instead."; return; }
+  const file = `SORE_${(UNITS.find(x => x.id === SU).shiftName).replace(/[^A-Za-z0-9]+/g,"-")}_${nm.replace(/[^A-Za-z0-9]+/g,"-").replace(/^-|-$/g,"")}.pdf`;
+  const res = await saveBlob(blob, file); btn.disabled = false;
+  msg.textContent = res === "ok" ? `Saved as ${file}. Now upload it to your Google Classroom assignment.` : res === "declined" ? "Download cancelled. Press the button again when you're ready." : "Download isn't available here. Use Copy my results and paste into Classroom.";
+}
+
 /* ---------- Events ---------- */
 document.addEventListener("click", async e => {
   const el = e.target.closest("button"); if (!el) return;
   if (el.hasAttribute("data-home")) return renderHome();
   if (el.hasAttribute("data-how")) return show("how");
-  if (el.id === "nextBtn") return start(el.dataset.target);
+  if (el.id === "nextBtn" && !el.dataset.shift) return start(el.dataset.target);
   if (el.dataset.brief){ $("#briefBody").innerHTML = UNITS.find(u => u.id === el.dataset.brief).brief + `<div class="row" style="margin-top:22px"><span></span><button class="primary" data-home>Back to the assignments</button></div>`; return show("brief"); }
   if (el.dataset.id) return start(el.dataset.id);
+  if (el.id === "nextBtn" && el.dataset.shift) return openShift(el.dataset.shift);
+  if (el.dataset.shift) return openShift(el.dataset.shift);
+  if (el.dataset.newshift){
+    if (el.dataset.armed !== "1"){ el.dataset.armed = "1"; el.textContent = "Click again to erase this shift"; return; }
+    store.set("sore-shift-" + el.dataset.newshift, null); try { localStorage.removeItem("sore-shift-" + el.dataset.newshift); } catch(e){}
+    return openShift(el.dataset.newshift);
+  }
+  if (el.dataset.tri){ const [pid, lv] = el.dataset.tri.split(":"); if (!SH.tri[pid]) SH.clock += TRIAGE_MIN; SH.tri[pid] = +lv; saveShift(); const y = window.scrollY; renderShift(); window.scrollTo({top:y}); return; }
+  if (el.hasAttribute("data-endtriage")){ SH.phase = "treat"; saveShift(); renderShift(); window.scrollTo({top:0}); return; }
+  if (el.dataset.see) return start(el.dataset.see, true);
+  if (el.hasAttribute("data-board")){ if (Object.keys(SH.seen).length >= unitCases(SU).length) SH.phase = "done"; saveShift(); renderShift(); show("shift"); return; }
+  if (el.hasAttribute("data-endshift")){
+    const left = unitCases(SU).filter(c => !SH.seen[c.id]).length;
+    if (left && !SH.confirmEnd){ SH.confirmEnd = true; renderShift(); return; }
+    SH.phase = "done"; delete SH.confirmEnd; saveShift(); renderShift(); window.scrollTo({top:0}); return;
+  }
+  if (el.id === "shPdf") return saveShiftPDF(el);
+  if (el.id === "shCopy"){ const ta = $("#shText"); try { await navigator.clipboard.writeText(ta.value); el.textContent = "Copied!"; } catch(err){ ta.closest("details").open = true; ta.focus(); ta.select(); el.textContent = "Selected: press Ctrl+C"; } return; }
   if (el.hasAttribute("data-retry")) return start(S.c.id);
   if (el.id === "reinstate"){ strikes = 0; store.set("dtp-strikes", 0); renderLicense(); return; }
   if (el.id === "pdfBtn") return savePDF(el);
@@ -1032,9 +1596,9 @@ document.addEventListener("click", async e => {
   if (el.dataset.go){ if (el.dataset.go === "done") finish(); else { S.stage = el.dataset.go; S.review = null; renderPanel(); } }
 });
 document.addEventListener("input", e => {
-  if (e.target.id === "sname" || e.target.id === "rname"){
+  if (e.target.id === "sname" || e.target.id === "rname" || e.target.id === "shName"){
     store.set("dtp-name", e.target.value.trim());
-    const ta = $("#resText"); if (ta) ta.value = ta.value.replace(/^Student: .*$/m, "Student: " + (e.target.value.trim() || "(no name entered)"));
+    const ta = $(e.target.id === "shName" ? "#shText" : "#resText"); if (ta) ta.value = ta.value.replace(/^Student: .*$/m, "Student: " + (e.target.value.trim() || "(no name entered)"));
   }
 });
 $("#schema").textContent = JSON.stringify({...CASES[3], actions: CASES[3].actions.slice(0, 3).concat(CASES[3].actions.slice(7, 8))}, null, 2);
