@@ -198,12 +198,42 @@ pre{overflow-x:auto;background:var(--bg);padding:14px;border-radius:8px;font-siz
 .faces{display:flex;flex-wrap:wrap;gap:4px;margin-top:10px}.faces span{width:44px;height:44px;border-radius:50%;overflow:hidden;background:var(--blue-soft)}.faces svg{display:block;width:100%;height:100%}
 .rtable td,.rtable th{font-size:14px}
 @media(max-width:760px){.brow{grid-template-columns:52px minmax(0,1fr)}.brow .wait,.brow>.act{grid-column:1/-1}.shiftcard{grid-template-columns:minmax(0,1fr)}}
+.land-hero{background:radial-gradient(120% 90% at 85% 20%,#1d3a6b 0%,#0b162a 60%);color:#fff;border-bottom:6px solid var(--orange)}
+.land-hero .wrap{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:clamp(24px,4vw,56px);align-items:center;min-height:min(78vh,640px)}
+.mark.big{font-size:clamp(64px,10vw,112px);line-height:.9}
+.land-hero .sub{font:600 clamp(18px,2.2vw,24px)/1.2 "Barlow Condensed",sans-serif;color:#c9d3e3;margin:6px 0 22px}
+.land-hero h1{font-size:clamp(30px,4vw,46px);max-width:18ch}
+.land-hero p{font-size:18px;opacity:.9;max-width:52ch;margin:14px 0 24px}
+.bigbtn{font-size:19px;min-height:52px;padding:10px 26px}
+.ghostlink{color:#fff;font-weight:700;padding:12px 6px;text-decoration:none;border-bottom:2px solid #ff6a2b}
+.faces-wall{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.faces-wall span{border-radius:50%;overflow:hidden;background:#dfe6f1;aspect-ratio:1;border:4px solid #13264a;box-shadow:0 10px 24px rgba(0,0,0,.35)}
+.faces-wall span:nth-child(odd){transform:translateY(14px)}
+.faces-wall svg{display:block;width:100%;height:100%}
+.lead{font-size:18px;color:var(--muted);max-width:60ch;margin:8px 0 22px}
+.moves{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:16px}
+.moves article{background:var(--paper);border:1px solid var(--line);border-top:6px solid var(--orange);border-radius:14px;padding:18px}
+.moves h3{font:700 24px/1.1 "Barlow Condensed",sans-serif;margin:10px 0 6px}
+.moves p{margin:0}
+.ic{width:56px;height:56px;border-radius:14px;background:var(--navy);display:grid;place-items:center}
+.ic svg{width:34px;height:34px}
+.band.alt{background:var(--paper);border-block:1px solid var(--line)}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:clamp(24px,4vw,56px)}
+.two h2{margin-bottom:10px}
+.scorecards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:12px;margin:12px 0}
+.scorecards div{background:var(--bg);border-radius:12px;padding:14px;display:grid;gap:4px}
+.scorecards b{font:700 22px/1.1 "Barlow Condensed",sans-serif;color:var(--orange)}
+.scorecards small{color:var(--muted)}
+.lic-list{list-style:none;padding:0}.lic-list li{margin:8px 0}
+.land-cta{background:var(--navy)}
+.land-cta .wrap{justify-content:space-between}
+@media(max-width:760px){.land-hero .wrap{grid-template-columns:minmax(0,1fr);min-height:0}.faces-wall{grid-template-columns:repeat(4,minmax(0,1fr));order:-1}}
 </style>
 <script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script>
 </head>
 <body>
 <header class="top"><div class="wrap">
-  <button class="brand" data-home aria-label="SORE! home"><span class="mark">SORE<span>!</span></span><small>Second Opinion Required: Emergency</small></button>
+  <button class="brand" data-landing aria-label="SORE! start page"><span class="mark">SORE<span>!</span></span><small>Second Opinion Required: Emergency</small></button>
   <div class="hbtns">
     <span class="lic" id="lic"></span>
     <button class="ghost" data-how>How to play</button>
@@ -239,75 +269,89 @@ pre{overflow-x:auto;background:var(--bg);padding:14px;border-radius:8px;font-siz
   </div></main>
 </section>
 
-<main class="band" id="how" hidden><div class="wrap">
-  <button class="link" data-home>← All assignments</button>
-  <div class="sheet">
-    <h2>How to play SORE!</h2>
-    <p>You're the doctor on shift. Each case is a patient with a problem to solve. Your job is to find out what's wrong <b>without wasting time or hurting anyone</b>.</p>
-    <h3>1. Read the briefing</h3>
-    <p>Each unit has a briefing with the key facts, like normal vital sign ranges. Read it first; the cases expect you to know it.</p>
-    <h3>2. Meet the patient</h3>
-    <p>Read the patient's story on the chart. Think: what could cause this? What do I need to find out?</p>
-    <h3>3. Investigate</h3>
-    <ol>
-      <li>Click any history question, vital sign, exam or test to <b>review it first</b>: what it checks and any risks.</li>
-      <li>Press <b>Order this</b> to do it, or <b>Cancel</b> to back out. Reviewing is free; ordering is not.</li>
-      <li>Results are written onto the patient's chart.</li>
-    </ol>
-    <div class="callout"><b>Watch the patient's condition bar, and their face.</b> Unnecessary orders waste time and drop the bar by 10. Harmful orders injure your patient and drop it by 30. Below 50, the case fails even with the right diagnosis.</div>
-    <h3>4. Decide</h3>
-    <p>You'll answer two questions, usually <i>which structure or vital sign is the problem</i> and then <i>the diagnosis</i>. Click an answer to read about it before you commit, then press <b>Next</b> or <b>Submit diagnosis</b>.</p>
-    <h3>5. Face the attending</h3>
-    <p>Dr. Okafor, the attending physician, reviews every case. You'll get your score, the debrief, and her judgement.</p>
-    <table class="stack">
-      <thead><tr><th>Score</th><th>Points</th><th>How to lose them</th></tr></thead>
-      <tbody>
-        <tr><td>Diagnosis</td><td>40</td><td>Wrong final answer</td></tr>
-        <tr><td>Step 2 answer</td><td>30</td><td>Wrong structure, bone or vital sign</td></tr>
-        <tr><td>Patient care</td><td>30</td><td>−4 per key step skipped, −4 per unnecessary order, −15 per harmful order</td></tr>
-      </tbody>
-    </table>
-    <h3>Your medical license</h3>
-    <ul>
-      <li><b>Full recovery</b>: right diagnosis, right step 2 answer, no harm, and careful testing. Removes one strike.</li>
-      <li><b>Recovered, with complaints</b>: the patient lives, but your care was sloppy. No strike.</li>
-      <li><b>Lawsuit</b>: wrong diagnosis, or you harmed the patient badly. One strike.</li>
-      <li>Three strikes and your license is <b>suspended</b>. Come back to this page to be reinstated.</li>
-    </ul>
-    <h3>Shifts & triage (system units)</h3>
-    <p>System units, like the skeletal and integumentary systems, are played as a full ER shift. Twelve patients arrive at 7:00 AM, and the waiting room is overcrowded and understaffed.</p>
-    <ol>
-      <li><b>Triage first.</b> Read each patient's triage card (what they say, their triage vitals, what you can see) and give them a level. Each triage takes 1 minute of the shift clock.</li>
-      <li><b>Then see patients.</b> Pick who to see next from the board. Each question, exam and test takes game time, shown when you review it. Reading and thinking are free; the clock only moves when you order something.</li>
-      <li><b>Every level must be seen within a set time.</b> Patients who wait longer get worse, and they start their visit in poorer condition. Watch their faces on the board.</li>
-      <li>Triage carefully. If you rank a dangerous patient too low, they'll get worse while you treat someone who could have waited.</li>
-    </ol>
-    <table class="stack">
-      <thead><tr><th>Level</th><th>See within</th><th>Examples</th></tr></thead>
-      <tbody>
-        <tr><td><span class="lv lv1">1 Immediate</span></td><td>45 min</td><td>Heavy bleeding, head injury with confusion, can't breathe</td></tr>
-        <tr><td><span class="lv lv2">2 Emergent</span></td><td>135 min</td><td>Severe pain, a limb at risk, high-risk older adults</td></tr>
-        <tr><td><span class="lv lv3">3 Urgent</span></td><td>240 min</td><td>Probable fracture with good circulation, stable vitals</td></tr>
-        <tr><td><span class="lv lv4">4 Non-urgent</span></td><td>360 min</td><td>Walking, mild pain, problem for days or weeks</td></tr>
-      </tbody>
-    </table>
-    <p class="note">Real emergency departments use scales like the Emergency Severity Index (ESI). The game's levels and times are simplified, and the clock runs on game minutes.</p>
-    <p><b>Shift score (100):</b> triage accuracy 20, patient outcomes 60 (each case score, reduced if the patient got worse while waiting), seen on time 20. At the end of the shift, download your <b>shift report</b> PDF for Google Classroom.</p>
-    <h3>6. Turn it in</h3>
-    <p>After each case, enter your name and press <b>Download PDF report</b>. Upload the PDF to the matching assignment in Google Classroom (<b>Add or create → File</b>) and press <b>Turn in</b>. If the download doesn't work on your device, press <b>Copy my results</b> and paste them into the assignment instead.</p>
-    <h3>Tips from the attending</h3>
-    <ul>
-      <li>Start with the history and a full set of vitals. They solve more cases than any scanner.</li>
-      <li>Always ask about medications and allergies.</li>
-      <li>Never force a possibly broken bone to move, or make an injured patient walk "to see."</li>
-      <li>Before every order, ask: <i>will this result change what I do?</i></li>
-    </ul>
-    <div class="row" style="margin-top:22px">
-      <button class="danger" id="reinstate" hidden>I've reviewed the rules. Reinstate my license.</button>
-      <button class="primary" data-home>Start playing</button>
+<section id="landing" hidden>
+  <div class="land-hero band"><div class="wrap">
+    <div>
+      <div class="mark big">SORE<span>!</span></div>
+      <div class="sub">Second Opinion Required: Emergency</div>
+      <h1>The waiting room is full. You're the only doctor on shift.</h1>
+      <p>Triage the crowd, take the history, order only what you need, and make the diagnosis before anyone gets worse. Keep your patients alive, and your medical license too.</p>
+      <div class="hbtns"><button class="primary bigbtn" data-home>Enter the ER →</button><a class="ghostlink" href="#howto">How to play ↓</a></div>
     </div>
-  </div>
-</div></main>
+    <div class="faces-wall" id="landFaces" aria-hidden="true"></div>
+  </div></div>
+
+  <div class="band" id="howto"><div class="wrap">
+    <h2>Your shift, in four moves</h2>
+    <p class="lead">Every case is a real-feeling patient. Your job is to find out what's wrong without wasting time or hurting anyone.</p>
+    <div class="moves">
+      <article><div class="ic"><svg viewBox="0 0 34 34" fill="none" stroke-width="3" stroke-linecap="round"><rect x="4" y="5" width="26" height="6" rx="2" fill="#c62828" stroke="none"/><rect x="4" y="14" width="20" height="6" rx="2" fill="#ef6c00" stroke="none"/><rect x="4" y="23" width="13" height="6" rx="2" fill="#2e7d32" stroke="none"/></svg></div><h3>Triage</h3><p>Twelve patients arrive at once. Read each triage card (what they say, their vitals, what you see) and rank them from <span class="lv lv1">1 Immediate</span> to <span class="lv lv4">4 Non-urgent</span>.</p></article>
+      <article><div class="ic"><svg viewBox="0 0 34 34" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="7" y="5" width="20" height="25" rx="2"/><rect x="12" y="2.5" width="10" height="5" rx="1.5" fill="#ff6a2b" stroke="#ff6a2b"/><path d="M11 18h3l2-4 3 8 2-4h3"/></svg></div><h3>Investigate</h3><p>Click any question, vital sign, exam or test to <b>review it first</b>: what it checks, its risks, and how long it takes. Then <b>Order this</b> or <b>Cancel</b>. Reviewing is free; ordering isn't.</p></article>
+      <article><div class="ic"><svg viewBox="0 0 34 34" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="15" cy="15" r="9"/><path d="M22 22l7 7" stroke="#ff6a2b" stroke-width="3.5"/><path d="M11 15l3 3 5-6"/></svg></div><h3>Decide</h3><p>Answer two questions: which structure or vital sign is the problem, then the diagnosis. Click an answer to read about it before you commit.</p></article>
+      <article><div class="ic"><svg viewBox="0 0 34 34" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 4c-4 0-6 2-6 5v6c0 3 2 5 6 5s6-2 6-5V9c0-3-2-5-6-5z"/><path d="M8 30c1-5 4-8 9-8s8 3 9 8"/><path d="M13 22v3a4 4 0 0 0 8 0v-3" stroke="#ff6a2b"/><circle cx="21" cy="26" r="1.8" fill="#ff6a2b" stroke="none"/></svg></div><h3>Face the attending</h3><p>Dr. Okafor reviews every patient. Get a full recovery, a patient who recovers with complaints, or a lawsuit.</p></article>
+    </div>
+  </div></div>
+
+  <div class="band alt"><div class="wrap two">
+    <div>
+      <h2>The clock is always running</h2>
+      <p>In a shift, every question, exam and test moves the clock forward for <b>everyone still waiting</b>. Reading and thinking are free. Each triage level has a time limit. Patients who wait longer get worse, start their visit in poorer condition, and cost you points. Watch their faces on the board.</p>
+      <table class="stack">
+        <thead><tr><th>Level</th><th>See within</th><th>Sounds like</th></tr></thead>
+        <tbody>
+          <tr><td><span class="lv lv1">1 Immediate</span></td><td>45 min</td><td>Heavy bleeding, head injury with confusion, can't breathe</td></tr>
+          <tr><td><span class="lv lv2">2 Emergent</span></td><td>135 min</td><td>Severe pain, a limb at risk, a high-risk older adult</td></tr>
+          <tr><td><span class="lv lv3">3 Urgent</span></td><td>240 min</td><td>Probable fracture with good circulation, stable vitals</td></tr>
+          <tr><td><span class="lv lv4">4 Non-urgent</span></td><td>360 min</td><td>Walking, mild pain, a problem for days or weeks</td></tr>
+        </tbody>
+      </table>
+      <p class="note">Real emergency departments use scales like the Emergency Severity Index (ESI). The game's levels and times are simplified and run on game minutes.</p>
+    </div>
+    <div>
+      <h2>How you're scored</h2>
+      <div class="scorecards">
+        <div><b>Each patient: 100</b><span>Diagnosis 40 · step 2 answer 30 · patient care 30</span><small>Patient care: −4 per key step skipped, −4 per unnecessary order, −15 per harmful one.</small></div>
+        <div><b>Each shift: 100</b><span>Triage 20 · outcomes 60 · on time 20</span><small>Outcomes shrink when patients got worse while waiting.</small></div>
+      </div>
+      <div class="callout"><b>Condition bar:</b> an unnecessary order drops it 10, and a harmful one drops it 30. Below 50, the patient's case fails, even with the right diagnosis.</div>
+      <h3>Your medical license</h3>
+      <ul class="lic-list">
+        <li><span class="chip hero">Full recovery</span> Right answers, no harm, careful testing. Erases a strike.</li>
+        <li><span class="chip mixed">Complaints</span> The patient lives, but your care was sloppy.</li>
+        <li><span class="chip fail">Lawsuit</span> Wrong diagnosis or serious harm. One strike.</li>
+      </ul>
+      <p>Three strikes and your license is <b>suspended</b>. Come back here to be reinstated.</p>
+      <button class="danger" id="reinstate" hidden>I've reviewed the rules. Reinstate my license.</button>
+    </div>
+  </div></div>
+
+  <div class="band"><div class="wrap two">
+    <div>
+      <h2>Turning it in</h2>
+      <ol>
+        <li>Enter your name.</li>
+        <li>At the end of a case or a shift, press <b>Download PDF report</b>.</li>
+        <li>In Google Classroom, open the assignment, choose <b>Add or create → File</b>, upload the PDF, and press <b>Turn in</b>.</li>
+      </ol>
+      <p class="note">If downloads are blocked on your device, press <b>Copy my results</b> and paste them into the assignment. Shift progress saves on this device, so finish on the same computer.</p>
+    </div>
+    <div>
+      <h2>Tips from Dr. Okafor</h2>
+      <ul>
+        <li>Start with the history and a full set of vitals. They solve more cases than any scanner.</li>
+        <li>Always ask about medications and allergies.</li>
+        <li>Never force a possibly broken bone to move, or make an injured patient walk "to see."</li>
+        <li>Before every order, ask: <i>will this result change what I do?</i></li>
+        <li>Read the unit briefing first. The cases expect you to know it.</li>
+      </ul>
+    </div>
+  </div></div>
+
+  <div class="land-cta band"><div class="wrap row">
+    <h2 style="color:#fff">Your patients are waiting.</h2>
+    <button class="primary bigbtn" data-home>Enter the ER →</button>
+  </div></div>
+</section>
 
 <main class="band" id="brief" hidden><div class="wrap">
   <button class="link" data-home>← All assignments</button>
@@ -1438,7 +1482,7 @@ function renderLicense(){
   $("#reinstate").hidden = strikes < 3;
 }
 function show(view){
-  for (const id of ["home","how","brief","game","shift"]) $("#" + id).hidden = id !== view;
+  for (const id of ["home","landing","brief","game","shift"]) $("#" + id).hidden = id !== view;
   window.scrollTo({top:0});
 }
 
@@ -1945,7 +1989,8 @@ async function saveShiftPDF(btn){
 document.addEventListener("click", async e => {
   const el = e.target.closest("button"); if (!el) return;
   if (el.hasAttribute("data-home")) return renderHome();
-  if (el.hasAttribute("data-how")) return show("how");
+  if (el.hasAttribute("data-landing")) return show("landing");
+  if (el.hasAttribute("data-how")){ show("landing"); const hw = $("#howto"); if (hw) hw.scrollIntoView(); return; }
   if (el.id === "nextBtn" && !el.dataset.shift) return start(el.dataset.target);
   if (el.dataset.brief){ $("#briefBody").innerHTML = UNITS.find(u => u.id === el.dataset.brief).brief + `<div class="row" style="margin-top:22px"><span></span><button class="primary" data-home>Back to the assignments</button></div>`; return show("brief"); }
   if (el.dataset.id) return start(el.dataset.id);
@@ -1996,6 +2041,10 @@ document.addEventListener("input", e => {
 });
 $("#schema").textContent = JSON.stringify({...CASES[3], actions: CASES[3].actions.slice(0, 3).concat(CASES[3].actions.slice(7, 8))}, null, 2);
 renderLicense(); renderHome();
+{ const wall = CASES.filter(c => c.unit !== "u1" && c.unit !== "u3").filter((c, i) => i % 3 === 0).slice(0, 8);
+  const moods = ["hurt","worse","happy","hurt","critical","ok","hurt","worse"];
+  $("#landFaces").innerHTML = wall.map((c, i) => `<span>${avatar(look(c), moods[i % moods.length])}</span>`).join(""); }
+show("landing");
 }
 </script>
 </body>
