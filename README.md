@@ -8,6 +8,7 @@ Interactive anatomy case studies for high school students. Take the history, che
 - Unit 1: The skeletal system: a 12-patient ER shift with triage and a game clock
 - Unit 2: The integumentary system: a 12-patient ER shift (burns, rashes, wounds, skin infections)
 - Unit 3: The cardiovascular system: a 12-patient ER shift (heart attack, aortic dissection, heart failure, arrhythmias, clots, anemia)
+- Unit 4: The digestive system: a 12-patient ER shift (bleeding ulcer, swallowed battery, appendicitis, hepatitis, reflux)
 - Organ systems (preview)
 
 Students turn in a PDF case report (Refresher cases) or shift report (system units) through Google Classroom.

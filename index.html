@@ -591,6 +591,32 @@ const UNITS = [
     <li><b>CT angiogram</b>: a CT scan with dye that lights up the arteries.</li>
   </ul>`
 },
+{ id:"digest", name:"Unit 4: The digestive system", mode:"shift", shiftName:"Digestive ER shift",
+  blurb:"A full ER shift: 12 patients with problems from the esophagus to the colon, including a toddler who swallowed a battery. Triage them, then see them before they get worse.",
+  brief:`<h2>Unit 4 briefing: the digestive system</h2>
+  <p>The digestive system breaks food into molecules small enough to absorb, takes in water, and gets rid of what's left. It's one long tube, the <b>GI tract</b>, plus helper organs.</p>
+  <h3>The tube, in order</h3>
+  <table class="stack">
+    <thead><tr><th>Part</th><th>Job</th><th>Problems in this unit</th></tr></thead>
+    <tbody>
+      <tr><td>Esophagus</td><td>Pushes food to the stomach in waves (peristalsis). A muscle ring at the bottom keeps acid out.</td><td>Food or a battery stuck; acid reflux</td></tr>
+      <tr><td>Stomach</td><td>Churns food with acid and enzymes. Protected by a mucus layer.</td><td>Ulcers</td></tr>
+      <tr><td>Small intestine</td><td>About 6 m long: duodenum, jejunum, ileum. Villi absorb nutrients and most of the water. Enzymes like lactase finish digestion.</td><td>Ulcers in the duodenum, blockage, stomach bugs, lactose intolerance</td></tr>
+      <tr><td>Large intestine (colon)</td><td>Absorbs the remaining water and forms stool. The appendix hangs off its start, in the lower right.</td><td>Appendicitis, diverticulitis</td></tr>
+    </tbody>
+  </table>
+  <h3>Helper organs</h3>
+  <ul>
+    <li><b>Liver:</b> makes bile, processes nutrients and medicines, and clears bilirubin. When it's inflamed, bilirubin builds up and causes <b>jaundice</b> (yellow eyes and skin).</li>
+    <li><b>Gallbladder:</b> stores bile and squeezes it out after fatty meals.</li>
+    <li><b>Pancreas:</b> makes digestive enzymes and insulin.</li>
+  </ul>
+  <h3>Where it hurts matters</h3>
+  <p>Divide the belly into four quarters around the belly button. <b>Upper right:</b> liver and gallbladder. <b>Upper middle:</b> stomach and duodenum. <b>Lower right:</b> appendix. <b>Lower left:</b> sigmoid colon. Pain from the intestines often starts vague, near the belly button, and moves once nearby tissue gets inflamed.</p>
+  <div class="callout"><b>Red flags in this unit:</b> vomiting blood or black stools with a fast pulse, a swallowed button battery, a swollen belly with green vomiting, and not being able to swallow saliva. Also: belly pain plus fever in a child or teen.</div>
+  <h3>Dehydration in children</h3>
+  <p>Signs: peeing less, a dry mouth, no tears, sunken eyes, a fast pulse, and slow capillary refill (press a fingernail: color should return in under 2 seconds). Small, frequent sips of rehydration solution are the main treatment.</p>`
+},
 { id:"u3", name:"Organ systems (preview)",
   blurb:"Early sample cases from later units: digestive, cardiovascular and respiratory.", brief:null }
 ];
@@ -1615,15 +1641,295 @@ const CASES = [
     clue:"White, then blue, then red fingers triggered by cold, lasting minutes, in a young woman with normal pulses and no fingertip sores.",
     mistake:"Ordering big scans. This is diagnosed from the story and the exam."}
 },
+{ id:"gi-bleed", unit:"digest", title:"Coffee grounds", level:"Patient 4.2",
+  patient:{name:"Ronald K.", age:58, sex:"M"},
+  triage:{level:1, arrival:"Ambulance", complaint:"“I threw up blood, and I almost passed out in the bathroom.”", vitals:"Pulse 124 · BP 94/60 · O₂ 97% · Pale and sweaty", sign:"Gray-looking, lightheaded when he sits up. Dark vomit stains on his shirt.", why:"Vomiting blood with a fast pulse and low blood pressure means he's losing a lot of blood. Immediate."},
+  story:"Ronald has had a gnawing pain in his upper belly for a few weeks. This morning he vomited something that looked like coffee grounds, then bright red blood. His stools have been black and sticky for two days.",
+  actions:[
+    A("hpi","key","Burning pain in the upper middle belly for weeks, better briefly after eating. Vomited “coffee grounds,” then red blood. Black, tarry stools for 2 days."),
+    A("meds","key","Takes high-dose ibuprofen several times a day for back pain, for months. No blood thinners. No allergies."),
+    A("vitals","key","Pulse 124, BP 94/60, breathing 22, oxygen 97%. Blood pressure drops further when he sits up."),
+    {id:"ivblood",group:R,label:"Two IV lines, fluids & a blood transfusion",about:"Replace the lost volume and red blood cells fast, through two large IVs.",kind:"key",result:"After fluids and two units of blood, his pulse falls to 96 and his blood pressure rises to 116/72."},
+    A("cbc","ok","Hemoglobin 7.6, very low.",{min:6}),
+    {id:"scope",group:T,label:"Urgent endoscopy",about:"A thin camera passed through the mouth into the esophagus, stomach and duodenum to find and stop the bleeding.",risk:"Needs sedation. The right test here.",kind:"key",min:12,result:"A deep ulcer in the first part of the duodenum with a bleeding vessel. The gastroenterologist seals it with clips."},
+    {id:"nsaid",group:R,label:"Give him ibuprofen for the pain",about:"An anti-inflammatory pain reliever.",risk:"Ibuprofen-type drugs damage the stomach's protective lining and can make an ulcer bleed more.",kind:"harm",result:"Within the hour he vomits more blood and his blood pressure drops again."},
+    {id:"ctabd",group:T,label:"CT scan of the abdomen",about:"Detailed X-ray slices of the belly.",risk:"Radiation, and it can't stop the bleeding.",kind:"extra",min:12,result:"Doesn't show the ulcer clearly. Time lost while he kept bleeding."}
+  ],
+  q1:{short:"Structure", prompt:"Where is the bleeding coming from?", options:[
+    {text:"Lining of the duodenum", info:"The first part of the small intestine, right after the stomach. Stomach acid pours into it, and when its protective mucus layer is damaged, an ulcer can form and erode into a blood vessel."},
+    {text:"Esophagus", info:"The food tube. Bleeding there usually follows violent retching or swollen veins from liver disease."},
+    {text:"Colon", info:"The large intestine. Bleeding there usually comes out as red or maroon blood in the stool, not vomit."},
+    {text:"Liver", info:"The liver doesn't bleed into the gut directly."},
+    {text:"Gallbladder", info:"Stores bile. Problems cause pain after fatty meals, not bleeding."}], answer:"Lining of the duodenum"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Bleeding peptic ulcer"},{text:"Food poisoning"},{text:"Gallstones"},{text:"Appendicitis"},{text:"Heartburn (GERD)"}], answer:"Bleeding peptic ulcer"},
+  debrief:{
+    body:"The stomach and duodenum protect themselves from acid with a mucus layer. Ibuprofen-type drugs (NSAIDs) weaken that protection, and so does the bacterium H. pylori. Acid then eats an ulcer into the wall. If it reaches a blood vessel, the bleeding can be heavy. Blood that meets stomach acid turns dark, like coffee grounds, and digested blood makes stools black.",
+    clue:"Coffee-ground vomit, black tarry stools, months of daily ibuprofen, and a fast pulse with low blood pressure.",
+    mistake:"Giving more ibuprofen. It caused the ulcer."}
+},
+{ id:"battery", unit:"digest", title:"The missing battery", level:"Patient 4.3",
+  patient:{name:"Lily R.", age:2, sex:"F"},
+  triage:{level:1, arrival:"Carried in by her mom", complaint:"“I think she swallowed the battery from the TV remote.”", vitals:"Pulse 128 · Breathing 26 · O₂ 99%", sign:"Drooling and fussy, but breathing comfortably.", why:"A swallowed button battery can burn through the esophagus within two hours. Even though she looks okay, every minute counts: immediate."},
+  story:"About 45 minutes ago, Lily's mom found the back of the TV remote open and the round, flat battery missing. Lily has been drooling and fussy and doesn't want to drink her juice.",
+  actions:[
+    {id:"what",group:H,label:"What did she swallow, and when?",about:"The type and size of the object, and how long ago, decide how urgent this is.",kind:"key",result:"A coin-sized button battery from the remote, about 45 minutes ago. Her mom has the package: it's a 20 mm lithium battery."},
+    A("vitals","ok","Pulse 128 and breathing 26 (normal for a 2-year-old who's upset), oxygen 99%."),
+    {id:"exam",group:E,label:"Check breathing, throat & drooling",about:"Look for drooling, trouble swallowing, noisy breathing or chest pain.",kind:"ok",result:"Drooling, refusing to swallow, but breathing quietly with no wheeze."},
+    {id:"xray",group:T,label:"X-ray of the neck, chest & belly",about:"Finds a swallowed metal object and shows where it is.",risk:"Small radiation dose, worth it.",kind:"key",min:6,result:"A round object in the esophagus at the level of the collarbones, with a double-ring “halo” edge: a button battery."},
+    {id:"honey",group:R,label:"Honey by spoon & call for urgent removal",about:"For children over 1, spoonfuls of honey can coat the battery and slow the burn until doctors remove it with a scope.",kind:"key",result:"Lily takes the honey, and the endoscopy team removes the battery 30 minutes later. There's a small burn in the esophagus, but no hole."},
+    {id:"vomit",group:R,label:"Make her throw up",about:"Try to bring the battery back up.",risk:"Vomiting can push the battery against more tissue or into the airway. Never induce vomiting for a swallowed battery.",kind:"harm",result:"She gags and cries but the battery doesn't come up. Her drooling gets worse."},
+    {id:"wait",group:F,label:"Wait and see if it passes in her poop",about:"Many swallowed coins pass on their own.",risk:"A battery stuck in the esophagus keeps burning the whole time.",kind:"harm",min:20,result:"Two hours later, the endoscopy finds a deep burn in the esophagus wall. She'll need a longer hospital stay."}
+  ],
+  q1:{short:"Structure", prompt:"Where is the battery stuck?", options:[
+    {text:"Esophagus", info:"The muscular tube from the throat to the stomach. It has narrow spots, like where it passes behind the collarbones, where swallowed objects get stuck."},
+    {text:"Trachea", info:"The windpipe. An object there would cause coughing, wheezing or trouble breathing."},
+    {text:"Stomach", info:"Once in the stomach, most small objects keep moving through the gut."},
+    {text:"Small intestine", info:"Objects that reach the intestine usually pass on their own."},
+    {text:"Larynx", info:"The voice box, at the top of the airway."}], answer:"Esophagus"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Button battery stuck in the esophagus"},{text:"Swallowed coin, harmless"},{text:"Strep throat"},{text:"Teething"},{text:"Croup"}], answer:"Button battery stuck in the esophagus"},
+  debrief:{
+    body:"A button battery pressed against the wet lining of the esophagus completes an electrical circuit. That creates a strong alkali, like drain cleaner, which can burn through the wall in hours. The esophagus narrows where it passes behind the collarbones, so objects often stop right there.",
+    clue:"A missing button battery, drooling and refusing to swallow, and the double-ring halo on X-ray.",
+    mistake:"Waiting or making her vomit. A battery in the esophagus is removed as fast as possible."}
+},
+{ id:"obstruction", unit:"digest", title:"Swollen and vomiting", level:"Patient 4.4",
+  patient:{name:"Dorothy A.", age:70, sex:"F"},
+  triage:{level:2, arrival:"Driven in by her son", complaint:"“My stomach is swollen like a balloon, and I keep throwing up.”", vitals:"Pulse 112 · BP 108/68 · O₂ 96% · Pain 8/10", sign:"Her belly is visibly swollen. She's holding a bag of green vomit.", why:"Severe pain, repeated vomiting, a fast pulse and lowish blood pressure in an older adult. Possible blocked intestine: emergent."},
+  story:"Dorothy has had cramping belly pain that comes in waves since yesterday. She keeps vomiting green fluid, her belly is swelling, and she hasn't passed gas or had a bowel movement in two days. She had her uterus removed 20 years ago.",
+  actions:[
+    A("hpi","key","Waves of crampy pain since yesterday. Vomiting green fluid. No gas or bowel movement for 2 days. Belly getting bigger."),
+    A("pmh","key","Hysterectomy (uterus removed) 20 years ago. High blood pressure."),
+    A("vitals","ok","Pulse 112, BP 108/68, breathing 20, oxygen 96%, temp 37.4 °C."),
+    {id:"exam",group:E,label:"Examine the abdomen",about:"Look at the shape, listen for bowel sounds, and press gently for tenderness.",kind:"key",result:"Very swollen and drum-like when tapped. High-pitched, tinkling bowel sounds. Tender all over, but no rigid board-like belly."},
+    {id:"ctabd",group:T,label:"CT scan of the abdomen",about:"Shows the intestines and exactly where a blockage is.",risk:"Radiation and IV dye.",kind:"key",min:12,result:"Swollen loops of small intestine full of fluid, narrowing to a sharp twist around a band of scar tissue (an adhesion)."},
+    {id:"ngtube",group:R,label:"Nothing by mouth, IV fluids & a stomach tube",about:"A tube through the nose into the stomach drains the backed-up fluid and gas. IV fluids replace what she's lost.",kind:"key",result:"The tube drains a liter of green fluid. Her nausea eases and the surgeons will check her within the hour."},
+    {id:"laxative",group:R,label:"Give a strong laxative",about:"Laxatives push stool through the bowel.",risk:"With a blockage, a laxative makes the intestine squeeze harder against it and can tear it.",kind:"harm",result:"Her cramps become unbearable and her pulse climbs to 130. The surgeons worry the bowel is close to bursting."},
+    A("ecg","extra","Normal. Not related to her belly pain.")
+  ],
+  q1:{short:"Structure", prompt:"Which structure is blocked?", options:[
+    {text:"Small intestine", info:"About 6 meters of coiled tube where most digestion and absorption happen. Scar tissue from old surgery (adhesions) can kink or trap a loop of it."},
+    {text:"Stomach", info:"A blocked stomach outlet causes vomiting of undigested food, without a hugely swollen belly."},
+    {text:"Colon", info:"The large intestine. Blockages there are often from tumors and build more slowly."},
+    {text:"Gallbladder", info:"Blocked by stones, causing right upper pain after fatty meals."},
+    {text:"Appendix", info:"A small pouch off the start of the colon."}], answer:"Small intestine"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Small bowel obstruction from adhesions"},{text:"Stomach flu"},{text:"Constipation"},{text:"Appendicitis"},{text:"Food poisoning"}], answer:"Small bowel obstruction from adhesions"},
+  debrief:{
+    body:"After abdominal surgery, bands of scar tissue (adhesions) can form between loops of intestine. Years later, a loop can twist or get trapped. Food, fluid and gas back up behind the blockage, so the belly swells and the patient vomits green bile. Nothing gets past, so no gas or stool comes out.",
+    clue:"Old abdominal surgery, crampy waves of pain, green vomiting, a swollen belly, and no gas or bowel movements.",
+    mistake:"A laxative. Never push harder against a blockage."}
+},
+{ id:"food-stuck", unit:"digest", title:"Steak stuck", level:"Patient 4.5",
+  patient:{name:"Mike D.", age:41, sex:"M"},
+  triage:{level:2, arrival:"Walked in, spitting into a cup", complaint:"“A piece of steak is stuck. I can't even swallow my spit.”", vitals:"Pulse 98 · BP 134/82 · O₂ 99%", sign:"Spitting saliva into a cup. Breathing and talking normally.", why:"He can't swallow his own saliva, so the esophagus is completely blocked. He's breathing fine, but it needs to come out within hours: emergent."},
+  story:"Mike was eating steak at a restaurant two hours ago when a bite got stuck in his chest. He's tried drinking water, but it all comes back up. This has happened a couple of times before, but it always went down on its own.",
+  actions:[
+    A("hpi","key","A bite of steak stuck behind his breastbone 2 hours ago. Can't swallow water or saliva. Breathing is fine. Has had food stick briefly before."),
+    A("pmh","ok","Seasonal allergies and asthma as a kid. Has had heartburn for years."),
+    {id:"airway",group:E,label:"Check his breathing & airway",about:"Make sure the food is stuck in the food pipe, not the airway.",kind:"key",result:"Breathing quietly, talking in full sentences, no stridor or wheeze. The blockage is in the esophagus, not the airway."},
+    {id:"scope",group:T,label:"Endoscopy to remove the food",about:"A camera passed into the esophagus to see the blockage and pull the food out or gently push it into the stomach.",risk:"Needs sedation. The standard treatment.",kind:"key",min:15,result:"The gastroenterologist removes the piece of steak. The esophagus lining has rings and furrows, a sign of eosinophilic esophagitis. Biopsies are taken."},
+    {id:"bread",group:F,label:"Make him swallow dry bread to push it down",about:"An old home remedy to force the food through.",risk:"More food piles up behind the blockage and can tear the esophagus.",kind:"harm",result:"He gags, and the bread comes back up mixed with blood-streaked spit. The esophagus may be torn."},
+    A("cxr","ok","No air outside the esophagus, so no tear. Meat doesn't show on X-ray.",{min:6}),
+    {id:"ctneck",group:T,label:"CT scan of the neck & chest",about:"Detailed X-ray slices.",risk:"Radiation, and he needs a scope either way.",kind:"extra",min:12,result:"Shows the blockage, but he still needs the scope to remove it."}
+  ],
+  q1:{short:"Structure", prompt:"Where is the food stuck?", options:[
+    {text:"Esophagus", info:"The muscular tube that pushes food from the throat to the stomach in waves (peristalsis). Inflammation or narrowing can make food stick."},
+    {text:"Trachea", info:"The airway. Food there causes choking, coughing and trouble breathing."},
+    {text:"Stomach", info:"Food that reaches the stomach can't be felt as stuck in the chest."},
+    {text:"Pharynx", info:"The throat behind the mouth. Food stuck there causes gagging and is often visible."},
+    {text:"Duodenum", info:"The first part of the small intestine."}], answer:"Esophagus"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Food stuck in the esophagus (food impaction)"},{text:"Choking (food in the airway)"},{text:"Heart attack"},{text:"Heartburn"},{text:"Panic attack"}], answer:"Food stuck in the esophagus (food impaction)"},
+  debrief:{
+    body:"The esophagus moves food with waves of muscle contraction. In eosinophilic esophagitis, allergy-type inflammation makes the walls stiff and narrow, so big bites of meat get stuck. Because the airway is a separate tube in front, he can still breathe and talk.",
+    clue:"Can't swallow even saliva, but breathing and talking normally. Earlier episodes and allergies point to eosinophilic esophagitis.",
+    mistake:"Forcing more food down. The scope removes it safely."}
+},
+{ id:"appendix", unit:"digest", title:"The moving pain", level:"Patient 4.6",
+  patient:{name:"Ethan V.", age:14, sex:"M"},
+  triage:{level:2, arrival:"Brought in by his dad", complaint:"“My stomach hurts, especially down on the right.”", vitals:"Pulse 104 · Temp 38.2 °C · BP 118/72 · Pain 7/10", sign:"Walking hunched over, holding the lower right side of his belly.", why:"Fever and worsening lower-right pain in a teenager: possible appendicitis, which can burst. Emergent."},
+  story:"Ethan's pain started around his belly button last night. This morning it moved down to the lower right side and got sharper. He threw up once and doesn't want to eat, even his favorite cereal.",
+  actions:[
+    A("hpi","key","Pain began around the belly button last night, then moved to the lower right and got sharper. Vomited once. No appetite. Hurts to walk or ride over bumps."),
+    A("meds","ok","No medications. No allergies."),
+    A("vitals","ok","Pulse 104, temp 38.2 °C, BP 118/72, breathing 18."),
+    {id:"exam",group:E,label:"Examine the abdomen",about:"Press each area gently and check what happens when you let go quickly (rebound).",kind:"key",result:"Sharp tenderness at a spot one-third of the way from his right hip bone to his belly button (McBurney's point). Pain when you let go quickly."},
+    A("cbc","key","White blood cells raised at 15,200.",{min:6}),
+    {id:"us",group:T,label:"Ultrasound of the abdomen",about:"Sound waves show the appendix, with no radiation. Usually the first scan for children and teens.",risk:"None.",kind:"key",min:10,result:"A swollen, thick-walled appendix that doesn't squeeze flat when pressed."},
+    {id:"callsurg",group:R,label:"Nothing by mouth, antibiotics & call surgery",about:"Prepare for the surgeons to remove the appendix.",kind:"key",result:"The surgical team removes his inflamed appendix that afternoon, before it bursts."},
+    {id:"enema",group:R,label:"Give a laxative or enema",about:"Clear out the bowel in case this is constipation.",risk:"Increases pressure in the bowel and can make an inflamed appendix burst.",kind:"harm",result:"Ethan's pain suddenly spreads across his whole belly, and his fever rises to 39.2 °C. The appendix may have burst."}
+  ],
+  q1:{short:"Structure", prompt:"Which structure is inflamed?", options:[
+    {text:"Appendix", info:"A finger-sized pouch hanging off the cecum, the start of the large intestine, in the lower right abdomen."},
+    {text:"Gallbladder", info:"Under the liver, upper right. Pain comes after fatty meals."},
+    {text:"Stomach", info:"Upper left and middle."},
+    {text:"Right kidney", info:"In the back. Kidney pain is usually in the side and back, often with blood in the urine."},
+    {text:"Sigmoid colon", info:"The S-shaped last part of the colon, in the lower left."}], answer:"Appendix"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Appendicitis"},{text:"Stomach flu"},{text:"Constipation"},{text:"Kidney stone"},{text:"Pulled muscle"}], answer:"Appendicitis"},
+  debrief:{
+    body:"The appendix's opening can get blocked by hard stool or swollen tissue. Trapped bacteria multiply and the appendix swells. Early on, the pain is vague around the belly button, because the nerves from the intestine aren't precise. When the inflamed appendix irritates the lining of the abdomen nearby, the pain moves to the exact spot in the lower right.",
+    clue:"Pain that started at the belly button and moved to the lower right, loss of appetite, fever, and tenderness at McBurney's point.",
+    mistake:"An enema or laxative. It can make the appendix burst."}
+},
+{ id:"gastro-kid", unit:"digest", title:"Can't keep anything down", level:"Patient 4.7",
+  patient:{name:"Noah P.", age:5, sex:"M"},
+  triage:{level:3, arrival:"Carried in by his grandmother", complaint:"“He's been throwing up and has diarrhea, and he's so sleepy.”", vitals:"Pulse 136 · Temp 38.0 °C · O₂ 99%", sign:"Tired but wakes up and answers. Lips look dry.", why:"A child with vomiting and diarrhea and signs of dehydration. He's still alert, so he's urgent rather than emergent. If he were hard to wake, he'd move up."},
+  story:"Noah has had vomiting and watery diarrhea for two days. Several kids in his kindergarten class are sick too. He's only peed once today, and he cries without tears.",
+  actions:[
+    {id:"io",group:H,label:"What's going in and coming out?",about:"Count vomits, diarrhea and wet diapers or bathroom trips. Peeing less is a key sign of dehydration.",kind:"key",result:"Vomited 6 times and had 8 watery stools in 2 days. Only peed once today. Can keep down a few sips at a time."},
+    A("vitals","key","Pulse 136 (fast for his age), temp 38.0 °C, breathing 24, oxygen 99%."),
+    {id:"hydration",group:E,label:"Check for dehydration",about:"Look at the lips, tongue and eyes, check for tears, and press a fingernail to see how fast the color returns (capillary refill).",kind:"key",result:"Dry, sticky mouth. No tears when he cries. Slightly sunken eyes. Color takes 3 seconds to return to his fingernail (normal is under 2)."},
+    {id:"ors",group:R,label:"Small sips of oral rehydration solution",about:"Rehydration drinks have the right balance of salt and sugar to be absorbed. A few milliliters every few minutes stays down best, with anti-nausea medicine if needed.",kind:"key",result:"With a dose of anti-nausea medicine and a spoonful every few minutes, he drinks 400 mL over two hours, pees, and asks for crackers."},
+    {id:"loperamide",group:R,label:"Give anti-diarrhea medicine",about:"Medicine that slows the bowel.",risk:"Not recommended for young children: it can cause serious side effects and keeps germs in the gut longer.",kind:"harm",result:"Noah becomes very drowsy and his belly swells. The medicine is stopped and he's watched closely for several hours."},
+    {id:"ctabd",group:T,label:"CT scan of the abdomen",about:"Detailed X-ray slices of the belly.",risk:"Radiation dose in a child, for a diagnosis made by the history and exam.",kind:"extra",min:12,result:"Fluid-filled bowel, as expected with a stomach bug. It didn't change anything."},
+    {id:"stool",group:T,label:"Stool test",about:"Checks the stool for specific bacteria or parasites.",risk:"None.",kind:"ok",min:4,result:"Positive for norovirus, the most common cause of stomach bugs in schools."}
+  ],
+  q1:{short:"Structure", prompt:"Which structure isn't doing its job?", options:[
+    {text:"Lining of the small intestine", info:"Covered in finger-like villi that absorb nutrients and most of the water we drink. A virus damages these cells, so water rushes out instead of being absorbed."},
+    {text:"Stomach acid glands", info:"They make acid to digest food. Not the main problem here."},
+    {text:"Liver", info:"Makes bile and processes nutrients. Liver problems cause jaundice."},
+    {text:"Kidneys", info:"They're working fine: they're saving water, which is why he isn't peeing."},
+    {text:"Appendix", info:"Appendicitis causes pain that settles in one spot, not days of diarrhea."}], answer:"Lining of the small intestine"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Viral gastroenteritis with dehydration"},{text:"Appendicitis"},{text:"Food allergy"},{text:"Bowel obstruction"},{text:"Lactose intolerance"}], answer:"Viral gastroenteritis with dehydration"},
+  debrief:{
+    body:"The small intestine absorbs most of the water we drink, through billions of tiny villi. Norovirus damages the cells lining the villi, so instead of absorbing water, the gut loses it as diarrhea. Add vomiting, and a small child can lose a big share of his body water in a day or two.",
+    clue:"Sick classmates, two days of vomiting and diarrhea, peeing only once today, no tears, a dry mouth and slow capillary refill.",
+    mistake:"Anti-diarrhea medicine in a young child. Replacing fluid is the treatment."}
+},
+{ id:"hepatitis", unit:"digest", title:"Yellow eyes", level:"Patient 4.8",
+  patient:{name:"Carlos M.", age:29, sex:"M"},
+  triage:{level:3, arrival:"Walked in", complaint:"“My girlfriend says my eyes are turning yellow.”", vitals:"Pulse 92 · Temp 37.9 °C · BP 120/74 · O₂ 98%", sign:"The whites of his eyes are yellow. He looks tired.", why:"Yellow eyes mean the liver is struggling. He's alert with stable vitals, so he's urgent."},
+  story:"Carlos has felt tired, achy and nauseous for a week, with a low fever and pain under his right ribs. Two days ago his urine turned dark brown, and his stools are pale. About four weeks ago he ate at a restaurant that was later in the news for a hepatitis outbreak.",
+  actions:[
+    A("hpi","key","A week of tiredness, nausea, aching and low fever. Dark urine and pale stools for 2 days. Dull ache under the right ribs."),
+    A("social","key","Ate at a restaurant 4 weeks ago that was linked to a hepatitis A outbreak. Rarely drinks alcohol. Never vaccinated for hepatitis A.",{label:"Food, travel & vaccines",about:"Where the patient ate, travel, vaccines and alcohol use all affect the liver."}),
+    A("meds","ok","Has been taking acetaminophen (Tylenol) for the aches, a few times a day. No other medications."),
+    {id:"exam",group:E,label:"Examine the eyes, skin & abdomen",about:"Look for yellowing (jaundice) and feel the liver below the right ribs.",kind:"key",result:"Yellow whites of the eyes and a yellow tint to the skin. The liver edge is tender and slightly enlarged below the right ribs."},
+    {id:"lft",group:T,label:"Liver blood tests & hepatitis tests",about:"Measures liver enzymes, bilirubin, and antibodies to hepatitis viruses.",risk:"One needle stick.",kind:"key",min:8,result:"Liver enzymes very high, bilirubin high. Positive for a new hepatitis A infection (IgM antibody)."},
+    {id:"care",group:R,label:"Rest, fluids, no alcohol & limit acetaminophen",about:"Hepatitis A usually clears on its own. The liver needs rest from anything that strains it. Close contacts can get a vaccine to protect them.",kind:"key",result:"He'll rest at home with fluids, avoid alcohol, and keep acetaminophen to a small, safe amount. His girlfriend gets a hepatitis A vaccine today."},
+    {id:"tylenol",group:R,label:"Full-dose acetaminophen every 4 hours",about:"Treat the fever and aches around the clock.",risk:"The liver breaks down acetaminophen. A sick liver can be damaged by high doses.",kind:"harm",result:"Two days later his liver tests are worse, and he's admitted to the hospital for monitoring."},
+    {id:"ctabd",group:T,label:"CT scan of the abdomen",about:"Detailed X-ray slices of the belly.",risk:"Radiation.",kind:"extra",min:12,result:"A slightly enlarged liver. The blood tests had already made the diagnosis."}
+  ],
+  q1:{short:"Structure", prompt:"Which organ is infected?", options:[
+    {text:"Liver", info:"The largest internal organ. It processes nutrients and drugs, makes bile, and clears bilirubin, the yellow pigment from old red blood cells. When it's inflamed, bilirubin builds up and turns skin and eyes yellow."},
+    {text:"Gallbladder", info:"Stores bile. A stone blocking the bile duct can also cause jaundice, usually with severe pain."},
+    {text:"Pancreas", info:"Makes digestive enzymes and insulin."},
+    {text:"Spleen", info:"Filters old red blood cells. Part of the immune system."},
+    {text:"Kidneys", info:"Filter the blood and make urine. Dark urine here comes from bilirubin, not kidney damage."}], answer:"Liver"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Hepatitis A"},{text:"Gallstones"},{text:"Food poisoning"},{text:"Mononucleosis"},{text:"Kidney infection"}], answer:"Hepatitis A"},
+  debrief:{
+    body:"Hepatitis A is a virus spread through food or water contaminated with stool. It infects liver cells and inflames the liver. The liver normally removes bilirubin into bile. When it can't, bilirubin builds up in the blood: yellow eyes and skin, dark urine, and pale stools because less bile reaches the gut.",
+    clue:"Yellow eyes, dark urine and pale stools after a week of flu-like illness, four weeks after eating at a restaurant with an outbreak.",
+    mistake:"Round-the-clock acetaminophen. An inflamed liver handles it poorly."}
+},
+{ id:"divertic", unit:"digest", title:"Lower left pain", level:"Patient 4.9",
+  patient:{name:"Patricia H.", age:68, sex:"F"},
+  triage:{level:3, arrival:"Driven in by her husband", complaint:"“I've got a bad pain low on my left side, and a fever.”", vitals:"Pulse 98 · Temp 38.3 °C · BP 132/80 · Pain 7/10", sign:"Uncomfortable, holding her lower left belly, but walking.", why:"Fever and belly pain, but stable blood pressure and she's walking. Urgent."},
+  story:"Patricia has had a steady pain in her lower left belly for two days, with a fever and some constipation. She admits her diet is “mostly white bread and meat, not many vegetables.”",
+  actions:[
+    A("hpi","key","Steady pain in the lower left belly for 2 days. Constipated. Mild nausea, no vomiting. No blood in the stool."),
+    A("intake","ok","Low-fiber diet: white bread, meat, few fruits or vegetables.",{label:"Usual diet",about:"Fiber keeps stool soft and lowers pressure inside the colon."}),
+    A("vitals","ok","Pulse 98, temp 38.3 °C, BP 132/80, breathing 16."),
+    {id:"exam",group:E,label:"Examine the abdomen",about:"Feel each area for tenderness, guarding or a mass.",kind:"key",result:"Tender in the lower left belly. No rigid board-like abdomen."},
+    A("cbc","ok","White blood cells raised at 13,800.",{min:6}),
+    {id:"ctabd",group:T,label:"CT scan of the abdomen",about:"Shows inflamed pouches in the colon and any abscess or tear.",risk:"Radiation and IV dye.",kind:"key",min:12,result:"Inflamed pouches in the sigmoid colon with swelling around them. No abscess, no tear."},
+    {id:"abx",group:R,label:"Clear liquids, pain relief & antibiotics",about:"Rest the bowel and treat the infection. Most cases settle at home.",kind:"key",result:"She'll go home on clear liquids and antibiotics, then gradually add fiber once she's better."},
+    {id:"colonoscopy",group:T,label:"Colonoscopy today",about:"A camera passed through the colon from below.",risk:"Inflating an acutely inflamed colon can tear it. It's done weeks later, once things settle.",kind:"harm",min:15,result:"During the scope, the inflamed colon wall tears. She needs emergency surgery."}
+  ],
+  q1:{short:"Structure", prompt:"Which structure is inflamed?", options:[
+    {text:"Pouches in the wall of the colon", info:"Diverticula are small pouches that bulge out through weak spots in the wall of the large intestine, most often in the S-shaped sigmoid colon in the lower left. Stool can get trapped in them and cause infection."},
+    {text:"Appendix", info:"Lower right, not left."},
+    {text:"Left ovary", info:"Ovary problems cause pelvic pain, but in a 68-year-old with a low-fiber diet and fever, the colon is far more likely."},
+    {text:"Left kidney", info:"Kidney pain is usually in the side and back."},
+    {text:"Small intestine", info:"Mostly in the middle of the abdomen."}], answer:"Pouches in the wall of the colon"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Diverticulitis"},{text:"Appendicitis"},{text:"Constipation only"},{text:"Kidney stone"},{text:"Stomach flu"}], answer:"Diverticulitis"},
+  debrief:{
+    body:"A low-fiber diet makes stool small and hard, so the colon has to squeeze harder to move it. Over years, the pressure pushes the inner lining out through weak spots in the muscle wall, forming pouches (diverticula). If stool gets trapped in a pouch, it becomes inflamed and infected: diverticulitis.",
+    clue:"An older adult with a low-fiber diet, lower-left pain, fever and constipation, plus inflamed pouches on CT.",
+    mistake:"A colonoscopy during the flare. It's done later, once the inflammation settles."}
+},
+{ id:"gerd", unit:"digest", title:"Burning after dinner", level:"Patient 4.10",
+  patient:{name:"Aisha N.", age:32, sex:"F"},
+  triage:{level:4, arrival:"Walked in", complaint:"“I get a burning in my chest after I eat, especially at night.”", vitals:"Pulse 76 · BP 118/76 · O₂ 99% · Pain 3/10", sign:"Comfortable, chatting with the nurse.", why:"Burning chest discomfort linked to meals for weeks, with normal vitals. Low priority, though chest pain still gets an ECG."},
+  story:"For about a month, Aisha has had a burning feeling behind her breastbone 30 minutes after dinner and when she lies down. Sometimes a sour liquid comes up into her mouth. She's been drinking a lot of coffee during a busy stretch at work.",
+  actions:[
+    A("hpi","key","Burning behind the breastbone after meals and when lying down. Sour taste in the mouth. Better with antacids. No pain with exercise, no shortness of breath."),
+    A("intake","ok","Late dinners, spicy food, 5 cups of coffee a day, often goes to bed right after eating.",{label:"Eating habits",about:"Timing, size and type of meals, caffeine and alcohol."}),
+    A("ecg","key","Normal. Chest discomfort always gets an ECG to rule out the heart."),
+    {id:"exam",group:E,label:"Examine the abdomen & chest",about:"Check for tenderness and listen to the heart and lungs.",kind:"ok",result:"Mild tenderness just below the breastbone. Normal heart and lung sounds."},
+    {id:"antacid",group:R,label:"Acid reducer & lifestyle changes",about:"A medicine that lowers stomach acid, plus smaller, earlier dinners, less coffee, and raising the head of the bed.",kind:"key",result:"She'll take an acid reducer for a few weeks, eat dinner earlier and cut back on coffee. She'll come back if she has trouble swallowing or loses weight."},
+    {id:"ibuprofen",group:R,label:"Give ibuprofen for the chest pain",about:"An anti-inflammatory pain reliever.",risk:"Ibuprofen-type drugs irritate the lining of the stomach and esophagus.",kind:"harm",result:"That night the burning is worse than ever, and she's up until 2 a.m."},
+    {id:"scope",group:T,label:"Endoscopy",about:"A camera passed into the esophagus and stomach.",risk:"Needs sedation. Saved for warning signs like trouble swallowing, weight loss or bleeding.",kind:"extra",min:15,result:"Mild redness at the bottom of the esophagus. The diagnosis was already clear from the history."}
+  ],
+  q1:{short:"Structure", prompt:"Which structure isn't closing properly?", options:[
+    {text:"Lower esophageal sphincter", info:"A ring of muscle where the esophagus meets the stomach. It relaxes to let food in and closes to keep acid out. When it's weak or relaxes too often, acid splashes up."},
+    {text:"Pyloric sphincter", info:"The muscle ring at the stomach's exit into the duodenum."},
+    {text:"Epiglottis", info:"The flap that covers the airway when you swallow."},
+    {text:"Gallbladder", info:"Stores bile. Gallbladder pain is in the upper right after fatty meals."},
+    {text:"Heart valves", info:"Her ECG and exam are normal, and the burning is tied to meals."}], answer:"Lower esophageal sphincter"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Gastroesophageal reflux disease (GERD)"},{text:"Heart attack"},{text:"Peptic ulcer"},{text:"Gallstones"},{text:"Food stuck in the esophagus"}], answer:"Gastroesophageal reflux disease (GERD)"},
+  debrief:{
+    body:"The stomach makes strong acid and has a lining built to handle it. The esophagus doesn't. A ring of muscle at the bottom of the esophagus normally keeps acid in the stomach. Big late meals, lying down, coffee and spicy food can relax it, so acid splashes up and burns: heartburn.",
+    clue:"Burning after meals and lying down, a sour taste, relief from antacids, and a normal ECG.",
+    mistake:"Skipping the ECG. Heart problems can feel like heartburn, so chest discomfort always gets one."}
+},
+{ id:"lactose", unit:"digest", title:"Bloated after cereal", level:"Patient 4.11",
+  patient:{name:"Hannah J.", age:19, sex:"F"},
+  triage:{level:4, arrival:"Walked in from her dorm", complaint:"“I get bloated and have diarrhea almost every morning.”", vitals:"Pulse 74 · BP 112/70 · O₂ 99% · Pain 2/10", sign:"Comfortable, a bit embarrassed.", why:"A weeks-long, uncomfortable but harmless problem with normal vitals. Lowest priority."},
+  story:"Since starting college, Hannah eats cereal with milk every morning and grabs ice cream at night. Within an hour of eating, she gets bloated and gassy, with cramps and loose stools. Weekends at home, when she eats differently, she feels fine.",
+  actions:[
+    {id:"diary",group:H,label:"Food & symptom timing",about:"Matching symptoms to what was eaten, and when, often finds the trigger.",kind:"key",result:"Bloating, gas, cramps and diarrhea 30–90 minutes after milk, ice cream or cheese pizza. Fine with other foods. No blood, no weight loss, no fever."},
+    A("fam","ok","Her mom and older brother “can't do milk either.”"),
+    {id:"exam",group:E,label:"Examine the abdomen",about:"Feel for tenderness, swelling or masses.",kind:"ok",result:"Soft, not tender. Some gurgling bowel sounds."},
+    {id:"trial",group:R,label:"Try two weeks without dairy (or with lactase pills)",about:"If symptoms go away without lactose and come back with it, that's the answer. Lactase enzyme pills or lactose-free milk let her keep eating dairy.",kind:"key",result:"She switches to lactose-free milk and takes a lactase pill with pizza. Two weeks later, her symptoms are gone."},
+    {id:"laxative",group:R,label:"Give a laxative to clean her out",about:"Empty the bowel to “reset” it.",risk:"Adds more diarrhea and cramping to a gut that's already irritated.",kind:"harm",result:"She spends the rest of the day in the bathroom with cramps, and nothing is learned."},
+    {id:"colonoscopy",group:T,label:"Colonoscopy",about:"A camera examines the colon.",risk:"Sedation and bowel prep, for a problem the history explains.",kind:"extra",min:15,result:"A normal colon. The problem is in the small intestine's enzymes, which a colonoscopy can't show."}
+  ],
+  q1:{short:"Structure", prompt:"What is she short of?", options:[
+    {text:"Lactase enzyme in the small intestine lining", info:"Lactase sits on the surface of the cells lining the small intestine and splits lactose (milk sugar) into two smaller sugars that can be absorbed. Many people make less lactase after childhood."},
+    {text:"Stomach acid", info:"Acid helps digest protein. Low acid isn't the cause of dairy-triggered symptoms."},
+    {text:"Bile", info:"Bile from the liver helps digest fat."},
+    {text:"Insulin", info:"A hormone from the pancreas that controls blood sugar, not a digestive enzyme."},
+    {text:"Good bacteria in the colon", info:"Colon bacteria are actually what make the gas, by eating undigested lactose."}], answer:"Lactase enzyme in the small intestine lining"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Lactose intolerance"},{text:"Milk allergy"},{text:"Stomach flu"},{text:"Appendicitis"},{text:"Food poisoning"}], answer:"Lactose intolerance"},
+  debrief:{
+    body:"Lactose, the sugar in milk, is too big to absorb. The enzyme lactase splits it at the surface of the small intestine. Without enough lactase, lactose passes into the colon, where it pulls in water (diarrhea) and bacteria ferment it into gas (bloating and cramps).",
+    clue:"Symptoms within an hour of dairy, fine without it, and family members with the same problem.",
+    mistake:"Big tests. A simple dairy-free trial answers the question. A milk allergy is different: it's the immune system, and it can cause hives or swelling."}
+},
+{ id:"hernia", unit:"digest", title:"Bulge in the groin", level:"Patient 4.12",
+  patient:{name:"Ken O.", age:55, sex:"M"},
+  triage:{level:4, arrival:"Walked in", complaint:"“There's a bulge in my groin that pops out when I lift things.”", vitals:"Pulse 70 · BP 130/82 · O₂ 98% · Pain 2/10", sign:"Comfortable. No bulge visible while sitting.", why:"A painless bulge that goes away on its own, with normal vitals. Lowest priority. If it got stuck, hard and painful, he'd move way up."},
+  story:"Ken moves furniture for a living. For about two months, a soft bulge has appeared in his right groin when he lifts heavy things or coughs. It disappears when he lies down. It aches a little at the end of the day.",
+  actions:[
+    A("hpi","key","Soft bulge in the right groin for 2 months, appears with lifting, coughing or straining, gone when lying down. Mild ache. No vomiting, and it's never gotten stuck."),
+    A("social","ok","Lifts heavy furniture all day. Smokes and has a morning cough.",{label:"Work & habits",about:"Heavy lifting and chronic coughing raise pressure inside the abdomen."}),
+    {id:"exam",group:E,label:"Examine the groin standing & coughing",about:"Look and feel at the groin while he stands and coughs, then check whether the bulge goes back in.",kind:"key",result:"A soft bulge in the right groin appears when he coughs and slides back in easily when he lies down. Not tender or hard."},
+    {id:"plan",group:R,label:"Refer to surgery & explain warning signs",about:"Most groin hernias are repaired with a planned surgery. A bulge that gets stuck, hard and painful, especially with vomiting, needs the ER right away.",kind:"key",result:"He has a surgery consultation in two weeks and knows exactly which warning signs mean coming straight back."},
+    {id:"lift",group:F,label:"Have him lift a heavy box to make it pop out",about:"Make the bulge bigger so it's easier to see.",risk:"Straining hard can push a loop of intestine through and trap it.",kind:"harm",result:"The bulge pops out bigger than ever and won't go back in for 20 minutes. It finally slides back, but it was close to getting trapped."},
+    {id:"us",group:T,label:"Ultrasound of the groin",about:"Shows the bulge and what's inside it.",risk:"None.",kind:"ok",min:8,result:"A loop of fatty tissue pushing through the abdominal wall in the right groin, sliding in and out."},
+    {id:"ctabd",group:T,label:"CT scan of the abdomen",about:"Detailed X-ray slices.",risk:"Radiation, for a diagnosis made by the exam.",kind:"extra",min:12,result:"Shows the hernia, which the exam already found."}
+  ],
+  q1:{short:"Structure", prompt:"What has a weak spot?", options:[
+    {text:"The abdominal wall at the inguinal canal", info:"The inguinal canal is a natural passage through the lower abdominal wall in the groin. Its weak spot can let fat or a loop of intestine push through when pressure inside the belly rises."},
+    {text:"The diaphragm", info:"The breathing muscle between the chest and abdomen. A weakness there is a hiatal hernia, which causes heartburn."},
+    {text:"The femur", info:"The thigh bone."},
+    {text:"A lymph node", info:"Swollen lymph nodes in the groin are firm lumps that don't come and go with coughing."},
+    {text:"The bladder", info:"Sits in the middle of the pelvis."}], answer:"The abdominal wall at the inguinal canal"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Inguinal hernia"},{text:"Swollen lymph node"},{text:"Pulled groin muscle"},{text:"Kidney stone"},{text:"Varicose vein"}], answer:"Inguinal hernia"},
+  debrief:{
+    body:"The abdominal wall is layers of muscle and tough tissue holding the organs in. The inguinal canal is a natural gap in the groin that's weaker than the rest. Heavy lifting, coughing and straining raise the pressure inside the belly, which can push fat or intestine out through the gap.",
+    clue:"A soft groin bulge that appears with lifting or coughing and slides back in lying down, in a man who lifts heavy furniture and coughs.",
+    mistake:"Straining to make it bigger. A hernia that gets stuck can cut off the intestine's blood supply."}
+},
 /* ===== PREVIEW: ORGAN SYSTEMS ===== */
-{ id:"ruq-pain", unit:"u3", title:"Pain after dinner", level:"Digestive",
+{ id:"ruq-pain", unit:"digest", title:"Pain after dinner", level:"Patient 4.1",
+  triage:{level:3, arrival:"Walked in with her sister", complaint:"“The pain under my right ribs won't stop, and it goes to my shoulder.”", vitals:"Temp 38.4 °C · Pulse 104 · BP 132/84 · Pain 7/10", sign:"Uncomfortable, holding her right side, but walking and talking.", why:"Fever and steady upper-right belly pain, but her blood pressure is fine and she's walking. Urgent."},
   patient:{name:"Dana R.", age:45, sex:"F"},
   story:"Dana comes to the emergency department with pain in the upper right side of her abdomen. It started about an hour after a large, fatty dinner and has lasted six hours. The pain spreads to her right shoulder blade. She feels nauseous and warm.",
   actions:[
     A("vitals","key","Temp 38.4 °C (fever). Heart rate 104 (fast). BP 132/84. Breathing normal."),
     {id:"exam",group:E,label:"Abdominal exam",about:"Look at and gently press each part of the abdomen to find where it's tender.",kind:"key",result:"Tender in the right upper abdomen. When you press under her right ribs, she stops breathing in sharply from pain (a positive Murphy's sign)."},
-    A("cbc","ok","White blood cells 14,500: raised, suggesting inflammation or infection."),
-    {id:"lipase",group:T,label:"Lipase (pancreas)",about:"Blood test for an enzyme that rises when the pancreas is inflamed.",risk:"One needle stick.",kind:"ok",result:"Normal. The pancreas is unlikely to be the main problem."},
+    A("cbc","ok","White blood cells 14,500: raised, suggesting inflammation or infection.",{min:6}),
+    {id:"lipase",group:T,label:"Lipase (pancreas)",about:"Blood test for an enzyme that rises when the pancreas is inflamed.",risk:"One needle stick.",kind:"ok",min:6,result:"Normal. The pancreas is unlikely to be the main problem."},
     {id:"us",group:T,label:"Ultrasound, right upper abdomen",about:"Sound waves make a picture of the liver, gallbladder and bile ducts.",risk:"None. No radiation.",kind:"key",result:"Gallstones present. The gallbladder wall is thickened, with fluid around it."},
     A("ecg","ok","Normal rhythm, no signs of heart damage."),
     A("cxr","extra","Clear lungs. No air under the diaphragm."),
@@ -1735,6 +2041,17 @@ const LOOKS = {
   "anemia":      {skin:"#f3d6bf", hair:"long",  hc:"#8a5a2a", shirt:"#9c5b8a"},
   "varicose":    {skin:"#e0b08a", hair:"bun",   hc:"#7a4a2a", shirt:"#d9534f"},
   "raynaud":     {skin:"#d9a77f", hair:"long",  hc:"#1d1d1d", shirt:"#4b6a88"},
+  "gi-bleed":    {skin:"#e8b896", hair:"short", hc:"#5b4a3a", shirt:"#6b7a8f"},
+  "battery":     {skin:"#e7b58f", hair:"curly", hc:"#3b2416", shirt:"#f2b632"},
+  "obstruction": {skin:"#f0c9a8", hair:"curly", hc:"#d8d8d8", shirt:"#7a5a9a", glasses:true},
+  "food-stuck":  {skin:"#c99a72", hair:"short", hc:"#2a1d14", shirt:"#2f6f8f", stache:true},
+  "appendix":    {skin:"#8d5a3b", hair:"crop",  hc:"#140d08", shirt:"#c83803"},
+  "gastro-kid":  {skin:"#f3d6bf", hair:"short", hc:"#c8994a", shirt:"#3a7bd5"},
+  "hepatitis":   {skin:"#c9a26a", hair:"short", hc:"#1a120c", shirt:"#5a6b4a"},
+  "divertic":    {skin:"#e0b08a", hair:"bun",   hc:"#bdbdbd", shirt:"#2fa38a", glasses:true},
+  "gerd":        {skin:"#6b4229", hair:"long",  hc:"#1a1414", shirt:"#9c5b8a"},
+  "lactose":     {skin:"#f2cfb0", hair:"long",  hc:"#b5432a", shirt:"#4b6a88"},
+  "hernia":      {skin:"#d6a27a", hair:"bald",  hc:"#5b5b5b", shirt:"#8b2b2b"},
   okafor:         {id:"okafor", skin:"#5a3620", hair:"bun",   hc:"#111111", shirt:"#ffffff", coat:true}
 };
 const PEEP = {
@@ -1749,6 +2066,9 @@ const PEEP = {
   "dissection":{head:"short2"}, "limb":{head:"noHair2"}, "chf":{head:"grayMedium"}, "svt":{head:"longBangs"},
   "afib":{head:"grayShort", fh:"moustache2"}, "aortic-sten":{head:"noHair1"}, "pericarditis":{head:"dreads1"}, "dvt":{head:"long"},
   "anemia":{head:"longCurly"}, "varicose":{head:"bun2"}, "raynaud":{head:"mediumStraight"},
+  "gi-bleed":{head:"short5"}, "battery":{head:"buns"}, "obstruction":{head:"grayMedium"}, "food-stuck":{head:"short2", fh:"moustache3"},
+  "appendix":{head:"twists"}, "gastro-kid":{head:"short4"}, "hepatitis":{head:"shaved1"}, "divertic":{head:"grayBun"},
+  "gerd":{head:"hijab"}, "lactose":{head:"mediumBangs3"}, "hernia":{head:"noHair3"},
   okafor:{head:"cornrows"}
 };
 const FACE = {hurt:"concerned", worse:"concernedFear", critical:"eyesClosed", happy:"smileBig", ok:"calm"};
