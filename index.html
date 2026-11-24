@@ -617,8 +617,40 @@ const UNITS = [
   <h3>Dehydration in children</h3>
   <p>Signs: peeing less, a dry mouth, no tears, sunken eyes, a fast pulse, and slow capillary refill (press a fingernail: color should return in under 2 seconds). Small, frequent sips of rehydration solution are the main treatment.</p>`
 },
-{ id:"u3", name:"Organ systems (preview)",
-  blurb:"Early sample cases from later units: digestive, cardiovascular and respiratory.", brief:null }
+{ id:"resp", name:"Unit 5: The respiratory system", mode:"shift", shiftName:"Respiratory ER shift",
+  blurb:"A full ER shift: 12 patients who can't breathe right, from a severe asthma attack to a family poisoned by their furnace. Triage them, then see them before they get worse.",
+  brief:`<h2>Unit 5 briefing: the respiratory system</h2>
+  <p>The respiratory system brings oxygen into the blood and removes carbon dioxide. Every cell needs oxygen, and carbon dioxide left to build up makes the blood acidic.</p>
+  <h3>The path of a breath</h3>
+  <table class="stack">
+    <thead><tr><th>Structure</th><th>What it does</th><th>Problems in this unit</th></tr></thead>
+    <tbody>
+      <tr><td>Nose & nasal cavity</td><td>Warms, moistens and filters air with a rich blood supply.</td><td>Nosebleeds</td></tr>
+      <tr><td>Pharynx (throat)</td><td>Shared passage for air and food. The tonsils guard it.</td><td>Strep throat</td></tr>
+      <tr><td>Larynx (voice box)</td><td>Holds the vocal cords. The epiglottis covers it when you swallow.</td><td>Croup, allergic swelling</td></tr>
+      <tr><td>Trachea</td><td>The windpipe, held open by C-shaped rings of cartilage.</td><td></td></tr>
+      <tr><td>Bronchi</td><td>The trachea splits into right and left main bronchi. The right one is wider and more vertical.</td><td>Inhaled objects</td></tr>
+      <tr><td>Bronchioles</td><td>Smaller branches with smooth muscle that can tighten.</td><td>Asthma</td></tr>
+      <tr><td>Alveoli</td><td>About 300 million tiny air sacs wrapped in capillaries. Oxygen and CO₂ cross here.</td><td>Emphysema (COPD), TB</td></tr>
+    </tbody>
+  </table>
+  <h3>Around the lungs</h3>
+  <ul>
+    <li><b>Pleura:</b> two thin layers around each lung. Low pressure between them keeps the lung stretched open. Air leaking in between collapses the lung (pneumothorax).</li>
+    <li><b>Diaphragm:</b> the dome-shaped muscle under the lungs. It flattens to pull air in.</li>
+    <li><b>Pulmonary arteries</b> bring blood to the lungs; a clot there is a pulmonary embolism.</li>
+  </ul>
+  <h3>Gas exchange and the blood</h3>
+  <p>Oxygen crosses from the alveoli into red blood cells and binds to <b>hemoglobin</b>. A pulse oximeter estimates how much hemoglobin is carrying oxygen (normal is 95–100%), but it can be fooled: carbon monoxide looks like oxygen to it. Breathing too fast blows off too much CO₂, which causes tingling and cramping.</p>
+  <div class="callout"><b>Red flags in this unit:</b> can't speak in full sentences, oxygen below about 92%, stridor (a harsh noise breathing in) at rest, swelling of the lips or tongue after an allergen, and sudden breathlessness after surgery or a long trip.</div>
+  <h3>Sounds to know</h3>
+  <ul>
+    <li><b>Wheeze:</b> a whistle breathing out, from narrowed small airways.</li>
+    <li><b>Stridor:</b> a harsh, high-pitched noise breathing in, from a narrowed upper airway.</li>
+    <li><b>Crackles:</b> wet popping, from fluid in the alveoli.</li>
+    <li><b>Quiet breath sounds on one side:</b> air or fluid around a lung, or a blocked bronchus.</li>
+  </ul>`
+}
 ];
 
 /* ---------- Cases ---------- */
@@ -1920,7 +1952,287 @@ const CASES = [
     clue:"A soft groin bulge that appears with lifting or coughing and slides back in lying down, in a man who lifts heavy furniture and coughs.",
     mistake:"Straining to make it bigger. A hernia that gets stuck can cut off the intestine's blood supply."}
 },
-/* ===== PREVIEW: ORGAN SYSTEMS ===== */
+{ id:"asthma", unit:"resp", title:"Can't finish a sentence", level:"Patient 5.2",
+  patient:{name:"Zoe A.", age:15, sex:"F"},
+  triage:{level:1, arrival:"Her mom rushed her in", complaint:"“Can't… breathe…”", vitals:"Pulse 128 · Breathing 34 · O₂ 89% · Can speak only 2–3 words at a time", sign:"Sitting hunched forward, using her neck muscles to breathe. Loud wheezing.", why:"A severe asthma attack: low oxygen, very fast breathing, and she can't speak in sentences. Immediate."},
+  story:"Zoe has asthma. She caught a cold three days ago, and tonight her breathing got worse and worse. She used her rescue inhaler six times at home, but it barely helped.",
+  actions:[
+    A("hpi","key","Her mom answers for her: a cold for 3 days, worse breathing all evening. Rescue inhaler six times with little relief. She was in the hospital for asthma last year."),
+    A("meds","ok","Rescue inhaler (albuterol). Was prescribed a daily controller inhaler but “stopped using it because she felt fine.” No allergies."),
+    A("vitals","key","Pulse 128, breathing 34, oxygen 89%, temp 37.6 °C."),
+    {id:"lungs",group:E,label:"Listen to the lungs & watch her breathe",about:"Listen for wheezing, and look at how hard the breathing muscles are working.",kind:"key",result:"Loud wheezing everywhere when breathing out, and a long, slow breath out. Neck muscles straining and the skin between her ribs pulling in."},
+    {id:"neb",group:R,label:"Oxygen, nebulized albuterol & steroids",about:"Albuterol relaxes the muscles around the airways. Steroids calm the swelling over the next few hours. Oxygen brings her level up.",kind:"key",result:"After three nebulizer treatments and a steroid dose, her oxygen climbs to 96% and she can speak in full sentences."},
+    {id:"sedate",group:R,label:"Give a sedative to calm her down",about:"She's very anxious and panicky.",risk:"Sedatives slow breathing. In a severe asthma attack, that can stop her breathing altogether.",kind:"harm",result:"Zoe becomes drowsy and her breathing slows, but her oxygen drops to 82%. The team has to help her breathe with a mask and bag."},
+    A("cxr","ok","Overinflated lungs from trapped air. No pneumonia, no collapsed lung.",{min:6}),
+    {id:"spiro",group:T,label:"Spirometry (forceful breathing test)",about:"Breathe in fully, then blow out as hard as possible.",risk:"Useful for diagnosing asthma in clinic, but not during a severe attack.",kind:"extra",min:5,result:"She can't do it. She's too short of breath, and trying makes her cough and wheeze harder."}
+  ],
+  q1:{short:"Structure", prompt:"Which structures are narrowed?", options:[
+    {text:"Bronchioles", info:"The small airways that branch off the bronchi. They have smooth muscle in their walls. In asthma, that muscle tightens, the lining swells, and mucus clogs them."},
+    {text:"Trachea", info:"The windpipe. A blockage there causes a harsh noise when breathing in (stridor), not wheezing on the way out."},
+    {text:"Alveoli", info:"The tiny air sacs where oxygen enters the blood. They're downstream of the problem here."},
+    {text:"Larynx", info:"The voice box. Swelling there causes hoarseness and stridor."},
+    {text:"Pleura", info:"The membranes around the lungs."}], answer:"Bronchioles"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Severe asthma attack"},{text:"Pneumonia"},{text:"Panic attack"},{text:"Collapsed lung"},{text:"Anaphylaxis"}], answer:"Severe asthma attack"},
+  debrief:{
+    body:"In asthma, the bronchioles are extra sensitive. A trigger, here a cold virus, makes their smooth muscle squeeze, their lining swell and mucus build up. Air can get in, but it's hard to push out through the narrow tubes, so it whistles (wheezes) and gets trapped. Albuterol relaxes the muscle; steroids calm the swelling.",
+    clue:"A known asthmatic, a recent cold, a rescue inhaler that stopped working, wheezing everywhere, and only 2–3 words per breath.",
+    mistake:"Sedating her. Anxiety is a symptom of not getting enough air. Fix the airways and the panic fades."}
+},
+{ id:"anaphylaxis", unit:"resp", title:"The cookie", level:"Patient 5.3",
+  patient:{name:"Mateo L.", age:12, sex:"M"},
+  triage:{level:1, arrival:"Carried in by his soccer coach", complaint:"“My throat feels tight and my lips are puffy.”", vitals:"Pulse 136 · BP 84/50 · O₂ 92% · Hoarse voice", sign:"Swollen lips, hives on his face and chest, wheezing.", why:"Swelling of the lips and throat, wheezing, low oxygen and low blood pressure after a possible allergen. Anaphylaxis is life-threatening: immediate."},
+  story:"Mateo ate a cookie a teammate's parent brought to soccer practice. Ten minutes later his lips swelled, his skin broke out in hives, and his voice got hoarse. He has a peanut allergy, but his epinephrine pen is in his backpack at home.",
+  actions:[
+    {id:"what",group:H,label:"Allergies & what he ate",about:"Quickly find the trigger and any known allergies.",kind:"key",result:"Known severe peanut allergy. The cookie turned out to be peanut butter oatmeal. Ate it 20 minutes ago."},
+    A("vitals","key","Pulse 136, BP 84/50 (low), breathing 28, oxygen 92%."),
+    {id:"airway",group:E,label:"Check his airway, lungs & skin",about:"Look at the lips and tongue, listen to his voice and lungs, and check the skin.",kind:"key",result:"Swollen lips, hoarse voice, wheezing in both lungs, and raised hives across his face and chest."},
+    {id:"epi",group:R,label:"Epinephrine shot in the thigh, right now",about:"Epinephrine tightens leaky blood vessels, raises blood pressure, and opens the airways. It's the first and most important treatment for anaphylaxis.",kind:"key",min:2,result:"Within five minutes his voice clears, the wheezing eases, and his blood pressure rises to 104/64. He'll get IV fluids and be watched for several hours in case symptoms return."},
+    {id:"antihist",group:R,label:"Give an antihistamine and wait to see",about:"Antihistamines help itching and hives.",risk:"They act slowly and don't open the airway or raise blood pressure. Waiting delays the epinephrine he needs.",kind:"harm",min:10,result:"Ten minutes later his throat is tighter, his oxygen is 86%, and his blood pressure has dropped to 70/40. Epinephrine is given in a rush."},
+    A("cxr","extra","Normal lungs. It delayed treatment without helping."),
+    A("cbc","extra","Normal. Not useful in an emergency like this.")
+  ],
+  q1:{short:"Structure", prompt:"Which airway structure is swelling and threatening to close?", options:[
+    {text:"Larynx (voice box) and throat", info:"The larynx sits at the top of the trachea and holds the vocal cords. Swelling there makes the voice hoarse and can close the airway completely."},
+    {text:"Alveoli", info:"Tiny air sacs at the ends of the airways, deep in the lungs."},
+    {text:"Diaphragm", info:"The main breathing muscle under the lungs."},
+    {text:"Nasal cavity", info:"Swelling in the nose is uncomfortable but doesn't block breathing through the mouth."},
+    {text:"Pleura", info:"The membranes around the lungs."}], answer:"Larynx (voice box) and throat"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Anaphylaxis (severe allergic reaction)"},{text:"Asthma attack"},{text:"Hives only"},{text:"Food poisoning"},{text:"Choking"}], answer:"Anaphylaxis (severe allergic reaction)"},
+  debrief:{
+    body:"In anaphylaxis, the immune system releases a flood of histamine and other chemicals all over the body. Blood vessels leak and widen (low blood pressure), tissues swell (lips, tongue, larynx), and airways tighten (wheezing). Epinephrine reverses all three, which is why it comes first.",
+    clue:"A known peanut allergy, a cookie, and then swelling, a hoarse voice, wheezing, hives and low blood pressure within minutes.",
+    mistake:"Waiting on an antihistamine. When in doubt, give epinephrine."}
+},
+{ id:"pe", unit:"resp", title:"After knee surgery", level:"Patient 5.4",
+  patient:{name:"Rachel F.", age:29, sex:"F"},
+  triage:{level:2, arrival:"Walked in, out of breath", complaint:"“I suddenly can't catch my breath, and it hurts when I breathe in.”", vitals:"Pulse 118 · Breathing 26 · O₂ 91% · BP 116/74", sign:"Breathing fast. Her right calf is in a brace from knee surgery.", why:"Sudden shortness of breath with low oxygen and a fast pulse, soon after surgery. Possible blood clot in the lungs: emergent."},
+  story:"Rachel had knee surgery 10 days ago and has mostly been on the couch since. An hour ago she suddenly became short of breath, with a sharp pain on the right side of her chest when she breathes in. Her right calf has been a bit swollen.",
+  actions:[
+    A("hpi","key","Sudden shortness of breath an hour ago, sharp right-sided chest pain when breathing in. Coughed up a small streak of blood once."),
+    A("pmh","key","Right knee surgery 10 days ago. Barely walking since. Takes a birth control pill.",{label:"Recent surgery & medicines",about:"Surgery, sitting still and estrogen all raise the risk of blood clots."}),
+    A("vitals","ok","Pulse 118, breathing 26, oxygen 91%, BP 116/74, temp 37.3 °C."),
+    {id:"legs",group:E,label:"Examine the legs",about:"Compare the calves for swelling, warmth and tenderness.",kind:"ok",result:"The right calf is swollen and tender, more than the surgery alone explains."},
+    A("ecg","ok","Fast but regular rhythm. No heart attack pattern.",{}),
+    {id:"ctpa",group:T,label:"CT pulmonary angiogram",about:"A CT scan with dye that lights up the arteries in the lungs and shows clots.",risk:"Radiation and IV dye. The key test here.",kind:"key",min:12,result:"A clot blocking a branch of the right pulmonary artery."},
+    {id:"anticoag",group:R,label:"Oxygen & start a blood thinner",about:"Oxygen raises her levels. A blood thinner stops the clot from growing while the body breaks it down.",kind:"key",result:"With oxygen and heparin, her oxygen rises to 96% and her pulse slows to 92."},
+    {id:"walk",group:E,label:"Walk her down the hallway to test her oxygen",about:"See how low her oxygen drops with effort.",risk:"Exertion with a clot in the lungs can make her faint or collapse.",kind:"harm",min:5,result:"Twenty steps in, her oxygen drops to 84% and she nearly faints. A nurse brings a wheelchair."}
+  ],
+  q1:{short:"Structure", prompt:"Where is the clot now?", options:[
+    {text:"Pulmonary artery", info:"Carries blood from the right side of the heart to the lungs to pick up oxygen. A clot from the leg veins travels through the heart and lodges here."},
+    {text:"Coronary artery", info:"Feeds the heart muscle. A blockage causes a heart attack."},
+    {text:"Bronchus", info:"An airway. Air still reaches the lung; it's the blood flow that's blocked."},
+    {text:"Aorta", info:"Carries oxygen-rich blood from the left ventricle to the body."},
+    {text:"Pulmonary vein", info:"Carries fresh oxygen-rich blood from the lungs back to the heart."}], answer:"Pulmonary artery"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Pulmonary embolism (blood clot in the lung)"},{text:"Pneumonia"},{text:"Asthma attack"},{text:"Panic attack"},{text:"Pulled chest muscle"}], answer:"Pulmonary embolism (blood clot in the lung)"},
+  debrief:{
+    body:"A clot formed in the deep veins of her leg after surgery and inactivity. A piece broke off, traveled up the veins, through the right side of the heart, and lodged in a pulmonary artery. Part of the lung gets air but no blood, so oxygen can't be picked up there, and her oxygen level drops.",
+    clue:"Recent surgery, little walking, estrogen, a swollen calf, then sudden breathlessness, sharp breathing pain and low oxygen.",
+    mistake:"A walking test. With a clot in the lungs, exertion can make her collapse."}
+},
+{ id:"copd", unit:"resp", title:"Pursed lips", level:"Patient 5.5",
+  patient:{name:"Dennis H.", age:68, sex:"M"},
+  triage:{level:2, arrival:"Ambulance", complaint:"“Can't get… the air out.”", vitals:"Pulse 110 · Breathing 28 · O₂ 86% · Temp 37.8 °C", sign:"Breathing out through pursed lips, leaning on his knees. Barrel-shaped chest.", why:"Very low oxygen and hard breathing in a man with lung disease. Emergent."},
+  story:"Dennis smoked for 45 years and has emphysema. He uses home oxygen at night. For three days he's had a worse cough with more green mucus, and today he couldn't walk to the bathroom without stopping.",
+  actions:[
+    A("hpi","key","Three days of more coughing, more green mucus, and more breathlessness. Can't walk across the room today."),
+    A("pmh","key","Emphysema (COPD). Smoked a pack a day for 45 years, quit last year. Home oxygen at night.",{label:"Lung history & smoking",about:"Years of smoking and known lung disease shape the diagnosis and the oxygen plan."}),
+    A("vitals","ok","Pulse 110, breathing 28, oxygen 86%, temp 37.8 °C."),
+    {id:"lungs",group:E,label:"Listen to the lungs & look at his chest",about:"Listen for wheezing and air movement, and look at the chest shape.",kind:"key",result:"Quiet breath sounds with scattered wheezes. Barrel-shaped chest. Breathing out through pursed lips takes twice as long as breathing in."},
+    A("cxr","ok","Overinflated, dark lungs with a flattened diaphragm, typical of emphysema. No pneumonia patch, no collapsed lung.",{min:6}),
+    {id:"treat",group:R,label:"Controlled oxygen, nebulizers, steroids & antibiotics",about:"Oxygen aimed at 88–92%, nebulized medicine to open the airways, steroids for inflammation, and antibiotics for the infection.",kind:"key",result:"His oxygen settles at 91% and his breathing slows to 20. He can talk in full sentences again."},
+    {id:"maxo2",group:R,label:"Turn his oxygen up to the maximum and leave it",about:"More oxygen seems better for someone with low oxygen.",risk:"Some people with severe COPD breathe less when given too much oxygen, so carbon dioxide builds up in the blood. The target is 88–92%.",kind:"harm",result:"An hour later Dennis is drowsy and confused. A blood test shows carbon dioxide building up. The oxygen is turned down to the target range."},
+    A("cbc","extra","White cells slightly raised. Didn't change the plan.")
+  ],
+  q1:{short:"Structure", prompt:"Which structures are damaged in emphysema?", options:[
+    {text:"Alveoli", info:"Tiny, stretchy air sacs where oxygen passes into the blood. In emphysema, years of smoke destroy their walls, so they merge into larger, floppy spaces with less surface area. They lose their spring, so air gets trapped."},
+    {text:"Trachea", info:"The windpipe, held open by C-shaped rings of cartilage."},
+    {text:"Larynx", info:"The voice box."},
+    {text:"Pleura", info:"The membranes around the lungs."},
+    {text:"Diaphragm muscle", info:"It's flattened by the overinflated lungs, but the damage is in the air sacs."}], answer:"Alveoli"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"COPD flare-up"},{text:"Asthma attack"},{text:"Heart failure"},{text:"Pulmonary embolism"},{text:"Lung cancer"}], answer:"COPD flare-up"},
+  debrief:{
+    body:"Healthy alveoli are like millions of tiny elastic balloons that spring back to push air out. Cigarette smoke slowly destroys their walls. With fewer, floppier air sacs, there's less surface for oxygen to cross, and air gets trapped. That's why the chest becomes barrel-shaped and why pursed-lip breathing helps: it keeps the airways open longer.",
+    clue:"Decades of smoking, emphysema, more green mucus for three days, pursed-lip breathing and a barrel chest.",
+    mistake:"Maxing out his oxygen. In severe COPD, aim for 88–92%."}
+},
+{ id:"co", unit:"resp", title:"The whole family has headaches", level:"Patient 5.6",
+  patient:{name:"Elena V.", age:38, sex:"F"},
+  triage:{level:2, arrival:"Walked in with her two kids", complaint:"“We all have pounding headaches and feel sick to our stomachs.”", vitals:"Pulse 104 · BP 122/78 · O₂ 99% · A little confused", sign:"Mother and children all pale and nauseous. She keeps repeating herself.", why:"A whole family sick at once with headaches, nausea and confusion, in winter. Possible carbon monoxide poisoning, even with a normal oxygen reading: emergent."},
+  story:"It's January. Elena and her two kids woke up with pounding headaches, nausea and dizziness. Their dog has been sleepy too. The headaches seem to get better when they leave the house. Their old gas furnace has been making a strange noise.",
+  actions:[
+    A("hpi","key","Headache, nausea and dizziness in the whole family for 2 days, worse at home and better away. The dog is sleepy too. Old gas furnace making noises."),
+    A("vitals","ok","Pulse 104, BP 122/78, breathing 20. Pulse oximeter reads 99%."),
+    {id:"neuro",group:E,label:"Neuro check",about:"Check alertness, memory and coordination.",kind:"ok",result:"Slow to answer, repeats questions, and is unsteady walking heel to toe."},
+    {id:"cooxi",group:T,label:"Carbon monoxide blood test",about:"A blood gas test that directly measures how much hemoglobin is carrying carbon monoxide (carboxyhemoglobin).",risk:"One needle stick from an artery or vein.",kind:"key",min:8,result:"Carboxyhemoglobin 24% (normal is under 3%). The kids' levels are also high."},
+    {id:"o2",group:R,label:"100% oxygen by tight mask for the whole family",about:"Breathing pure oxygen pushes carbon monoxide off hemoglobin much faster. The fire department checks the house.",kind:"key",result:"After a few hours of high-flow oxygen, everyone's headaches fade. The fire department finds a cracked furnace venting carbon monoxide into the house."},
+    {id:"trust",group:R,label:"Trust the 99% oxygen reading and send them home",about:"The pulse oximeter says her oxygen is normal.",risk:"A pulse oximeter can't tell carbon monoxide from oxygen on hemoglobin. The reading is falsely normal.",kind:"harm",result:"They drive home to the same house. That night, the youngest child can't be woken and arrives back by ambulance."},
+    {id:"ctbrain",group:T,label:"CT scan of the head",about:"Detailed X-ray slices of the brain.",risk:"Radiation, and it doesn't show carbon monoxide.",kind:"extra",min:12,result:"Normal. The problem is in the blood, not visible on a scan."}
+  ],
+  q1:{short:"Structure", prompt:"What is blocking oxygen delivery?", options:[
+    {text:"Hemoglobin is carrying carbon monoxide instead of oxygen", info:"Hemoglobin in red blood cells normally picks up oxygen in the lungs. Carbon monoxide sticks to hemoglobin about 200 times more strongly than oxygen, taking its place. The lungs work fine, but the blood can't carry enough oxygen."},
+    {text:"The alveoli are full of fluid", info:"Fluid in the air sacs (as in pneumonia or heart failure) would lower the oxygen saturation reading."},
+    {text:"The airways are narrowed", info:"Narrow airways cause wheezing and breathlessness, not a whole family with headaches."},
+    {text:"A clot in the pulmonary artery", info:"A clot causes sudden breathlessness in one person, not a whole family."},
+    {text:"The brain's blood vessels are blocked", info:"A stroke affects one person suddenly, with weakness or trouble speaking."}], answer:"Hemoglobin is carrying carbon monoxide instead of oxygen"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Carbon monoxide poisoning"},{text:"Food poisoning"},{text:"Flu"},{text:"Migraines"},{text:"Dehydration"}], answer:"Carbon monoxide poisoning"},
+  debrief:{
+    body:"Carbon monoxide is an invisible, odorless gas from burning fuel. When breathed in, it binds to hemoglobin far more strongly than oxygen does, so red blood cells carry less oxygen to the brain and heart. A standard pulse oximeter can't tell the difference and shows a normal number. Breathing 100% oxygen speeds up its removal.",
+    clue:"The whole family (and the dog) sick at once, better away from home, in winter, with an old furnace.",
+    mistake:"Trusting a normal pulse oximeter reading. It's fooled by carbon monoxide."}
+},
+{ id:"croup", unit:"resp", title:"The barking cough", level:"Patient 5.7",
+  patient:{name:"Leo B.", age:3, sex:"M"},
+  triage:{level:3, arrival:"Carried in by his dad at 2 a.m.", complaint:"“He sounds like a seal when he coughs.”", vitals:"Pulse 124 · Breathing 30 · O₂ 97% · Temp 38.1 °C", sign:"A loud barking cough. A harsh noise when he breathes in, only when he cries.", why:"Croup with noisy breathing only when upset, good oxygen, and he's alert and playful between coughs. Urgent. If he had noisy breathing at rest, he'd move up."},
+  story:"Leo had a runny nose for two days. Tonight he woke up with a loud, barking cough, a hoarse voice, and a harsh, high-pitched noise when he breathes in while crying.",
+  actions:[
+    A("hpi","key","Runny nose for 2 days, then a sudden barking cough and hoarse voice tonight. Noisy breathing when crying. Drinking normally, no drooling."),
+    A("vitals","ok","Pulse 124, breathing 30, oxygen 97%, temp 38.1 °C."),
+    {id:"observe",group:E,label:"Watch his breathing from his dad's lap",about:"Look for stridor (a harsh noise breathing in) at rest, chest pulling in, drooling, and how alert he is, without upsetting him.",kind:"key",result:"Calm on his dad's lap: no stridor at rest, mild pulling in at the base of his neck, no drooling, playing with a toy between coughs."},
+    {id:"steroid",group:R,label:"One dose of oral steroid",about:"A single dose of dexamethasone reduces swelling in the airway for a day or two.",kind:"key",result:"Two hours later his cough is softer and the noisy breathing is gone even when he cries. He goes home with his dad."},
+    {id:"pin",group:E,label:"Hold him down to look in his throat",about:"Use a tongue depressor to examine the back of the throat.",risk:"Upsetting a child with croup makes the airway swelling worse, and the throat exam doesn't change treatment.",kind:"harm",result:"Leo screams and fights. His stridor becomes loud and constant, his oxygen drops to 92%, and he needs a breathing treatment."},
+    {id:"neckxr",group:T,label:"X-ray of the neck",about:"Can show narrowing below the vocal cords (a “steeple sign”).",risk:"Radiation, and croup is diagnosed by listening.",kind:"extra",min:6,result:"A narrowing below the vocal cords, as expected. It didn't change the treatment."}
+  ],
+  q1:{short:"Structure", prompt:"Which part of the airway is swollen?", options:[
+    {text:"Larynx and trachea, just below the vocal cords", info:"In young children, the airway just below the vocal cords (the subglottis) is the narrowest part. A little swelling there causes the barking cough, hoarse voice and stridor."},
+    {text:"Bronchioles", info:"Small airways deep in the lungs. Swelling there causes wheezing, not a barking cough."},
+    {text:"Epiglottis", info:"The flap above the larynx. Infection there (epiglottitis) causes drooling, high fever and a child who looks very sick. It's rare now thanks to vaccines."},
+    {text:"Alveoli", info:"The air sacs. Infection there is pneumonia."},
+    {text:"Nasal passages", info:"A stuffy nose doesn't cause a barking cough."}], answer:"Larynx and trachea, just below the vocal cords"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Croup"},{text:"Asthma"},{text:"Epiglottitis"},{text:"Pneumonia"},{text:"Something stuck in the airway"}], answer:"Croup"},
+  debrief:{
+    body:"Croup is usually caused by a cold virus. In a small child, the airway just below the vocal cords is narrow, so even a little swelling makes a big difference. Air rushing through the narrowed spot makes the seal-like bark and the harsh noise (stridor) on breathing in. Crying makes the airway work harder and the noise louder.",
+    clue:"A young child with a cold, then a sudden barking cough, a hoarse voice, and stridor that appears when crying, often at night.",
+    mistake:"Upsetting the child. Keep him calm on his parent's lap."}
+},
+{ id:"aspiration", unit:"resp", title:"The party peanuts", level:"Patient 5.8",
+  patient:{name:"Isla M.", age:2, sex:"F"},
+  triage:{level:3, arrival:"Carried in by her mom", complaint:"“She's been wheezing since a coughing fit at a party yesterday.”", vitals:"Pulse 122 · Breathing 32 · O₂ 95% · Temp normal", sign:"Breathing a bit fast, with a wheeze you can hear. Playful.", why:"A wheezing toddler with good oxygen who is alert and playing. Urgent, but the story suggests something specific that still needs finding."},
+  story:"Yesterday at a birthday party, Isla had a sudden choking and coughing fit while eating from a bowl of peanuts. It settled after a minute. Since then she's had a cough and a wheeze. She's never wheezed before.",
+  actions:[
+    {id:"choke",group:H,label:"Any choking episode?",about:"A sudden choking or coughing fit while eating or playing is the clue to something inhaled, even if it settled.",kind:"key",result:"Yes: a sudden coughing and gagging fit with peanuts in her mouth yesterday. It stopped after about a minute."},
+    A("vitals","ok","Pulse 122, breathing 32, oxygen 95%, temp normal."),
+    {id:"lungs",group:E,label:"Listen to both sides of the chest",about:"Compare breath sounds on the right and left.",kind:"key",result:"Wheezing and quieter breath sounds only on the right side. The left side sounds normal."},
+    A("cxr","ok","The right lung looks darker and overinflated on breathing out: air is getting trapped behind something in the right main bronchus.",{min:6}),
+    {id:"bronch",group:R,label:"Bronchoscopy to remove the object",about:"A specialist passes a small tube with a camera into the airway to find and remove what was inhaled.",kind:"key",min:12,result:"Under anesthesia, the specialist removes half a peanut from the right main bronchus. Isla's wheeze is gone the next morning."},
+    {id:"inhaler",group:R,label:"Treat it as asthma and send her home",about:"Wheezing is often asthma in young children.",risk:"The peanut stays in the airway, and infection builds up behind it.",kind:"harm",result:"Three days later she's back with a high fever and pneumonia in the right lung, behind the trapped peanut."},
+    {id:"ctchest",group:T,label:"CT scan of the chest",about:"Detailed X-ray slices.",risk:"Radiation in a toddler, and she needs the bronchoscopy either way.",kind:"extra",min:12,result:"Shows a blockage in the right main bronchus. Bronchoscopy was needed anyway."}
+  ],
+  q1:{short:"Structure", prompt:"Where is the peanut stuck?", options:[
+    {text:"Right main bronchus", info:"The trachea splits into two main bronchi. The right one is wider, shorter and more vertical than the left, so inhaled objects usually fall into it."},
+    {text:"Left main bronchus", info:"Longer, narrower and angled more sharply, so objects end up here less often."},
+    {text:"Esophagus", info:"The food pipe. A swallowed object there causes drooling and refusing food, not one-sided wheezing."},
+    {text:"Larynx", info:"An object stuck at the voice box causes severe choking and no voice."},
+    {text:"Nasal cavity", info:"Objects in the nose cause a one-sided smelly discharge."}], answer:"Right main bronchus"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Inhaled foreign body (peanut in the airway)"},{text:"Asthma"},{text:"Croup"},{text:"Pneumonia"},{text:"Peanut allergy"}], answer:"Inhaled foreign body (peanut in the airway)"},
+  debrief:{
+    body:"The trachea splits into the right and left main bronchi. The right one is wider and more in line with the trachea, so an inhaled object usually drops into it. It acts like a one-way valve: air gets in around it but can't get out, so that lung traps air and wheezes on one side only.",
+    clue:"A choking fit with peanuts, then a new wheeze on one side only in a toddler who's never wheezed before.",
+    mistake:"Calling it asthma. One-sided wheezing after a choking episode means something is in the airway."}
+},
+{ id:"tb", unit:"resp", title:"Three months of coughing", level:"Patient 5.9",
+  patient:{name:"Paul G.", age:45, sex:"M"},
+  triage:{level:3, arrival:"Walked in", complaint:"“This cough won't go away, and now there's blood in it.”", vitals:"Pulse 96 · Temp 38.0 °C · O₂ 95% · BP 118/74", sign:"Thin, coughing often. His clothes look loose.", why:"Stable vitals, so he's urgent rather than emergent. But a long cough with blood, fever and weight loss could be contagious TB: mask him and isolate him right away."},
+  story:"Paul volunteers at a crowded homeless shelter. He's had a cough for three months, and lately there are streaks of blood in his mucus. He's been sweating through his sheets at night and has lost about 15 pounds without trying.",
+  actions:[
+    {id:"mask",group:F,label:"Mask him & move him to an isolation room",about:"Anyone who might have tuberculosis wears a mask and waits in a special negative-pressure room, so the germs aren't spread through the air.",kind:"key",min:2,result:"Paul wears a mask and moves to an airborne isolation room. Staff put on fitted N95 masks."},
+    A("hpi","key","Cough for 3 months, blood-streaked mucus for 2 weeks, drenching night sweats, 15 pounds lost without trying, low fevers."),
+    A("social","key","Volunteers several nights a week at a crowded homeless shelter. A few people there have had “bad coughs.”",{label:"Work, travel & exposures",about:"Crowded indoor spaces, travel and sick contacts point to contagious infections."}),
+    A("vitals","ok","Pulse 96, temp 38.0 °C, oxygen 95%, BP 118/74."),
+    A("cxr","key","A patchy area with a hollow cavity in the top of the right lung."),
+    {id:"sputum",group:T,label:"Sputum tests for TB",about:"Mucus coughed up from deep in the lungs is tested for the TB bacteria, using a stain and a fast DNA test.",risk:"None.",kind:"key",min:6,result:"The fast DNA test is positive for Mycobacterium tuberculosis."},
+    {id:"nomask",group:F,label:"Let him wait in the waiting room without a mask",about:"He's stable and the isolation rooms are busy.",risk:"TB spreads through the air when someone coughs. The waiting room is full of people.",kind:"harm",result:"He coughs in the waiting room for 40 minutes. Later, the health department has to test 30 people who were sitting near him."},
+    A("cbc","extra","Mildly low red cells. Didn't help with the diagnosis.")
+  ],
+  q1:{short:"Structure", prompt:"Where in the lungs is TB growing?", options:[
+    {text:"Alveoli in the upper lobes", info:"TB bacteria grow best where oxygen is highest, the tops (apices) of the lungs. The immune system walls them off, but active disease destroys lung tissue and can leave a hollow cavity."},
+    {text:"Trachea", info:"The windpipe. TB rarely affects it."},
+    {text:"Pleura only", info:"TB can cause fluid around the lungs, but his X-ray shows a cavity in the lung itself."},
+    {text:"Larynx", info:"The voice box."},
+    {text:"Bronchioles only", info:"Narrow bronchioles cause wheezing, as in asthma."}], answer:"Alveoli in the upper lobes"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Active tuberculosis (TB)"},{text:"Pneumonia"},{text:"Lung cancer"},{text:"Bronchitis"},{text:"COPD"}], answer:"Active tuberculosis (TB)"},
+  debrief:{
+    body:"TB bacteria are breathed into the alveoli in tiny droplets from someone who's coughing. The immune system often walls them off for years. When disease becomes active, the bacteria destroy lung tissue, usually in the upper lobes where oxygen is richest, creating cavities. Coughing spreads the bacteria to others.",
+    clue:"A cough for months, blood in the mucus, night sweats, weight loss, a crowded-shelter exposure, and a cavity at the top of the lung.",
+    mistake:"Forgetting the mask. With possible TB, isolation comes first, even before the workup."}
+},
+{ id:"strep", unit:"resp", title:"Sore throat, no cough", level:"Patient 5.10",
+  patient:{name:"Sophie K.", age:17, sex:"F"},
+  triage:{level:4, arrival:"Walked in", complaint:"“My throat is so sore I can barely swallow.”", vitals:"Pulse 98 · Temp 38.6 °C · O₂ 99%", sign:"Talking in a slightly muffled voice. Swallowing her saliva fine.", why:"A sore throat with fever, but she's breathing normally, swallowing saliva and her vitals are stable. Lowest priority."},
+  story:"Sophie's throat started hurting yesterday and quickly got worse. She has a fever and a headache, but no cough or runny nose. Her little brother had strep throat last week.",
+  actions:[
+    A("hpi","key","Sore throat since yesterday, fever, headache. No cough, no runny nose. Her brother had strep last week."),
+    A("meds","key","No medications. No allergies to antibiotics."),
+    {id:"throat",group:E,label:"Look at the throat & feel the neck",about:"Look at the tonsils and feel the lymph nodes in the front of the neck.",kind:"key",result:"Swollen red tonsils with white patches. Tender, swollen lymph nodes in the front of her neck. Uvula in the middle."},
+    {id:"rapid",group:T,label:"Rapid strep test",about:"A throat swab tested in minutes for group A strep bacteria.",risk:"Brief gagging.",kind:"key",min:4,result:"Positive for group A strep."},
+    {id:"abx",group:R,label:"Penicillin-type antibiotic & pain relief",about:"Antibiotics clear the bacteria and prevent rare complications like rheumatic fever. Acetaminophen or ibuprofen helps the pain.",kind:"key",result:"She starts amoxicillin and takes ibuprofen for the pain. She's told she's no longer contagious after 12–24 hours on antibiotics."},
+    {id:"aspirin",group:R,label:"Give aspirin for the fever",about:"A common fever reducer.",risk:"Aspirin is avoided in children and teens because of Reye's syndrome, a rare but serious liver and brain illness.",kind:"harm",result:"A senior nurse stops it before it's given, but the order goes on your record. Aspirin isn't for teens with a fever."},
+    A("cxr","extra","Normal lungs. Strep throat doesn't involve the lungs."),
+    A("cbc","extra","Raised white cells. The rapid test had already answered the question.")
+  ],
+  q1:{short:"Structure", prompt:"Which structure is infected?", options:[
+    {text:"Palatine tonsils and pharynx", info:"The tonsils are lymph tissue on both sides of the back of the throat (the pharynx). They trap germs, and sometimes get infected themselves."},
+    {text:"Larynx", info:"The voice box. Laryngitis causes hoarseness more than a painful swallow."},
+    {text:"Trachea", info:"The windpipe, below the larynx."},
+    {text:"Sinuses", info:"Air spaces in the face. Sinusitis causes face pressure and a stuffy nose."},
+    {text:"Esophagus", info:"The food pipe, below the throat."}], answer:"Palatine tonsils and pharynx"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Strep throat"},{text:"Common cold"},{text:"Mononucleosis"},{text:"Flu"},{text:"Allergies"}], answer:"Strep throat"},
+  debrief:{
+    body:"The tonsils are clusters of immune tissue guarding the entrance to the throat. Group A strep bacteria can infect them directly, making them swollen, red and coated with white patches, with tender lymph nodes in the neck. Colds are caused by viruses, which usually bring a cough and runny nose too.",
+    clue:"Fever, white patches on swollen tonsils, tender neck nodes, no cough, a sick brother, and a positive rapid test.",
+    mistake:"Aspirin for a teen. Use acetaminophen or ibuprofen instead."}
+},
+{ id:"panic", unit:"resp", title:"Tingling fingers", level:"Patient 5.11",
+  patient:{name:"Destiny W.", age:19, sex:"F"},
+  triage:{level:4, arrival:"Brought in by her roommate", complaint:"“I can't stop breathing fast, and my fingers and lips are tingling.”", vitals:"Pulse 112 · Breathing 30 · O₂ 100% · BP 124/78", sign:"Breathing fast and shallow, frightened, hands cramping into claws.", why:"Fast breathing but perfect oxygen, normal blood pressure, no chest injury or wheeze. Probably not dangerous, but she still gets checked and an ECG."},
+  story:"Destiny has her biggest final exam tomorrow. While studying tonight, her heart started pounding, she felt like she couldn't get enough air, and she started breathing faster and faster. Now her fingers and lips tingle and her hands are cramping.",
+  actions:[
+    A("hpi","key","Sudden pounding heart, fast breathing and a feeling of doom while studying for finals. Tingling lips and fingers. Has had a shorter episode before. No asthma, no recent surgery or travel."),
+    A("meds","ok","No medications. Drank three energy drinks today. No allergies."),
+    A("vitals","ok","Pulse 112, breathing 30, oxygen 100%, BP 124/78."),
+    {id:"lungs",group:E,label:"Listen to the heart & lungs",about:"Check for wheezing, quiet breath sounds or an abnormal heartbeat.",kind:"key",result:"Clear lungs on both sides. Fast but regular heartbeat. No wheeze."},
+    A("ecg","key","Fast normal rhythm (sinus tachycardia). Nothing dangerous."),
+    {id:"coach",group:R,label:"Coach slow breathing in a calm room",about:"Breathe in for 4 counts, hold for 4, out for 6. Slower breathing lets carbon dioxide come back up.",kind:"key",result:"After ten minutes of slow breathing with a nurse, the tingling fades, her hands relax and her pulse drops to 84. She's given information about anxiety support."},
+    {id:"bag",group:R,label:"Have her breathe into a paper bag",about:"An old trick to rebreathe carbon dioxide.",risk:"Can drop oxygen levels, and is dangerous if the fast breathing is really from an asthma attack, a clot or a heart problem.",kind:"harm",result:"Her oxygen dips to 91% and she panics more. The bag is taken away."},
+    {id:"ctpa",group:T,label:"CT pulmonary angiogram",about:"A CT scan with dye to look for blood clots in the lungs.",risk:"Radiation and IV dye, without anything pointing to a clot.",kind:"extra",min:12,result:"Normal. Her story, exam and ECG had already made a clot very unlikely."}
+  ],
+  q1:{short:"Structure", prompt:"Why are her fingers and lips tingling?", options:[
+    {text:"She's breathing out too much carbon dioxide", info:"Breathing fast blows off carbon dioxide (CO₂). Low CO₂ makes the blood less acidic, which lowers the calcium available to nerves. The nerves fire too easily: tingling and cramping hands."},
+    {text:"Her oxygen is too low", info:"Her oxygen is 100%. Low oxygen causes bluish lips and confusion, not tingling."},
+    {text:"A blocked artery in her arm", info:"That would affect one arm, not both hands and her lips."},
+    {text:"Her alveoli are full of fluid", info:"Fluid in the lungs causes crackles and low oxygen."},
+    {text:"Her airways are tight", info:"Tight airways cause wheezing. Her lungs are clear."}], answer:"She's breathing out too much carbon dioxide"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Panic attack with hyperventilation"},{text:"Asthma attack"},{text:"Pulmonary embolism"},{text:"Heart attack"},{text:"Anaphylaxis"}], answer:"Panic attack with hyperventilation"},
+  debrief:{
+    body:"Breathing does two jobs: bringing oxygen in and getting carbon dioxide out. When anxiety makes someone breathe too fast, they blow off too much CO₂. That changes the blood's chemistry, nerves become jumpy, and the fingers and lips tingle and cramp. Slowing the breathing lets CO₂ return to normal.",
+    clue:"Fast breathing with perfect oxygen, clear lungs, a normal ECG, tingling and hand cramps, during a stressful time.",
+    mistake:"The paper bag. Calm, slow breathing works better and is safer. And panic is only called panic after ruling out the dangerous causes."}
+},
+{ id:"nosebleed", unit:"resp", title:"Won't stop bleeding", level:"Patient 5.12",
+  patient:{name:"Caleb N.", age:14, sex:"M"},
+  triage:{level:4, arrival:"Brought in by his mom", complaint:"“My nose has been bleeding for 20 minutes.”", vitals:"Pulse 90 · BP 118/72 · O₂ 99%", sign:"Holding a bloody tissue to his nose, head tilted back.", why:"A nosebleed in a healthy teen with normal vitals. Not dangerous, though he should be taught to stop it properly. Lowest priority."},
+  story:"Caleb's nose started bleeding during class after he'd been picking at a crust inside it. The air at home and school is very dry with the heat on. His mom has been having him tilt his head back.",
+  actions:[
+    A("hpi","key","Bleeding from the right nostril for 20 minutes after picking at a crust. Dry air at home. A few small nosebleeds this winter. No easy bruising."),
+    A("meds","ok","No medications. Not taking aspirin or ibuprofen. No bleeding problems in the family."),
+    {id:"pinch",group:F,label:"Lean forward & pinch the soft part of the nose",about:"Sit up, lean forward, and pinch the soft part of the nose firmly for 10–15 minutes without letting go to check.",kind:"key",min:12,result:"After 15 minutes of steady pressure, the bleeding stops."},
+    {id:"look",group:E,label:"Look inside the nose with a light",about:"Find where the bleeding is coming from.",kind:"key",result:"A small, raw spot on the front of the septum (the wall between the nostrils), with a crust nearby."},
+    {id:"tilt",group:F,label:"Keep his head tilted back",about:"What his mom has been doing.",risk:"Blood runs down the throat, where it can be swallowed or inhaled. Swallowed blood often causes vomiting.",kind:"harm",result:"Caleb swallows a lot of blood, gags, and vomits it up. The bleeding hasn't slowed at all."},
+    {id:"ctsinus",group:T,label:"CT scan of the sinuses",about:"Detailed X-ray slices of the face.",risk:"Radiation, for a simple front-of-the-nose bleed.",kind:"extra",min:12,result:"Normal sinuses. Not needed."},
+    A("cbc","extra","Normal. Not needed for a simple nosebleed with no warning signs.")
+  ],
+  q1:{short:"Structure", prompt:"Where is the bleeding coming from?", options:[
+    {text:"Blood vessels on the front of the nasal septum", info:"The front of the septum has a dense web of small blood vessels just under a thin lining (Kiesselbach's area). Dry air and picking crack the lining, and these vessels bleed. Most nosebleeds come from here."},
+    {text:"The back of the nose", info:"Bleeding from the back of the nose is rarer, heavier and more common in older adults."},
+    {text:"The sinuses", info:"Air-filled spaces in the face bones."},
+    {text:"The lungs", info:"Blood coughed up from the lungs comes with coughing, not from the nostril."},
+    {text:"The stomach", info:"Swallowed blood can come back up, but it started in the nose."}], answer:"Blood vessels on the front of the nasal septum"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Anterior nosebleed (epistaxis)"},{text:"Bleeding disorder"},{text:"Broken nose"},{text:"Sinus infection"},{text:"High blood pressure crisis"}], answer:"Anterior nosebleed (epistaxis)"},
+  debrief:{
+    body:"The nose warms and moistens the air you breathe using a rich blood supply right under its lining. At the front of the septum, many small vessels meet just under a thin surface. Dry winter air makes that lining crack, and picking opens the vessels. Firm pressure on the soft part of the nose squeezes them closed.",
+    clue:"Dry air, picking, bleeding from one front nostril, and a raw spot on the front of the septum.",
+    mistake:"Tilting the head back. Lean forward and pinch."}
+},
+/* ===== MORE CASES ===== */
 { id:"ruq-pain", unit:"digest", title:"Pain after dinner", level:"Patient 4.1",
   triage:{level:3, arrival:"Walked in with her sister", complaint:"“The pain under my right ribs won't stop, and it goes to my shoulder.”", vitals:"Temp 38.4 °C · Pulse 104 · BP 132/84 · Pain 7/10", sign:"Uncomfortable, holding her right side, but walking and talking.", why:"Fever and steady upper-right belly pain, but her blood pressure is fine and she's walking. Urgent."},
   patient:{name:"Dana R.", age:45, sex:"F"},
@@ -1973,7 +2285,8 @@ const CASES = [
     clue:"Crushing central chest pressure during exertion, spreading to the arm and jaw, with sweating. The ECG and troponin confirm heart muscle injury.",
     mistake:"Ordering everything before the ECG. In a real emergency the ECG comes within minutes, because treatment is time-critical."}
 },
-{ id:"sudden-breath", unit:"u3", title:"Sudden shortness of breath", level:"Respiratory",
+{ id:"sudden-breath", unit:"resp", title:"Sudden shortness of breath", level:"Patient 5.1",
+  triage:{level:2, arrival:"Walked in with a classmate", complaint:"“Sharp pain on my left side, and I can't catch my breath.”", vitals:"Pulse 110 · Breathing 24 · O₂ 92% · Pain 7/10", sign:"Tall and thin, breathing fast, holding his left side.", why:"Sudden one-sided chest pain with low oxygen and fast breathing. Possible collapsed lung: emergent."},
   patient:{name:"Jordan K.", age:19, sex:"M"},
   story:"Jordan is tall and thin. While sitting in class, he felt a sudden sharp pain on the left side of his chest, and now he can't catch his breath. The pain gets worse when he breathes in. He has no fever and no cough.",
   actions:[
@@ -1983,6 +2296,7 @@ const CASES = [
     A("ecg","ok","Fast but normal rhythm. No signs of heart damage."),
     A("trop","extra","Normal."),
     A("cbc","extra","Normal. No sign of infection."),
+    {id:"chesttube",group:R,label:"Oxygen & release the trapped air",about:"Oxygen helps the trapped air absorb faster. For a large collapse, a thin needle or tube between the ribs lets the air out so the lung can re-expand.",kind:"key",result:"A small tube between his ribs lets the trapped air out with a hiss. His lung re-expands and his oxygen rises to 98%."},
     {id:"spiro",group:T,label:"Spirometry (forceful breathing test)",about:"Breathe in fully, then blow out as hard and fast as possible to measure lung function.",risk:"Forceful breathing can make an air leak worse.",kind:"harm",result:"Jordan can barely blow. Afterward he's more breathless and his oxygen drops to 89%."}
   ],
   q1:{short:"Structure", prompt:"Which structure is the problem?", options:[
@@ -2052,6 +2366,17 @@ const LOOKS = {
   "gerd":        {skin:"#6b4229", hair:"long",  hc:"#1a1414", shirt:"#9c5b8a"},
   "lactose":     {skin:"#f2cfb0", hair:"long",  hc:"#b5432a", shirt:"#4b6a88"},
   "hernia":      {skin:"#d6a27a", hair:"bald",  hc:"#5b5b5b", shirt:"#8b2b2b"},
+  "asthma":      {skin:"#a86b4a", hair:"long",  hc:"#1a1414", shirt:"#2fa38a"},
+  "anaphylaxis": {skin:"#c99a72", hair:"short", hc:"#1a120c", shirt:"#c83803", spots:"#d9534f"},
+  "pe":          {skin:"#f2cfb0", hair:"long",  hc:"#d9ad55", shirt:"#5a7ab0"},
+  "copd":        {skin:"#e8b896", hair:"bald",  hc:"#d0d0d0", shirt:"#6b7a4a", stache:true},
+  "co":          {skin:"#d6a27a", hair:"long",  hc:"#2a1d14", shirt:"#9c5b8a"},
+  "croup":       {skin:"#f3d6bf", hair:"short", hc:"#7a4a2a", shirt:"#3a7bd5"},
+  "aspiration":  {skin:"#8d5a3b", hair:"curly", hc:"#140d08", shirt:"#e0679a"},
+  "tb":          {skin:"#e0b08a", hair:"short", hc:"#5b4a3a", shirt:"#555f6e", stache:true},
+  "strep":       {skin:"#f0c9a8", hair:"long",  hc:"#6b4a2b", shirt:"#7a5a9a"},
+  "panic":       {skin:"#6b4229", hair:"curly", hc:"#140d08", shirt:"#f2b632"},
+  "nosebleed":   {skin:"#e7b58f", hair:"crop",  hc:"#3a2a20", shirt:"#2f6f8f"},
   okafor:         {id:"okafor", skin:"#5a3620", hair:"bun",   hc:"#111111", shirt:"#ffffff", coat:true}
 };
 const PEEP = {
@@ -2069,6 +2394,9 @@ const PEEP = {
   "gi-bleed":{head:"short5"}, "battery":{head:"buns"}, "obstruction":{head:"grayMedium"}, "food-stuck":{head:"short2", fh:"moustache3"},
   "appendix":{head:"twists"}, "gastro-kid":{head:"short4"}, "hepatitis":{head:"shaved1"}, "divertic":{head:"grayBun"},
   "gerd":{head:"hijab"}, "lactose":{head:"mediumBangs3"}, "hernia":{head:"noHair3"},
+  "asthma":{head:"long"}, "anaphylaxis":{head:"short1"}, "pe":{head:"medium1"}, "copd":{head:"noHair2", fh:"moustache7"},
+  "co":{head:"mediumBangs"}, "croup":{head:"short3"}, "aspiration":{head:"buns"}, "tb":{head:"short5", fh:"full"},
+  "strep":{head:"longBangs"}, "panic":{head:"afro"}, "nosebleed":{head:"flatTop"},
   okafor:{head:"cornrows"}
 };
 const FACE = {hurt:"concerned", worse:"concernedFear", critical:"eyesClosed", happy:"smileBig", ok:"calm"};
