@@ -12,3 +12,7 @@ Interactive anatomy case studies for high school students. Take the history, che
 Students turn in a PDF case report (Unit 1) or shift report (system units) through Google Classroom.
 
 Educational simulation, not medical advice. Patients are fictional.
+
+## Credits
+
+Patient portraits: [Open Peeps](https://www.openpeeps.com/) by Pablo Stanley (CC0 1.0), generated with [DiceBear](https://www.dicebear.com/) (MIT License).
