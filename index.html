@@ -558,6 +558,39 @@ const UNITS = [
   <h3>Wounds</h3>
   <p>Clean a wound and check it for anything stuck inside before closing it. Any broken skin raises the question of <b>tetanus</b>: a booster is due every 10 years, or after 5 years for a dirty wound.</p>`
 },
+{ id:"cardio", name:"Unit 3: The cardiovascular system", mode:"shift", shiftName:"Cardiovascular ER shift",
+  blurb:"A full ER shift: 12 patients with heart and blood-vessel problems, from crushing chest pain to white fingers. Triage them, then see them before they get worse.",
+  brief:`<h2>Unit 3 briefing: the cardiovascular system</h2>
+  <p>The cardiovascular system is the <b>heart</b>, the <b>blood vessels</b> and the <b>blood</b>. It delivers oxygen and nutrients to every cell and carries waste away.</p>
+  <h3>The heart</h3>
+  <ul>
+    <li><b>Four chambers.</b> The <b>right atrium</b> and <b>right ventricle</b> send used blood to the lungs. The <b>left atrium</b> and <b>left ventricle</b> pump fresh, oxygen-rich blood to the body. The left ventricle has the thickest wall because it does the hardest work.</li>
+    <li><b>Four valves</b> keep blood moving one way: tricuspid, pulmonary, mitral and aortic. A narrowed or leaky valve makes a <b>murmur</b>.</li>
+    <li><b>Coronary arteries</b> feed the heart muscle itself. A blocked coronary artery causes a <b>heart attack</b>.</li>
+    <li>The <b>pericardium</b> is a two-layered sac around the heart.</li>
+  </ul>
+  <h3>The electrical system</h3>
+  <p>Each beat starts in the <b>SA node</b> (the natural pacemaker) in the right atrium, spreads across the atria, pauses at the <b>AV node</b>, then races down into the ventricles. An <b>ECG</b> records this: the P wave is the atria, the tall QRS is the ventricles. Problems with the wiring cause rhythms that are too fast, too slow or irregular.</p>
+  <h3>Blood vessels</h3>
+  <table class="stack">
+    <thead><tr><th>Vessel</th><th>Carries</th><th>Key features</th></tr></thead>
+    <tbody>
+      <tr><td>Arteries</td><td>Blood away from the heart</td><td>Thick, muscular, high pressure. The aorta is the largest. A blocked artery makes tissue cold, pale and painful.</td></tr>
+      <tr><td>Capillaries</td><td>Exchange with the tissues</td><td>One cell thick, so oxygen and nutrients pass through.</td></tr>
+      <tr><td>Veins</td><td>Blood back to the heart</td><td>Thin-walled, low pressure, with one-way valves. Muscles squeeze them to push blood upward. A blocked vein makes tissue swollen and warm.</td></tr>
+    </tbody>
+  </table>
+  <h3>Blood</h3>
+  <p><b>Red blood cells</b> carry oxygen on <b>hemoglobin</b>, which needs iron. <b>White blood cells</b> fight infection. <b>Platelets</b> start clots. Too few red cells or too little hemoglobin is <b>anemia</b>.</p>
+  <div class="callout"><b>Red flags in this unit:</b> crushing chest pain with sweating, tearing pain into the back, a cold pale limb with no pulse, and being short of breath lying flat. These patients can't wait.</div>
+  <h3>Tests you'll see</h3>
+  <ul>
+    <li><b>ECG</b>: the heart's electrical tracing. Fast and painless, so it comes early in any chest pain.</li>
+    <li><b>Troponin</b>: a blood test for heart muscle damage.</li>
+    <li><b>Echocardiogram</b>: an ultrasound of the heart, showing the chambers, walls and valves.</li>
+    <li><b>CT angiogram</b>: a CT scan with dye that lights up the arteries.</li>
+  </ul>`
+},
 { id:"u3", name:"Organ systems (preview)",
   blurb:"Early sample cases from later units: digestive, cardiovascular and respiratory.", brief:null }
 ];
@@ -1289,6 +1322,299 @@ const CASES = [
     clue:"Fat at the base of the wound, with no muscle or bone, makes it stage 3. Always check the other bony spots: his heels have early injuries.",
     mistake:"Massaging red skin, or treating only the wound. Pressure relief, nutrition and support for his caregiver are what prevent the next one."}
 },
+{ id:"dissection", unit:"cardio", title:"Tearing pain", level:"Patient 3.2",
+  patient:{name:"Victor N.", age:64, sex:"M"},
+  triage:{level:1, arrival:"Brought in by his wife", complaint:"“It feels like something ripped in my chest and went straight through to my back.”", vitals:"Pulse 104 · BP 188/102 · O₂ 97% · Pain 10/10", sign:"Pale and sweating, gripping his chest. He has high blood pressure and skips his pills.", why:"Sudden, severe, tearing chest pain spreading to the back, with very high blood pressure. Possible tear in the aorta: immediate."},
+  story:"Victor was carrying groceries up the stairs when a sudden, ripping pain shot through his chest and into the space between his shoulder blades. It hit full force in an instant. He has high blood pressure but often forgets his medicine.",
+  actions:[
+    A("hpi","key","“It came on all at once, the worst pain of my life. Tearing, not squeezing. It goes right through to my back.”"),
+    A("meds","key","Prescribed a blood pressure pill but “takes it when he remembers.” No allergies. Not on blood thinners."),
+    A("pmh","ok","High blood pressure for 15 years. Smokes a pack a day."),
+    {id:"bparms",group:V,label:"Blood pressure in both arms",about:"Compare the blood pressure in the right and left arms. A big difference can mean a branch of the aorta is being squeezed off.",kind:"key",result:"Right arm 188/102. Left arm 146/88. A 42-point difference."},
+    A("ecg","key","No signs of a heart attack. Fast but regular rhythm."),
+    {id:"cta",group:T,label:"CT angiogram of the chest",about:"A CT scan with dye that lights up the aorta and the large arteries.",risk:"Radiation and IV dye. Worth it when a torn aorta is possible.",kind:"key",min:12,result:"A tear in the inner lining of the aorta, starting just above the heart and running down into the chest. Blood is flowing between the layers of the aortic wall."},
+    {id:"bpdrug",group:R,label:"IV medicine to lower pulse & blood pressure",about:"Slowing the heart and lowering blood pressure reduces the force on the torn wall while the surgeons get ready.",kind:"key",result:"His pulse settles to 64 and his blood pressure to 118/70. The cardiac surgery team is on the way."},
+    {id:"lytic",group:R,label:"Give a clot-busting drug",about:"Thrombolytics dissolve clots. They're used for some heart attacks and strokes.",risk:"If this isn't a clot, a clot-busting drug can cause catastrophic bleeding.",kind:"harm",result:"Within minutes his blood pressure crashes. The tear is bleeding freely now, and he's rushed to the operating room in critical condition."},
+    A("cbc","extra","Normal. It took time and didn't change anything.")
+  ],
+  q1:{short:"Structure", prompt:"Which structure is torn?", options:[
+    {text:"Aorta", info:"The body's largest artery. It leaves the left ventricle, arches over the heart and runs down through the chest and abdomen. Its wall has three layers; a tear in the inner layer lets blood split them apart."},
+    {text:"Coronary artery", info:"Small arteries on the surface of the heart that feed the heart muscle. A blockage causes a heart attack, usually squeezing pain rather than tearing."},
+    {text:"Pulmonary artery", info:"Carries blood from the right ventricle to the lungs."},
+    {text:"Superior vena cava", info:"The large vein returning blood from the head and arms to the right atrium."},
+    {text:"Esophagus", info:"The food tube behind the heart. A tear there usually follows violent vomiting."}], answer:"Aorta"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Aortic dissection"},{text:"Heart attack (myocardial infarction)"},{text:"Pulmonary embolism"},{text:"Pericarditis"},{text:"Pulled chest muscle"}], answer:"Aortic dissection"},
+  debrief:{
+    body:"The aorta's wall has three layers. Years of high blood pressure weaken it. When the inner layer tears, blood surges into the wall and splits the layers apart (a dissection). It can block arteries that branch off the aorta, like the one to the left arm, which is why the arm pressures differ.",
+    clue:"Sudden, tearing pain into the back, uncontrolled high blood pressure, and different blood pressures in the two arms.",
+    mistake:"Treating it like a heart attack. Clot-busters and blood thinners help a blocked coronary artery but make a torn aorta bleed."}
+},
+{ id:"limb", unit:"cardio", title:"The cold foot", level:"Patient 3.3",
+  patient:{name:"Earl T.", age:72, sex:"M"},
+  triage:{level:2, arrival:"Wheeled in by his daughter", complaint:"“My left leg went cold and numb about two hours ago, and it hurts like crazy.”", vitals:"Pulse 112, irregular · BP 150/88 · O₂ 96% · Pain 9/10", sign:"His left foot is pale and cold compared to the right.", why:"A cold, pale, painful limb means the blood supply may be blocked. Muscle starts to die within hours, so the leg is at risk: emergent."},
+  story:"Earl was watching TV when his left leg suddenly became painful, cold and numb from the knee down. He has an irregular heartbeat and stopped his blood thinner a month ago because of the cost.",
+  actions:[
+    A("hpi","key","Sudden onset two hours ago. Pain is severe, the foot feels “dead,” and he can barely wiggle his toes."),
+    A("meds","key","Was prescribed a blood thinner for atrial fibrillation (an irregular heartbeat) but stopped it a month ago because it was too expensive."),
+    {id:"pulses",group:E,label:"Check pulses in both legs",about:"Feel the pulses at the groin, behind the knee and on the top of the foot, and compare both sides.",kind:"key",result:"Right leg: strong pulses everywhere. Left leg: pulse at the groin, but none behind the knee or in the foot. The left foot is pale and cold."},
+    {id:"neuro",group:E,label:"Check feeling & movement in the foot",about:"Loss of feeling and strength means the nerves and muscles are already starving for blood.",kind:"ok",result:"Reduced feeling on the top of his foot. Weak toe movement."},
+    {id:"cta",group:T,label:"CT angiogram of the legs",about:"A CT scan with dye that shows where an artery is blocked.",risk:"Radiation and IV dye.",kind:"key",min:12,result:"A clot completely blocking the left popliteal artery, behind the knee."},
+    {id:"heparin",group:R,label:"Start an IV blood thinner (heparin)",about:"Stops the clot from growing while the vascular surgeons prepare to remove it.",kind:"key",result:"Heparin is running. The vascular surgery team takes him to remove the clot."},
+    {id:"heat",group:F,label:"Raise the leg & put a heating pad on it",about:"Try to make the leg more comfortable and warm it up.",risk:"Raising the leg makes it even harder for blood to get in, and a numb foot can't feel a burn.",kind:"harm",result:"The foot goes whiter, and an hour later there's a blister where the heating pad sat. He couldn't feel it burning."},
+    A("xray","extra","Normal bones. A blocked artery doesn't show on an X-ray.",{group:T,label:"X-ray of the leg",about:"Pictures of the leg bones.",risk:"Small radiation dose."})
+  ],
+  q1:{short:"Structure", prompt:"Which structure is blocked?", options:[
+    {text:"Popliteal artery", info:"The continuation of the femoral artery, running behind the knee. It splits into the arteries that feed the lower leg and foot."},
+    {text:"Femoral vein", info:"A deep vein in the thigh. Clots here cause a swollen, warm leg, not a cold, pale one."},
+    {text:"Sciatic nerve", info:"The large nerve down the back of the leg. Pinching it causes shooting pain and numbness, but the foot stays warm and pink."},
+    {text:"Aorta", info:"The main artery leaving the heart. A blockage there would affect both legs."},
+    {text:"Saphenous vein", info:"A long surface vein running up the inside of the leg."}], answer:"Popliteal artery"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Acute limb ischemia (a clot blocking a leg artery)"},{text:"Deep vein thrombosis (DVT)"},{text:"Sciatica"},{text:"Muscle cramp"},{text:"Gout"}], answer:"Acute limb ischemia (a clot blocking a leg artery)"},
+  debrief:{
+    body:"In atrial fibrillation, the upper chambers of the heart quiver instead of squeezing, so blood pools and can clot. A clot can break off, travel out through the aorta, and lodge in a smaller artery, here behind the knee. Everything downstream loses its blood supply.",
+    clue:"The six Ps: pain, pallor (paleness), pulselessness, paresthesia (numbness), paralysis and poikilothermia (coldness). Plus atrial fibrillation without a blood thinner.",
+    mistake:"Raising and warming the leg. Arterial blood needs gravity's help, and a leg without blood flow can't feel heat."}
+},
+{ id:"chf", unit:"cardio", title:"Can't lie flat", level:"Patient 3.4",
+  patient:{name:"Margaret L.", age:78, sex:"F"},
+  triage:{level:2, arrival:"Ambulance", complaint:"“I can't breathe when I lie down. I've been sleeping in my recliner.”", vitals:"Pulse 108 · BP 162/94 · Breathing 28 · O₂ 89%", sign:"Sitting bolt upright, breathing fast. Both ankles are very swollen.", why:"Low oxygen and fast breathing in an older adult. She needs oxygen and treatment soon: emergent."},
+  story:"Margaret has had a weak heart for years. Over the past week her ankles have swollen and she's been more and more short of breath. Last night she couldn't lie down at all. Her family had a big holiday dinner three days ago.",
+  actions:[
+    A("hpi","key","Short of breath for a week, much worse lying flat. Wakes up gasping at night. Gained 6 pounds this week."),
+    A("meds","key","Ran out of her water pill (a diuretic) 5 days ago and hasn't refilled it. Also takes a heart medicine. No allergies."),
+    A("intake","ok","“We had ham, gravy and pickles at the holiday dinner. I know, I know, too much salt.”",{label:"Recent diet",about:"Salty food makes the body hold on to water."}),
+    A("vitals","ok","Pulse 108, BP 162/94, breathing 28, oxygen 89%, temp 36.7 °C."),
+    {id:"lungs",group:E,label:"Listen to the lungs & look at the legs",about:"Listen for crackles (fluid in the air sacs) and press on the swollen ankles.",kind:"key",result:"Wet crackles in the bottom half of both lungs. Pressing on her ankle leaves a dent that stays (pitting edema)."},
+    A("cxr","key","A large heart, with fluid in both lungs (pulmonary edema)."),
+    {id:"bnp",group:T,label:"BNP blood test",about:"BNP is a hormone released when the heart's walls are stretched by too much fluid.",risk:"One needle stick.",kind:"ok",min:6,result:"Very high. Her heart is under strain."},
+    {id:"diuretic",group:R,label:"Oxygen, sit her up & give an IV water pill",about:"A diuretic makes the kidneys remove extra fluid, which pulls it out of the lungs.",kind:"key",result:"Over the next hour she urinates a liter, her breathing slows, and her oxygen rises to 95%."},
+    {id:"fluids",group:R,label:"Give a large bag of IV fluids",about:"Fluids are often given to patients who look unwell.",risk:"Adds even more fluid to a heart that can't pump what it already has.",kind:"harm",result:"Her breathing gets worse and her oxygen drops to 84%. Pink, frothy fluid comes up when she coughs. The fluids are stopped."}
+  ],
+  q1:{short:"Structure", prompt:"Which part of the heart is failing?", options:[
+    {text:"Left ventricle", info:"The thick-walled chamber that pumps blood out to the whole body. When it's weak, blood backs up into the lungs."},
+    {text:"Right atrium", info:"Receives used blood from the body and passes it to the right ventricle."},
+    {text:"Mitral valve only", info:"The valve between the left atrium and left ventricle. A leaky valve can cause failure, but here the muscle is weak."},
+    {text:"Coronary arteries", info:"Feed the heart muscle. Blockages cause heart attacks, which can lead to heart failure later."},
+    {text:"Pericardium", info:"The sac around the heart."}], answer:"Left ventricle"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Congestive heart failure flare-up"},{text:"Pneumonia"},{text:"Asthma attack"},{text:"Blood clot in the lung"},{text:"Kidney stones"}], answer:"Congestive heart failure flare-up"},
+  debrief:{
+    body:"A weak left ventricle can't push out all the blood it receives. Blood backs up into the lungs, and fluid leaks into the air sacs, so oxygen can't get through. Lying flat spreads that fluid across more of the lungs, which is why she sleeps sitting up. Extra fluid also pools in the legs.",
+    clue:"Worse lying flat, crackles in both lungs, swollen ankles, weight gain, and she ran out of her water pill right after a salty holiday meal.",
+    mistake:"Giving IV fluids. Her problem is too much fluid, not too little."}
+},
+{ id:"svt", unit:"cardio", title:"Racing heart", level:"Patient 3.5",
+  patient:{name:"Mia K.", age:16, sex:"F"},
+  triage:{level:2, arrival:"Her volleyball coach drove her in", complaint:"“My heart is going so fast I can feel it in my throat.”", vitals:"Pulse 196, regular · BP 108/70 · O₂ 99%", sign:"Alert and talking, a little lightheaded, hand on her chest.", why:"An extremely fast heart rate. She's stable for now, but it needs to be slowed soon: emergent."},
+  story:"Mia was warming up for a volleyball game when her heart suddenly started racing, “like a switch flipped.” It's been going for 40 minutes. This has happened twice before, but it stopped on its own within a few minutes.",
+  actions:[
+    A("hpi","key","Started suddenly, like a switch. Pounding in her chest and neck. Slightly lightheaded. No chest pain. Two shorter episodes in the past year."),
+    A("meds","ok","No medications. Drank one energy drink before the game. No allergies."),
+    A("pulse","key","196 beats per minute and perfectly regular."),
+    A("bp","ok","108/70 mmHg. Holding steady."),
+    A("ecg","key","A narrow, regular, very fast rhythm at 196, with no normal P waves visible: supraventricular tachycardia (SVT)."),
+    {id:"vagal",group:R,label:"Try a vagal maneuver",about:"Bearing down hard (like blowing into a syringe), then lying back with the legs raised, stimulates the vagus nerve, which can slow the heart's electrical relay station.",kind:"key",result:"After the second try, her heart suddenly drops to 88 beats per minute. She says, “Whoa, it stopped.”"},
+    {id:"shock",group:R,label:"Shock her heart right away",about:"An electrical shock (cardioversion) can reset a fast rhythm.",risk:"Painful. Used for unstable patients, and she's awake and stable. Gentler options come first.",kind:"harm",result:"Mia screams. The shock works, but she's terrified and in pain, and it was done without sedation when simpler steps hadn't been tried."},
+    A("trop","extra","Normal. Nothing suggested heart muscle damage."),
+    A("cxr","extra","Normal heart and lungs.")
+  ],
+  q1:{short:"Structure", prompt:"Where does this rhythm start?", options:[
+    {text:"Above the ventricles, in a loop through the AV node", info:"The atrioventricular (AV) node is the electrical relay between the upper and lower chambers. In SVT, an extra pathway lets the signal loop around it over and over, driving the heart very fast."},
+    {text:"The SA node, beating faster than usual", info:"The SA node is the heart's natural pacemaker. It speeds up with exercise or fear, but gradually, not like a switch."},
+    {text:"The ventricles", info:"A rhythm starting in the ventricles makes a wide, abnormal-looking ECG and is often more dangerous."},
+    {text:"The aortic valve", info:"A valve, not part of the electrical system."},
+    {text:"The coronary arteries", info:"Blood vessels that feed the heart muscle."}], answer:"Above the ventricles, in a loop through the AV node"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Supraventricular tachycardia (SVT)"},{text:"Panic attack"},{text:"Heart attack"},{text:"Dehydration"},{text:"Normal fast heartbeat from exercise"}], answer:"Supraventricular tachycardia (SVT)"},
+  debrief:{
+    body:"Normally each heartbeat starts in the SA node and passes once through the AV node to the ventricles. In SVT, an extra electrical pathway lets the signal circle back and keep re-triggering the AV node, so the heart races at 150–250 beats a minute. Stimulating the vagus nerve slows the AV node and can break the loop.",
+    clue:"A sudden on-off switch feeling, a perfectly regular rate near 200, a narrow-complex rhythm on the ECG, and earlier episodes.",
+    mistake:"Jumping to a shock in a stable, awake patient. Try a vagal maneuver first, then medicine."}
+},
+{ id:"afib", unit:"cardio", title:"Fluttering", level:"Patient 3.6",
+  patient:{name:"Howard B.", age:68, sex:"M"},
+  triage:{level:3, arrival:"Drove himself", complaint:"“My heart feels like it's flopping around in my chest.”", vitals:"Pulse 118, irregular · BP 136/84 · O₂ 97%", sign:"Comfortable, talking normally.", why:"A fast, irregular heartbeat, but his blood pressure and oxygen are good and he isn't short of breath or in pain. Urgent, not emergent."},
+  story:"Howard noticed his heart “fluttering and flopping” after dinner last night, and it hasn't stopped. He feels a bit tired but is otherwise fine. He has high blood pressure.",
+  actions:[
+    A("hpi","key","Started yesterday evening, about 16 hours ago. Irregular fluttering. Mild tiredness. No chest pain, no fainting, no shortness of breath."),
+    A("meds","ok","Takes a blood pressure pill. No blood thinners. No allergies."),
+    A("pulse","key","118 beats per minute and completely irregular. No two beats are the same distance apart."),
+    A("vitals","ok","BP 136/84, breathing 16, oxygen 97%, temp normal."),
+    A("ecg","key","An irregularly irregular rhythm with no P waves and a wavy baseline: atrial fibrillation."),
+    {id:"ratecontrol",group:R,label:"Slow the heart rate & start a blood thinner",about:"A rate-slowing medicine lets the ventricles fill properly. A blood thinner prevents clots forming in the quivering atria.",kind:"key",result:"His heart rate settles to 84. He'll start a blood thinner and see cardiology this week."},
+    {id:"carotid",group:F,label:"Press hard on both sides of his neck",about:"Pressing on the carotid arteries stimulates nerves that can slow the heart.",risk:"In older adults, pressing the carotid arteries can knock loose plaque and cause a stroke. Never press both sides at once.",kind:"harm",result:"His heart rate barely changes, and he says he feels dizzy and his vision went gray for a few seconds. You stop immediately."},
+    A("trop","ok","Normal. No sign of heart muscle damage.",{min:6}),
+    A("cta","extra","Normal arteries. Not needed for this rhythm problem.",{group:T,label:"CT angiogram of the chest",about:"A CT scan with dye to look at the large arteries.",risk:"Radiation and IV dye.",min:15})
+  ],
+  q1:{short:"Structure", prompt:"Which chambers are quivering instead of beating?", options:[
+    {text:"The atria", info:"The two upper chambers. In atrial fibrillation, hundreds of chaotic signals make them quiver instead of squeezing, and only some signals get through to the ventricles, at random."},
+    {text:"The ventricles", info:"The two lower pumping chambers. If they quivered (ventricular fibrillation), the heart would stop pumping: cardiac arrest."},
+    {text:"Only the left ventricle", info:"The main pumping chamber to the body."},
+    {text:"The aorta", info:"An artery, not a chamber."},
+    {text:"The pericardium", info:"The sac around the heart."}], answer:"The atria"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Atrial fibrillation"},{text:"Supraventricular tachycardia"},{text:"Heart attack"},{text:"Anxiety"},{text:"Normal heartbeat"}], answer:"Atrial fibrillation"},
+  debrief:{
+    body:"In atrial fibrillation, the atria quiver instead of contracting. The ventricles still pump, but irregularly. Blood moving slowly in the quivering atria can form clots, which can travel to the brain (stroke) or a leg. That's why most people with AFib need a blood thinner.",
+    clue:"An irregularly irregular pulse, an ECG with no P waves, in an older adult with high blood pressure.",
+    mistake:"Forgetting stroke prevention. Slowing the rate helps him feel better, but the blood thinner protects his brain."}
+},
+{ id:"aortic-sten", unit:"cardio", title:"Fainted mowing the lawn", level:"Patient 3.7",
+  patient:{name:"Bernard F.", age:79, sex:"M"},
+  triage:{level:3, arrival:"Driven in by his neighbor", complaint:"“I was mowing the lawn and next thing I knew I was on the grass.”", vitals:"Pulse 76 · BP 118/82 · O₂ 96% · Alert now", sign:"Awake and talking. A scrape on his forehead.", why:"Fainting during exertion in an older adult needs a careful heart workup, but he's awake with normal vitals now. Urgent."},
+  story:"Bernard fainted while pushing his lawn mower up a slope. He woke up within a minute. Lately he's been getting short of breath and has had chest tightness when he walks uphill, but he blamed it on getting older.",
+  actions:[
+    A("hpi","key","Passed out during exertion, with no warning. Has had chest tightness and breathlessness climbing hills for months."),
+    A("meds","ok","Takes a cholesterol pill. No allergies."),
+    A("vitals","ok","Pulse 76, BP 118/82, breathing 16, oxygen 96%."),
+    {id:"murmur",group:E,label:"Listen to the heart",about:"Listen for a murmur: the whooshing sound of turbulent blood flow through a narrowed or leaky valve.",kind:"key",result:"A loud, harsh murmur between heartbeats, loudest just right of the breastbone and spreading up into the neck."},
+    A("ecg","key","Thick heart muscle pattern (left ventricular hypertrophy). No heart attack."),
+    {id:"echo",group:T,label:"Echocardiogram (heart ultrasound)",about:"Sound waves show the heart's chambers, walls and valves moving in real time.",risk:"None. No radiation.",kind:"key",min:12,result:"The aortic valve is thick, stiff and barely opens. The left ventricle wall is thickened from pushing against it."},
+    {id:"treadmill",group:T,label:"Treadmill stress test",about:"Exercise on a treadmill while the ECG is watched.",risk:"Hard exercise against a tightly narrowed valve can cause fainting or cardiac arrest.",kind:"harm",min:10,result:"Two minutes in, Bernard turns gray and his blood pressure drops. The test is stopped and he's laid flat."},
+    {id:"ctbrain",group:T,label:"CT scan of the head",about:"Checks for bleeding in the brain after a fall.",risk:"Radiation dose.",kind:"ok",min:12,result:"No bleeding. Just the forehead scrape."}
+  ],
+  q1:{short:"Structure", prompt:"Which structure is the problem?", options:[
+    {text:"Aortic valve", info:"The valve between the left ventricle and the aorta. It opens with each heartbeat to let blood out to the body. When it stiffens and narrows (stenosis), the heart can't push enough blood through during exercise."},
+    {text:"Mitral valve", info:"Between the left atrium and left ventricle. Problems often cause shortness of breath and an irregular heartbeat."},
+    {text:"Tricuspid valve", info:"Between the right atrium and right ventricle."},
+    {text:"Brain arteries", info:"A blocked brain artery causes a stroke: weakness or trouble speaking that doesn't go away in a minute."},
+    {text:"Inner ear", info:"Inner ear problems cause spinning dizziness (vertigo), not sudden fainting during exercise."}], answer:"Aortic valve"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Aortic stenosis (narrowed aortic valve)"},{text:"Simple fainting from heat"},{text:"Stroke"},{text:"Low blood sugar"},{text:"Seizure"}], answer:"Aortic stenosis (narrowed aortic valve)"},
+  debrief:{
+    body:"With age, the aortic valve can stiffen and calcify. During exercise the muscles need more blood, but the narrow valve won't let the heart push more out, so blood flow to the brain drops and the person faints. The left ventricle thickens from years of pushing against the blockage.",
+    clue:"Fainting during exertion, chest tightness and breathlessness on hills, and a loud murmur that spreads to the neck.",
+    mistake:"A stress test. With severe aortic stenosis, exercise testing is dangerous. The echo answers the question safely."}
+},
+{ id:"pericarditis", unit:"cardio", title:"Better leaning forward", level:"Patient 3.8",
+  patient:{name:"Sam P.", age:22, sex:"M"},
+  triage:{level:3, arrival:"Walked in", complaint:"“Sharp pain in my chest. It's worse when I lie down.”", vitals:"Pulse 98 · BP 122/76 · O₂ 98% · Temp 37.9 °C", sign:"Sitting forward on the edge of the chair. Comfortable when he leans forward.", why:"Chest pain always gets a careful look, but his vitals are stable and the pain pattern isn't typical of a heart attack. Urgent."},
+  story:"Sam had a cold last week. Two days ago he developed a sharp pain in the center of his chest. It's worse when he lies back or takes a deep breath, and better when he sits up and leans forward.",
+  actions:[
+    A("hpi","key","Sharp, stabbing pain, worse lying flat or breathing in, much better leaning forward. Started 2 days ago, a week after a cold."),
+    A("meds","ok","No medications. No allergies."),
+    A("vitals","ok","Pulse 98, BP 122/76, breathing 18, oxygen 98%, temp 37.9 °C."),
+    {id:"rub",group:E,label:"Listen to the heart",about:"Listen for a friction rub: a scratchy sound like two pieces of sandpaper rubbing.",kind:"key",result:"A scratchy, squeaky rub with each heartbeat, heard best while he leans forward."},
+    A("ecg","key","ST elevation across almost every lead, not just one area, plus a slight dip in the PR segments: the pattern of pericarditis, not a heart attack."),
+    A("trop","ok","Normal. The heart muscle itself isn't damaged.",{min:6}),
+    {id:"echo",group:T,label:"Echocardiogram (heart ultrasound)",about:"Shows the heart and any fluid collecting around it.",risk:"None.",kind:"ok",min:10,result:"A small amount of fluid around the heart. The heart is squeezing normally."},
+    {id:"nsaid",group:R,label:"Anti-inflammatory medicine",about:"Ibuprofen-type medicine plus colchicine calms the inflamed sac around the heart.",kind:"key",result:"By evening, the pain is much better. He'll rest from sports until it fully settles."},
+    {id:"heparin",group:R,label:"Start an IV blood thinner (heparin) for a heart attack",about:"Blood thinners are part of heart attack treatment.",risk:"In an inflamed pericardium, a blood thinner can cause bleeding into the sac, which squeezes the heart.",kind:"harm",result:"Two hours later, Sam's blood pressure drops and the fluid around his heart has grown. The blood thinner is stopped and cardiology rushes in."}
+  ],
+  q1:{short:"Structure", prompt:"Which structure is inflamed?", options:[
+    {text:"Pericardium", info:"The two-layered sac around the heart, with a thin film of fluid between the layers. When it's inflamed, the rough layers rub with each beat."},
+    {text:"Myocardium", info:"The heart muscle itself. Damage to it raises troponin."},
+    {text:"Endocardium", info:"The thin inner lining of the heart chambers and valves."},
+    {text:"Pleura", info:"The sac around each lung. Pleurisy also hurts with breathing but doesn't change with each heartbeat."},
+    {text:"Sternum", info:"The breastbone. Bone pain is tender when pressed."}], answer:"Pericardium"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Pericarditis"},{text:"Heart attack"},{text:"Pneumonia"},{text:"Collapsed lung"},{text:"Heartburn"}], answer:"Pericarditis"},
+  debrief:{
+    body:"The pericardium is a two-layered sac with a little fluid between the layers, so the heart can slide smoothly as it beats. A virus can inflame it. The inflamed layers rub together, causing sharp pain and a scratchy sound. Leaning forward pulls the heart away from the back of the sac, which eases the pain.",
+    clue:"Sharp pain, better leaning forward, worse lying down, after a cold. Plus a friction rub and ST changes across the whole ECG.",
+    mistake:"Treating it as a heart attack. A blood thinner can cause bleeding into the sac."}
+},
+{ id:"dvt", unit:"cardio", title:"Swollen calf", level:"Patient 3.9",
+  patient:{name:"Jasmine W.", age:35, sex:"F"},
+  triage:{level:3, arrival:"Walked in, limping slightly", complaint:"“My left calf has been swollen and sore since I got back from my trip.”", vitals:"Pulse 88 · BP 124/78 · O₂ 98% · Pain 5/10", sign:"Left calf visibly bigger than the right. No trouble breathing.", why:"A possible blood clot in a leg vein. She's stable with normal oxygen and no chest symptoms: urgent."},
+  story:"Jasmine got back from a 14-hour flight from Asia four days ago. Since then, her left calf has become swollen, tight and achy. She takes birth control pills.",
+  actions:[
+    A("hpi","key","Calf swelling and aching for 3 days, worse when walking. No chest pain, no shortness of breath, no coughing up blood."),
+    A("meds","key","Takes a birth control pill containing estrogen. No allergies."),
+    A("social","ok","Just flew 14 hours each way. Mostly stayed in her seat. Doesn't smoke.",{label:"Recent travel & habits",about:"Long periods sitting still slow blood flow in the leg veins."}),
+    A("vitals","ok","Pulse 88, BP 124/78, breathing 14, oxygen 98%."),
+    {id:"legs",group:E,label:"Examine both legs",about:"Measure both calves and feel for warmth, tenderness and swelling.",kind:"key",result:"Left calf is 4 cm bigger around than the right, warm and tender along the deep veins. Foot pulses are normal."},
+    {id:"duplex",group:T,label:"Ultrasound of the leg veins",about:"Sound waves show blood flow in the veins. A clot shows up as a vein that won't squeeze flat.",risk:"None.",kind:"key",min:12,result:"A clot in the left popliteal and femoral veins. The vein won't compress."},
+    {id:"anticoag",group:R,label:"Start a blood thinner",about:"Stops the clot from growing and from breaking off, while the body slowly dissolves it.",kind:"key",result:"She starts a blood thinner pill today and is told to stop the estrogen birth control and talk with her doctor about other options."},
+    {id:"massage",group:F,label:"Massage the calf to ease the swelling",about:"Rubbing the sore muscle to push fluid out.",risk:"Can break off a piece of clot, which can travel to the lungs (pulmonary embolism).",kind:"harm",result:"An hour later Jasmine suddenly feels short of breath and her oxygen drops to 92%. A piece of the clot may have traveled to her lungs."},
+    {id:"ddimer",group:T,label:"D-dimer (clots)",about:"Blood test that rises when the body is breaking down blood clots.",risk:"One needle stick.",kind:"extra",result:"Raised, but the ultrasound had already shown the clot, so this added nothing."}
+  ],
+  q1:{short:"Structure", prompt:"Where is the clot?", options:[
+    {text:"Deep veins of the leg", info:"Veins buried in the calf and thigh muscles, like the popliteal and femoral veins. Calf muscles squeeze them to push blood back to the heart, so sitting still lets blood pool."},
+    {text:"An artery in the leg", info:"A blocked artery makes the leg cold and pale, not warm and swollen."},
+    {text:"A surface (superficial) vein", info:"Veins just under the skin. Clots there make a tender red cord but are much less dangerous."},
+    {text:"The calf muscle", info:"A torn calf muscle hurts after a sudden push-off, often with a pop."},
+    {text:"Lymph nodes", info:"Swollen lymph nodes are lumps, usually in the groin, not a swollen calf."}], answer:"Deep veins of the leg"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Deep vein thrombosis (DVT)"},{text:"Calf muscle strain"},{text:"Cellulitis"},{text:"Acute limb ischemia"},{text:"Varicose veins"}], answer:"Deep vein thrombosis (DVT)"},
+  debrief:{
+    body:"Blood in the leg veins moves back to the heart when the calf muscles squeeze the veins, and one-way valves stop it falling back. Sitting still for hours, plus estrogen (which makes blood clot more easily), let a clot form in a deep vein. If part of it breaks off, it travels through the heart to the lungs.",
+    clue:"A long flight, estrogen birth control, and one warm, swollen, tender calf.",
+    mistake:"Massaging the leg. Never rub a suspected clot."}
+},
+{ id:"anemia", unit:"cardio", title:"Always tired", level:"Patient 3.10",
+  patient:{name:"Brianna C.", age:17, sex:"F"},
+  triage:{level:4, arrival:"Brought in by her mom", complaint:"“I'm exhausted all the time, and I get winded on the stairs.”", vitals:"Pulse 98 · BP 112/68 · O₂ 99%", sign:"Pale, tired-looking, walking normally.", why:"A problem building for months, with stable vitals. She needs a workup, but she can safely wait."},
+  story:"Brianna has felt tired for about three months. She gets out of breath climbing the stairs at school, and her friends say she looks pale. She's been craving ice to chew on.",
+  actions:[
+    A("hpi","key","Gradually more tired over 3 months. Short of breath on stairs. Craves crunching ice. Gets headaches."),
+    {id:"periods",group:H,label:"Menstrual history",about:"Heavy periods are the most common cause of iron loss in teens and young women.",kind:"key",result:"Her periods are very heavy, lasting 8 days and soaking through a pad every 1–2 hours on the heaviest days."},
+    A("meds","ok","No medications. No allergies. Became vegetarian last year."),
+    A("vitals","ok","Pulse 98 (a bit fast at rest), BP 112/68, oxygen 99%."),
+    {id:"inspect",group:E,label:"Look at skin, eyelids & nails",about:"Look inside the lower eyelids and at the nail beds for paleness.",kind:"ok",result:"Pale inner eyelids and nail beds. Nails slightly spoon-shaped."},
+    A("cbc","key","Hemoglobin low at 8.9 (normal about 12–16). Red blood cells small and pale, the pattern of iron deficiency."),
+    {id:"iron",group:R,label:"Start iron & refer for heavy periods",about:"Iron replaces what's been lost. A doctor can help treat the heavy periods so it doesn't happen again.",kind:"key",result:"She starts iron tablets, gets advice on iron-rich vegetarian foods, and has a gynecology appointment next week."},
+    {id:"aspirin",group:R,label:"Give aspirin for her headaches",about:"A common over-the-counter pain reliever.",risk:"Aspirin thins the blood, which makes heavy bleeding worse. It's also avoided in teens because of the risk of Reye's syndrome.",kind:"harm",result:"Her next period is even heavier. Aspirin was the wrong choice for a teen who is losing blood."},
+    {id:"transfuse",group:R,label:"Give a blood transfusion",about:"Replaces red blood cells directly.",risk:"Transfusions carry small risks and aren't needed for stable iron deficiency.",kind:"extra",min:10,result:"She feels a little better, but iron tablets would have fixed this safely over a few weeks."}
+  ],
+  q1:{short:"Structure", prompt:"What is she short of?", options:[
+    {text:"Hemoglobin in her red blood cells", info:"Hemoglobin is the iron-containing protein in red blood cells that carries oxygen. Without enough iron, the body makes fewer, smaller, paler red cells."},
+    {text:"White blood cells", info:"The infection-fighting cells. Too few cause frequent infections, not tiredness and paleness."},
+    {text:"Platelets", info:"Cell fragments that help blood clot. Too few cause bruising and bleeding."},
+    {text:"Plasma", info:"The liquid part of blood. Losing plasma causes dehydration, not this slow pattern."},
+    {text:"Oxygen in the lungs", info:"Her lungs work fine: her oxygen saturation is 99%. The problem is how much oxygen her blood can carry."}], answer:"Hemoglobin in her red blood cells"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Iron-deficiency anemia from heavy periods"},{text:"Mononucleosis (mono)"},{text:"Depression"},{text:"Asthma"},{text:"Heart failure"}], answer:"Iron-deficiency anemia from heavy periods"},
+  debrief:{
+    body:"Each red blood cell is packed with hemoglobin, which uses iron to grab oxygen in the lungs and release it in the tissues. Losing blood every month, without enough iron in the diet to replace it, leaves too little hemoglobin. Tissues get less oxygen, so she's tired and breathless, and the heart beats faster to compensate.",
+    clue:"Months of tiredness, paleness, ice cravings, very heavy periods, a vegetarian diet, and small, pale red cells on the blood count.",
+    mistake:"Aspirin. It thins the blood and should be avoided in teens."}
+},
+{ id:"varicose", unit:"cardio", title:"Bulging veins", level:"Patient 3.11",
+  patient:{name:"Linda S.", age:52, sex:"F"},
+  triage:{level:4, arrival:"Walked in", complaint:"“The veins in my legs are bulging and my legs ache by the end of the day.”", vitals:"Pulse 72 · BP 128/80 · O₂ 99% · Pain 3/10", sign:"Twisted, bulging blue veins on both lower legs.", why:"A long-term, non-dangerous problem with normal vitals. Lowest priority."},
+  story:"Linda is a hairstylist who stands all day. Over the past few years, the veins on the backs of her calves have become twisted and bulging. Her legs feel heavy and achy by evening, and better when she puts her feet up.",
+  actions:[
+    A("hpi","key","Slowly worse over years. Heavy, achy legs by evening, better with her feet raised. No sudden swelling, no redness."),
+    A("social","ok","Stands 9 hours a day at work. Has had three pregnancies.",{label:"Work & pregnancies",about:"Long standing and pregnancy both put pressure on leg veins."}),
+    A("fam","ok","Her mother had the same veins."),
+    {id:"legs",group:E,label:"Examine the legs standing up",about:"Look at the veins while she stands, when they fill most, and check for swelling, skin changes or tender red cords.",kind:"key",result:"Twisted, rope-like veins on both calves that flatten when she lies down. Mild ankle swelling. No warmth, redness or one-sided calf swelling."},
+    {id:"stockings",group:R,label:"Compression stockings & leg raising",about:"Snug stockings squeeze the veins so blood can't pool, and raising the legs lets gravity help.",kind:"key",result:"She's fitted for compression stockings and referred to a vein clinic to discuss treatment options."},
+    {id:"duplex",group:T,label:"Ultrasound of the leg veins",about:"Shows blood flow and whether the valves leak.",risk:"None.",kind:"ok",min:10,result:"Leaky valves in the surface veins, with blood flowing backward. No clots in the deep veins."},
+    {id:"ctleg",group:T,label:"CT scan of the legs",about:"Detailed X-ray slices of the legs.",risk:"Radiation, and it doesn't show valve function.",kind:"extra",min:15,result:"Not useful. It showed the enlarged veins, but nothing the exam and ultrasound didn't."},
+    {id:"pop",group:F,label:"Massage & squeeze the bulging veins",about:"Try to push the pooled blood out of the veins.",risk:"Can injure the stretched vein walls or loosen a clot if one is present.",kind:"harm",result:"A painful bruise blooms on her calf, and a vein starts to ooze under the skin."}
+  ],
+  q1:{short:"Structure", prompt:"What part of the veins has failed?", options:[
+    {text:"The one-way valves inside the veins", info:"Leg veins have small flaps that let blood flow up toward the heart but stop it falling back down. When they stretch and leak, blood pools and the veins bulge."},
+    {text:"The artery walls", info:"Arteries carry blood away from the heart at high pressure. Bulging arteries are called aneurysms."},
+    {text:"The calf muscles", info:"The calf muscles act as a pump for the veins, but they're working fine here."},
+    {text:"The capillaries", info:"Tiny vessels connecting arteries to veins. Broken capillaries make small spider veins."},
+    {text:"The lymph vessels", info:"Carry extra tissue fluid. Blockage causes swelling but not bulging blue veins."}], answer:"The one-way valves inside the veins"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Varicose veins"},{text:"Deep vein thrombosis (DVT)"},{text:"Heart failure"},{text:"Acute limb ischemia"},{text:"Cellulitis"}], answer:"Varicose veins"},
+  debrief:{
+    body:"Veins carry blood back to the heart at low pressure, often uphill from the legs. One-way valves stop blood sliding back down. Standing for long hours, pregnancy and family genes can stretch the veins until the valve flaps no longer meet. Blood pools, and the veins swell and twist.",
+    clue:"Years of slowly worsening, rope-like veins that flatten when she lies down, aching by evening, and a job standing all day.",
+    mistake:"Over-testing. Varicose veins are diagnosed by looking. An ultrasound checks the valves, but a CT doesn't help."}
+},
+{ id:"raynaud", unit:"cardio", title:"White fingers", level:"Patient 3.12",
+  patient:{name:"Tessa T.", age:24, sex:"F"},
+  triage:{level:4, arrival:"Walked in", complaint:"“My fingers turn white, then blue, whenever I'm cold.”", vitals:"Pulse 76 · BP 114/70 · O₂ 99% · Pain 2/10", sign:"Fingers look normal right now. Wearing gloves indoors.", why:"A long-standing problem that comes and goes, with normal vitals and normal-looking fingers. Lowest priority."},
+  story:"Grace works in a grocery store's frozen food section. For two winters, her fingers have turned stark white when she's cold, then blue, then bright red and throbbing as they warm up. Each episode lasts about 15 minutes.",
+  actions:[
+    A("hpi","key","Fingers turn white, then blue, then red when cold or stressed. Numb, then throbbing. Lasts 10–20 minutes. No sores on her fingertips."),
+    A("meds","ok","No medications. Drinks four cups of coffee a day. Doesn't smoke. No allergies."),
+    A("pmh","ok","Healthy. No joint pain, rashes or swallowing trouble."),
+    {id:"hands",group:E,label:"Examine the hands",about:"Look at the fingers, nail beds and fingertips, and feel the wrist pulses.",kind:"key",result:"Normal color and warmth right now. Strong wrist pulses. No sores or scars on the fingertips."},
+    {id:"coldtest",group:E,label:"Watch her hands after holding a cold drink",about:"A brief, gentle cold trigger to see the color change.",kind:"ok",min:5,result:"After a minute holding an iced drink, two fingers on each hand turn sharply white up to the middle knuckle."},
+    {id:"warm",group:R,label:"Advice: warm gloves, layers, less caffeine",about:"Keeping the whole body warm and avoiding triggers is the first treatment.",kind:"key",result:"She'll wear insulated gloves in the freezer section, cut back on coffee, and come back if she gets sores on her fingers."},
+    {id:"ice",group:F,label:"Soak her hands in ice water for 10 minutes",about:"A longer, stronger cold test to see the full attack.",risk:"Prolonged cold can trigger a severe attack and damage tissue in the fingertips.",kind:"harm",min:10,result:"Her fingers go white and then deep blue, and the pain is intense. It takes 40 minutes for the color to return."},
+    A("cta","extra","Normal large arteries. The problem is in the tiny finger arteries, which this scan doesn't show.",{group:T,label:"CT angiogram of the arms",about:"A CT scan with dye to show the arm arteries.",risk:"Radiation and IV dye.",min:15})
+  ],
+  q1:{short:"Structure", prompt:"What is happening in her fingers?", options:[
+    {text:"The small arteries in the fingers clamp down", info:"Small arteries have smooth muscle in their walls that can narrow them (vasoconstriction). In Raynaud's, cold makes them over-react and squeeze shut, cutting off blood flow for a few minutes."},
+    {text:"A clot blocks the arm artery", info:"A clot would cause constant pain and coldness, not color changes that come and go."},
+    {text:"The finger veins are leaking", info:"Leaky veins cause swelling, not white fingers."},
+    {text:"Frostbite of the skin", info:"Frostbite is tissue freezing after long, severe cold. It doesn't come and go in minutes."},
+    {text:"A pinched nerve", info:"A pinched nerve causes numbness and tingling, but the fingers stay a normal color."}], answer:"The small arteries in the fingers clamp down"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Raynaud's phenomenon"},{text:"Frostbite"},{text:"Carpal tunnel syndrome"},{text:"Acute limb ischemia"},{text:"Anemia"}], answer:"Raynaud's phenomenon"},
+  debrief:{
+    body:"Arteries have a layer of smooth muscle that can narrow or widen them. In Raynaud's, cold or stress makes the small finger arteries spasm shut: white when the blood is cut off, blue as the remaining blood loses its oxygen, then red when the arteries reopen and blood rushes back.",
+    clue:"White, then blue, then red fingers triggered by cold, lasting minutes, in a young woman with normal pulses and no fingertip sores.",
+    mistake:"Ordering big scans. This is diagnosed from the story and the exam."}
+},
 /* ===== PREVIEW: ORGAN SYSTEMS ===== */
 { id:"ruq-pain", unit:"u3", title:"Pain after dinner", level:"Digestive",
   patient:{name:"Dana R.", age:45, sex:"F"},
@@ -1315,7 +1641,8 @@ const CASES = [
     clue:"Right upper pain after fatty food, spreading to the right shoulder blade, plus a positive Murphy's sign. The ultrasound confirms it.",
     mistake:"Choosing pancreatitis. The pancreas is nearby, but a normal lipase makes it unlikely."}
 },
-{ id:"chest-pressure", unit:"u3", title:"Pressure in the chest", level:"Cardiovascular",
+{ id:"chest-pressure", unit:"cardio", title:"Pressure in the chest", level:"Patient 3.1",
+  triage:{level:1, arrival:"Ambulance, from his driveway", complaint:"“It feels like an elephant is sitting on my chest.”", vitals:"Pulse 98 · BP 150/92 · O₂ 95% · Pain 9/10", sign:"Pale, sweaty, clutching his chest. Pain spreads to his left arm and jaw.", why:"Crushing chest pain with sweating, spreading to the arm and jaw: a possible heart attack. Every minute of blocked blood flow kills heart muscle. Immediate."},
   patient:{name:"Luis M.", age:58, sex:"M"},
   story:"Luis was shoveling snow when he felt heavy pressure in the center of his chest, “like someone sitting on me.” It has lasted 40 minutes and spreads to his left arm and jaw. He is sweating and short of breath. He smokes and takes medicine for high blood pressure.",
   actions:[
@@ -1324,7 +1651,8 @@ const CASES = [
     A("ecg","key","ST elevation in leads II, III and aVF: a pattern of injury to the bottom (inferior) wall of the heart."),
     A("trop","key","Raised. Troponin leaks out of damaged heart muscle cells."),
     {id:"ddimer",group:T,label:"D-dimer (clots)",about:"Blood test that rises when the body is breaking down blood clots.",risk:"One needle stick.",kind:"extra",result:"Normal. A blood clot in the lungs is unlikely."},
-    A("cxr","ok","Normal heart size. Lungs clear. Normal width of the aorta."),
+    A("cxr","extra","Normal heart size and clear lungs. It didn't change anything, and in a heart attack every minute before the artery is opened counts."),
+    {id:"cath",group:R,label:"Aspirin & activate the cath lab",about:"Aspirin stops more platelets from sticking to the clot. The cardiac catheterization (cath) lab opens the blocked artery with a balloon and a stent.",kind:"key",result:"Luis chews an aspirin, and 40 minutes later the cardiology team opens his blocked right coronary artery with a stent. The pain is gone."},
     {id:"stress",group:T,label:"Treadmill stress test",about:"Exercise on a treadmill while the ECG is watched, to see if the heart gets enough blood under effort.",risk:"Dangerous during active chest pain: it makes the heart work harder.",kind:"harm",result:"Within a minute Luis's pain becomes crushing and his heart rhythm goes irregular. The test is stopped and the team rushes in."}
   ],
   q1:{short:"Structure", prompt:"Which structure is the problem?", options:[
@@ -1396,6 +1724,17 @@ const LOOKS = {
   "sjs":        {skin:"#a8704a", hair:"long",  hc:"#151010", shirt:"#e0b040", spots:"#9a3a3a"},
   "poison-ivy": {skin:"#efc4a0", hair:"short", hc:"#a0522d", shirt:"#556b2f"},
   "bedsore":    {skin:"#e9c2a2", hair:"bald",  hc:"#dcdcdc", shirt:"#8a9aaa", glasses:true},
+  "dissection":  {skin:"#e8b896", hair:"short", hc:"#6b6b6b", shirt:"#5a6b7a", glasses:true},
+  "limb":        {skin:"#f0c9a8", hair:"bald",  hc:"#d0d0d0", shirt:"#7a8f5a"},
+  "chf":         {skin:"#7a4a2c", hair:"curly", hc:"#e6e6e6", shirt:"#b0547a", glasses:true},
+  "svt":         {skin:"#e8c09a", hair:"long",  hc:"#2a1d14", shirt:"#c83803"},
+  "afib":        {skin:"#c99a72", hair:"short", hc:"#9a9a9a", shirt:"#2f5f8f"},
+  "aortic-sten": {skin:"#f2cfb0", hair:"bald",  hc:"#e6e6e6", shirt:"#6b7a4a", glasses:true},
+  "pericarditis":{skin:"#a86b4a", hair:"crop",  hc:"#1a120c", shirt:"#3a7bd5"},
+  "dvt":         {skin:"#8d5a3b", hair:"long",  hc:"#140d08", shirt:"#2fa38a"},
+  "anemia":      {skin:"#f3d6bf", hair:"long",  hc:"#8a5a2a", shirt:"#9c5b8a"},
+  "varicose":    {skin:"#e0b08a", hair:"bun",   hc:"#7a4a2a", shirt:"#d9534f"},
+  "raynaud":     {skin:"#d9a77f", hair:"long",  hc:"#1d1d1d", shirt:"#4b6a88"},
   okafor:         {id:"okafor", skin:"#5a3620", hair:"bun",   hc:"#111111", shirt:"#ffffff", coat:true}
 };
 const PEEP = {
@@ -1406,7 +1745,11 @@ const PEEP = {
   "shoulder":{head:"shaved2"}, "scaphoid":{head:"bun"}, "hives":{head:"longBangs"}, "nec-fasc":{head:"noHair3", fh:"moustache4"},
   "glass-cut":{head:"mediumBangs2"}, "burn":{head:"short2"}, "mole":{head:"grayShort"}, "frostbite":{head:"hatBeanie", fh:"full2"},
   "boil":{head:"flatTop"}, "petechiae":{head:"mediumBangs"}, "cellulitis":{head:"medium3"}, "sjs":{head:"longCurly"},
-  "poison-ivy":{head:"shaved3"}, "bedsore":{head:"noHair1"}, okafor:{head:"cornrows"}
+  "poison-ivy":{head:"shaved3"}, "bedsore":{head:"noHair1"},
+  "dissection":{head:"short2"}, "limb":{head:"noHair2"}, "chf":{head:"grayMedium"}, "svt":{head:"longBangs"},
+  "afib":{head:"grayShort", fh:"moustache2"}, "aortic-sten":{head:"noHair1"}, "pericarditis":{head:"dreads1"}, "dvt":{head:"long"},
+  "anemia":{head:"longCurly"}, "varicose":{head:"bun2"}, "raynaud":{head:"mediumStraight"},
+  okafor:{head:"cornrows"}
 };
 const FACE = {hurt:"concerned", worse:"concernedFear", critical:"eyesClosed", happy:"smileBig", ok:"calm"};
 const DOC_FACE = {hurt:"veryAngry", worse:"concernedFear", critical:"eyesClosed", happy:"smileBig", ok:"serious"};
