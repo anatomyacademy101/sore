@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SORE! Second Opinion Required</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Source+Sans+3:wght@400;600;700&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&display=swap" rel="stylesheet">
+<style>
+/* VOICE: game-day energy on a hospital floor; clinical where it teaches, cheeky where it judges
+   IDEA: the ER waiting room and the triage board: patients wait on the bench, you call them in
+   PICTURE: illustrated patient portraits everywhere: the waiting-room bench, case cards, the chart, the verdict
+   COLOUR and TYPE: deep navy and burnt orange (the person's ask), white chart paper; Barlow Condensed headlines, Source Sans UI, Source Serif for patient voices
+   LAYOUT: navy top bar + waiting-room hero; units as assignment rows; in a case, portrait chart left, orders right; stacks under 760px */
+:root{color-scheme:light dark;
+--bg:light-dark(#f2f4f8,#0a1120);--paper:light-dark(#ffffff,#121c2f);--ink:light-dark(#0b162a,#e8edf5);
+--muted:light-dark(#566176,#9aa8bf);--line:light-dark(#d9dfe8,#25324b);
+--navy:#0b162a;--navy2:#13264a;--orange:light-dark(#c83803,#ff6a2b);--on-orange:light-dark(#fff,#0b162a);
+--orange-soft:light-dark(#fdebe2,#3a1f12);--blue:light-dark(#1c3d73,#8fb2ee);--blue-soft:light-dark(#e7edf7,#18284a);
+--red:light-dark(#b3261e,#ff7b72);--red-soft:light-dark(#fbe5e3,#3a1a1a);--ok:light-dark(#1d6b45,#6fd3a0);
+--ok-soft:light-dark(#e2f3ea,#13301f);--amber:light-dark(#8a5300,#f2c46b);--amber-soft:light-dark(#fcefd9,#33280f)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Source Sans 3",system-ui,sans-serif;overflow-x:clip}
+.wrap{max-width:1240px;margin:0 auto}
+.band{padding:clamp(22px,3vw,44px) max(5vw,16px)}
+.top{background:var(--navy);color:#fff;padding:10px max(5vw,16px);border-bottom:5px solid var(--orange)}
+.top .wrap{display:flex;flex-wrap:wrap;gap:10px 20px;align-items:center;justify-content:space-between}
+.brand{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;background:none;border:0;color:#fff;padding:4px 0;min-height:44px}
+.mark{font:800 34px/1 "Barlow Condensed",sans-serif;letter-spacing:.5px}
+.mark span{color:#ff6a2b}
+.brand small{font:600 15px/1.2 "Barlow Condensed",sans-serif;opacity:.8}
+.hbtns{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.lic{font-size:14px;font-weight:700;padding:6px 12px;border-radius:99px;background:#1e3358;color:#fff}
+.lic.s1{background:#f2c46b;color:#0b162a}.lic.s2,.lic.s3{background:#ff6a2b;color:#0b162a}
+.top button.ghost{background:transparent;color:#fff;border-color:#3a4f78}
+h1,h2{font-family:"Barlow Condensed",sans-serif;font-weight:700;line-height:1.05;margin:0;text-wrap:balance}
+h1{font-size:clamp(36px,5vw,52px)}
+h2{font-size:clamp(26px,3vw,32px)}
+h3{font-size:17px;margin:0 0 8px}
+.note{font-size:13px;color:var(--muted)}
+button,input{font:inherit}
+button{cursor:pointer;border-radius:8px;min-height:44px;padding:8px 16px;border:1px solid var(--line);background:var(--paper);color:var(--ink)}
+button:focus-visible,input:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+button:disabled{cursor:default;opacity:.5}
+.primary{background:var(--orange);border-color:var(--orange);color:var(--on-orange);font-weight:700}
+.danger{border-color:var(--red);color:var(--red);font-weight:600}
+.link{border:0;background:none;color:var(--blue);padding:8px 0;font-weight:700}
+/* hero */
+.hero{background:linear-gradient(180deg,var(--navy) 0%,var(--navy2) 100%);color:#fff}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:clamp(20px,4vw,48px);align-items:center}
+.hero p{opacity:.88;max-width:52ch;margin:10px 0 18px;font-size:17px}
+.namebox{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin-bottom:16px}
+.namebox label{display:grid;gap:4px;font-size:14px;font-weight:600;flex:1;min-width:200px;max-width:320px}
+.namebox input{min-height:44px;font-size:16px;border-radius:8px;border:1px solid #3a4f78;background:#0f1f3d;color:#fff;padding:8px 12px}
+.room{position:relative;border-radius:16px;overflow:hidden;background:linear-gradient(180deg,#dfe6f1 0%,#cfd9e8 72%,#0b162a 72%,#0b162a 100%);padding:54px 16px 0;min-height:300px}
+.room .sign{position:absolute;top:14px;left:18px;background:#c83803;color:#fff;font:700 15px/1 "Barlow Condensed",sans-serif;padding:7px 12px;border-radius:6px;letter-spacing:.5px}
+.room .clock{position:absolute;top:12px;right:18px;width:34px;height:34px}
+.room .row-p{position:relative;z-index:1;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;align-items:end}
+.room .seat svg{display:block;width:100%;height:auto}
+.room .seat b{display:block;text-align:center;font-size:12px;color:#0b162a;margin-top:-2px}
+.bench{position:relative;height:30px;margin:0 -4px;background:#c83803;border-radius:8px 8px 3px 3px;box-shadow:inset 0 -6px 0 #9e2c02}
+.legs{display:flex;justify-content:space-around;height:26px}
+.legs i{width:8px;background:#e8edf5;opacity:.5}
+/* units */
+.unit{margin-bottom:40px}
+.unit-head{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 20px;align-items:end;margin-bottom:16px;border-bottom:3px solid var(--navy);padding-bottom:12px}
+:root[data-theme=dark] .unit-head{border-color:var(--orange)}
+.unit-head p{margin:4px 0 0;color:var(--muted);max-width:70ch}
+.prog{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:600;margin-top:8px}
+.prog i{width:140px;height:8px;border-radius:4px;background:var(--line);overflow:hidden}.prog i b{display:block;height:100%;background:var(--orange)}
+.cases{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,330px),1fr));gap:16px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 16px;display:grid;grid-template-columns:84px minmax(0,1fr);gap:14px;align-items:center;text-align:left;transition:transform .15s,border-color .15s}
+.card:hover{border-color:var(--orange);transform:translateY(-2px)}
+.card .pic{border-radius:50%;overflow:hidden;background:var(--blue-soft);aspect-ratio:1}
+.card .pic svg{display:block;width:100%;height:100%}
+.card h3{margin:2px 0;font-size:20px;font-family:"Barlow Condensed",sans-serif;font-weight:700}
+.tag{display:inline-block;font-size:13px;padding:2px 10px;border-radius:99px;background:var(--orange-soft);color:var(--orange);font-weight:700}
+.chip{display:inline-block;font-size:13px;font-weight:700;padding:2px 10px;border-radius:99px;margin-top:6px}
+.chip.none{background:var(--blue-soft);color:var(--blue)}.chip.hero{background:var(--ok-soft);color:var(--ok)}.chip.mixed{background:var(--amber-soft);color:var(--amber)}.chip.fail{background:var(--red-soft);color:var(--red)}
+/* sheets */
+.sheet{background:var(--paper);border:1px solid var(--line);border-top:6px solid var(--orange);border-radius:12px;padding:clamp(18px,3vw,36px);max-width:920px}
+.sheet h3{margin-top:24px;font-size:19px}
+.sheet ol,.sheet ul{padding-left:1.3em}.sheet li{margin:4px 0}
+.sheet p{max-width:70ch}
+table{width:100%;border-collapse:collapse;margin:10px 0 6px;font-size:15px}
+th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:14px;color:var(--muted)}
+.callout{background:var(--orange-soft);border-left:5px solid var(--orange);border-radius:0 10px 10px 0;padding:12px 16px;margin:14px 0}
+/* game */
+.play{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:22px;align-items:start}
+.chart{background:var(--paper);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.chart-head{display:grid;grid-template-columns:104px minmax(0,1fr);gap:16px;align-items:center;padding:16px 20px;background:var(--navy);color:#fff;border-bottom:5px solid var(--orange)}
+.chart-head .pic{border-radius:50%;overflow:hidden;background:#dfe6f1;aspect-ratio:1;border:3px solid #fff}
+.chart-head .pic svg{display:block;width:100%;height:100%}
+.chart-head h2{font-size:30px}
+.chart-head .meta{opacity:.8;font-size:15px}
+.cond{margin-top:10px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;align-items:center;font-size:14px}
+.cond i{grid-column:1/-1;display:block;height:10px;border-radius:5px;background:#24395f;overflow:hidden}
+.cond i b{display:block;height:100%;background:#6fd3a0;transition:width .4s}
+.cond.mid i b{background:#f2c46b}.cond.low i b{background:#ff6a2b}
+.story{font-family:"Source Serif 4",Georgia,serif;font-size:17px;padding:18px 20px;margin:0;border-bottom:1px solid var(--line)}
+.findings{padding:14px 20px 20px}
+.findings ol{list-style:none;margin:0;padding:0}
+.findings li{padding:10px 0;border-top:1px dashed var(--line);animation:in .35s ease}
+.findings li:first-child{border-top:0}
+.findings .lab{font-weight:700;color:var(--blue);font-size:14px}
+.findings li.hurt{color:var(--red)}.findings li.hurt .lab{color:var(--red)}
+.empty{color:var(--muted);font-style:italic}
+@keyframes in{from{opacity:0;transform:translateY(-4px)}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){.findings li{animation:none}.cond i b{transition:none}.card{transition:none}.card:hover{transform:none}}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;flex-direction:column;gap:16px}
+.track{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.track span{font-size:13px;font-weight:700;color:var(--muted);border-top:5px solid var(--line);padding-top:6px}
+.track span.on{color:var(--orange);border-color:var(--orange)}.track span.past{color:var(--ink);border-color:var(--navy)}
+:root[data-theme=dark] .track span.past{border-color:var(--blue)}
+.group{margin:12px 0 6px;font-size:13px;font-weight:700;color:var(--muted)}
+.tests{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,150px),1fr));gap:8px}
+.tests button{text-align:left;font-size:15px}
+.tests button.done{background:var(--blue-soft);border-color:var(--blue);color:var(--blue)}
+.tests button.viewing{border:2px solid var(--orange)}
+.review{border:2px solid var(--orange);border-radius:12px;padding:14px 16px;background:var(--orange-soft)}
+.review p{margin:4px 0}
+.risk{color:var(--red);font-size:15px}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opts button{text-align:left}
+.opts button.sel{border:2px solid var(--orange);background:var(--orange-soft);font-weight:600}
+.info{border-left:5px solid var(--navy);padding:10px 14px;background:var(--blue-soft);border-radius:0 10px 10px 0}
+.info p{margin:4px 0 0}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+.debrief{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:clamp(18px,3vw,32px);margin-top:22px}
+.judge{border-radius:14px;padding:18px 20px;margin-bottom:22px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:18px;align-items:start}
+.judge.hero{background:var(--ok-soft)}.judge.mixed{background:var(--amber-soft)}.judge.fail{background:var(--red-soft)}
+.duo{display:flex;gap:6px}
+.duo div{width:86px;text-align:center;font-size:12px;font-weight:700;color:var(--muted)}
+.duo svg{display:block;width:86px;height:86px;border-radius:50%;background:var(--paper)}
+.judge .who{font-size:13px;font-weight:700;color:var(--muted)}
+.judge h3{font:700 30px/1.05 "Barlow Condensed",sans-serif;margin:4px 0 6px}
+.judge.hero h3{color:var(--ok)}.judge.mixed h3{color:var(--amber)}.judge.fail h3{color:var(--red)}
+.judge p{margin:6px 0 0;font-family:"Source Serif 4",Georgia,serif;font-size:17px}
+.judge ul{margin:10px 0 0;padding-left:1.2em;font-size:15px}
+.score{display:flex;flex-wrap:wrap;gap:24px;align-items:center;margin-bottom:18px}
+.big{font:800 clamp(48px,7vw,64px)/1 "Barlow Condensed",sans-serif;color:var(--orange)}
+.bars{flex:1;min-width:220px;display:grid;gap:8px}
+.bar{display:grid;grid-template-columns:8.5em minmax(0,1fr) 3.5em;gap:10px;align-items:center;font-size:14px}
+.bar i{display:block;height:10px;border-radius:5px;background:var(--line);overflow:hidden}
+.bar i b{display:block;height:100%;background:var(--navy)}
+:root[data-theme=dark] .bar i b{background:var(--blue)}
+.bar span:last-child{text-align:right;white-space:nowrap}
+.verdicts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:12px;margin-bottom:18px}
+.v{padding:12px 14px;border-radius:10px}
+.v.good{background:var(--ok-soft);color:var(--ok)}.v.bad{background:var(--red-soft);color:var(--red)}
+.v p{margin:4px 0 0;color:var(--ink)}
+.teach{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:18px}
+.teach>div{border-top:4px solid var(--orange);padding-top:10px}
+.teach p{margin:0}
+.turnin{margin-top:22px;background:var(--blue-soft);border-radius:12px;padding:16px 18px}
+.turnin textarea{width:100%;min-height:150px;font:14px/1.45 ui-monospace,monospace;border:1px solid var(--line);border-radius:8px;padding:10px;background:var(--paper);color:var(--ink);margin-top:8px}
+details{margin-top:28px;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 20px}
+summary{cursor:pointer;font-weight:600;min-height:28px}
+pre{overflow-x:auto;background:var(--bg);padding:14px;border-radius:8px;font-size:13px;max-height:380px}
+[hidden]{display:none!important}
+@media(max-width:760px){.hero .wrap,.play{grid-template-columns:minmax(0,1fr)}.bar{grid-template-columns:7em minmax(0,1fr) 3em}.chart-head{grid-template-columns:80px minmax(0,1fr)}.room .row-p{grid-template-columns:repeat(3,minmax(0,1fr))}.room{background:linear-gradient(180deg,#dfe6f1 0%,#cfd9e8 80%,#0b162a 80%)}.judge{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:600px){table{font-size:14px}.stack thead{display:none}.stack tr{display:grid;padding-block:10px;border-bottom:1px solid var(--line)}.stack td{display:flow-root;border:0;padding:3px 0;padding-inline-start:7.5em;text-align:start}.stack td::before{content:attr(data-l);float:inline-start;width:7em;margin-inline-start:-7.5em;font-weight:700;color:var(--muted);white-space:normal}.stack td:empty{display:none}.unit-head{grid-template-columns:minmax(0,1fr)}}
+</style>
+<script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <button class="brand" data-home aria-label="SORE! home"><span class="mark">SORE<span>!</span></span><small>Second Opinion Required: Emergency</small></button>
+  <div class="hbtns">
+    <span class="lic" id="lic"></span>
+    <button class="ghost" data-how>How to play</button>
+  </div>
+</div></header>
+
+<section id="home">
+  <div class="hero band"><div class="wrap">
+    <div>
+      <h1>Your patients are waiting.</h1>
+      <p>Take the history, check the vitals, order only what you need, and make the call. Each case is one assignment. Keep your patients alive and your medical license in good standing.</p>
+      <div class="namebox">
+        <label for="sname">Your name (shows on your results)<input id="sname" autocomplete="name" placeholder="First and last name"></label>
+      </div>
+      <div class="hbtns"><button class="primary" id="nextBtn">Start next assignment</button><button class="ghost" data-how style="background:transparent;color:#fff;border-color:#3a4f78">How to play</button></div>
+    </div>
+    <div class="room" aria-label="Illustrated waiting room with this unit's patients on a bench">
+      <span class="sign">EMERGENCY · WAITING ROOM</span>
+      <svg class="clock" viewBox="0 0 34 34" aria-hidden="true"><circle cx="17" cy="17" r="15" fill="#fff" stroke="#0b162a" stroke-width="3"/><path d="M17 8v9l6 4" stroke="#c83803" stroke-width="3" fill="none" stroke-linecap="round"/></svg>
+      <div class="row-p" id="bench"></div>
+      <div class="bench"></div><div class="legs"><i></i><i></i><i></i><i></i></div>
+    </div>
+  </div></div>
+  <main class="band"><div class="wrap">
+    <div id="units"></div>
+    <p class="note">Sample cases written for teaching, awaiting review by a clinician. Educational simulation, not medical advice. Patients are fictional.</p>
+    <details>
+      <summary>For authors: the case data format</summary>
+      <p class="note">Each case is one record in the CASES list. Every action has a <code>kind</code>: <code>key</code> (expected; skipping it costs points), <code>ok</code> (reasonable, no cost), <code>extra</code> (unnecessary: costs points and patient condition) or <code>harm</code> (hurts the patient). Each answer option can carry an <code>info</code> card. Each patient's illustration is set in LOOKS.</p>
+      <div class="row"><span></span><button id="copy">Copy format</button></div>
+      <pre id="schema"></pre>
+    </details>
+  </div></main>
+</section>
+
+<main class="band" id="how" hidden><div class="wrap">
+  <button class="link" data-home>← All assignments</button>
+  <div class="sheet">
+    <h2>How to play SORE!</h2>
+    <p>You're the doctor on shift. Each case is a patient with a problem to solve. Your job is to find out what's wrong <b>without wasting time or hurting anyone</b>.</p>
+    <h3>1. Read the briefing</h3>
+    <p>Each unit has a briefing with the key facts, like normal vital sign ranges. Read it first; the cases expect you to know it.</p>
+    <h3>2. Meet the patient</h3>
+    <p>Read the patient's story on the chart. Think: what could cause this? What do I need to find out?</p>
+    <h3>3. Investigate</h3>
+    <ol>
+      <li>Click any history question, vital sign, exam or test to <b>review it first</b>: what it checks and any risks.</li>
+      <li>Press <b>Order this</b> to do it, or <b>Cancel</b> to back out. Reviewing is free; ordering is not.</li>
+      <li>Results are written onto the patient's chart.</li>
+    </ol>
+    <div class="callout"><b>Watch the patient's condition bar, and their face.</b> Unnecessary orders waste time and drop the bar by 10. Harmful orders injure your patient and drop it by 30. Below 50, the case fails even with the right diagnosis.</div>
+    <h3>4. Decide</h3>
+    <p>You'll answer two questions, usually <i>which structure or vital sign is the problem</i> and then <i>the diagnosis</i>. Click an answer to read about it before you commit, then press <b>Next</b> or <b>Submit diagnosis</b>.</p>
+    <h3>5. Face the attending</h3>
+    <p>Dr. Okafor, the attending physician, reviews every case. You'll get your score, the debrief, and her judgement.</p>
+    <table class="stack">
+      <thead><tr><th>Score</th><th>Points</th><th>How to lose them</th></tr></thead>
+      <tbody>
+        <tr><td>Diagnosis</td><td>40</td><td>Wrong final answer</td></tr>
+        <tr><td>Step 2 answer</td><td>30</td><td>Wrong structure, bone or vital sign</td></tr>
+        <tr><td>Patient care</td><td>30</td><td>−4 per key step skipped, −4 per unnecessary order, −15 per harmful order</td></tr>
+      </tbody>
+    </table>
+    <h3>Your medical license</h3>
+    <ul>
+      <li><b>Full recovery</b>: right diagnosis, right step 2 answer, no harm, and careful testing. Removes one strike.</li>
+      <li><b>Recovered, with complaints</b>: the patient lives, but your care was sloppy. No strike.</li>
+      <li><b>Lawsuit</b>: wrong diagnosis, or you harmed the patient badly. One strike.</li>
+      <li>Three strikes and your license is <b>suspended</b>. Come back to this page to be reinstated.</li>
+    </ul>
+    <h3>6. Turn it in</h3>
+    <p>After each case, enter your name and press <b>Download PDF report</b>. Upload the PDF to the matching assignment in Google Classroom (<b>Add or create → File</b>) and press <b>Turn in</b>. If the download doesn't work on your device, press <b>Copy my results</b> and paste them into the assignment instead.</p>
+    <h3>Tips from the attending</h3>
+    <ul>
+      <li>Start with the history and a full set of vitals. They solve more cases than any scanner.</li>
+      <li>Always ask about medications and allergies.</li>
+      <li>Never force a possibly broken bone to move, or make an injured patient walk "to see."</li>
+      <li>Before every order, ask: <i>will this result change what I do?</i></li>
+    </ul>
+    <div class="row" style="margin-top:22px">
+      <button class="danger" id="reinstate" hidden>I've reviewed the rules. Reinstate my license.</button>
+      <button class="primary" data-home>Start playing</button>
+    </div>
+  </div>
+</div></main>
+
+<main class="band" id="brief" hidden><div class="wrap">
+  <button class="link" data-home>← All assignments</button>
+  <div class="sheet" id="briefBody"></div>
+</div></main>
+
+<main class="band" id="game" hidden><div class="wrap">
+  <button class="link" data-home>← All assignments</button>
+  <div class="play">
+    <article class="chart">
+      <div class="chart-head">
+        <div class="pic" id="ppic"></div>
+        <div><div class="meta" id="pmeta"></div><h2 id="pname"></h2><div class="cond" id="cond"></div></div>
+      </div>
+      <p class="story" id="story"></p>
+      <div class="findings"><h3>Chart</h3><ol id="findings"></ol></div>
+    </article>
+    <aside class="panel" id="panel"></aside>
+  </div>
+  <section class="debrief" id="debrief" hidden></section>
+</div></main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script>
+{
+/* ---------- Shared action library (label, group, what it checks, risk) ---------- */
+const H="History", V="Vital signs", E="Physical exam", T="Tests & imaging";
+const LIB = {
+  cc:{group:H,label:"Chief complaint & onset",about:"Ask what's wrong, in the patient's own words, and when it started."},
+  hpi:{group:H,label:"Describe it (OLDCARTS)",about:"Onset, location, duration, character, aggravating/alleviating factors, radiation, timing, severity."},
+  meds:{group:H,label:"Medications & allergies",about:"What the patient takes, and any allergies. Always ask before any medicine is given."},
+  pmh:{group:H,label:"Past medical history",about:"Past illnesses, ongoing conditions, surgeries and hospital stays."},
+  fam:{group:H,label:"Family history",about:"Illnesses that run in the family, such as heart disease or stroke."},
+  social:{group:H,label:"Social history",about:"Work, living situation, activity, smoking and alcohol."},
+  intake:{group:H,label:"Last food & drink",about:"When the patient last ate or drank, and what. The L in SAMPLE."},
+  mech:{group:H,label:"How did it happen?",about:"The mechanism of injury tells you which bones and tissues took the force."},
+  where:{group:H,label:"Where exactly does it hurt?",about:"Ask the patient to point to the worst spot and rate the pain from 0 to 10."},
+  pinj:{group:H,label:"Past injuries",about:"Earlier broken bones, sprains or surgeries."},
+  train:{group:H,label:"Training history",about:"How much, how often, and any recent changes in exercise or equipment."},
+  temp:{group:V,label:"Temperature",about:"Thermometer by mouth, ear, forehead, armpit or rectum."},
+  pulse:{group:V,label:"Pulse",about:"Two fingers (never the thumb) on the radial artery at the thumb side of the wrist. Count for 30 seconds and double it."},
+  resp:{group:V,label:"Respiratory rate",about:"Count chest rises for 30 seconds and double it, without telling the patient (people change their breathing when watched)."},
+  bp:{group:V,label:"Blood pressure",about:"Cuff on the bare upper arm at heart level, patient seated and rested. Recorded as systolic over diastolic, in mmHg."},
+  spo2:{group:V,label:"Oxygen saturation",about:"A pulse oximeter clipped on a fingertip shines light through the skin to estimate oxygen in the blood."},
+  vitals:{group:V,label:"Full set of vital signs",about:"Temperature, pulse, breathing rate, blood pressure and oxygen saturation."},
+  cbc:{group:T,label:"Complete blood count",about:"Counts red cells, white cells and platelets. High white cells suggest infection or inflammation.",risk:"One needle stick."},
+  ecg:{group:T,label:"ECG (heart tracing)",about:"Stickers on the chest record the heart's electrical activity.",risk:"None. Quick and painless."},
+  cxr:{group:T,label:"Chest X-ray",about:"A picture of the lungs, heart and ribs.",risk:"Very small radiation dose."},
+  trop:{group:T,label:"Troponin",about:"Blood test for a protein released when heart muscle is damaged.",risk:"One needle stick."},
+  lp:{group:T,label:"Lumbar puncture (spinal tap)",about:"A needle in the lower back collects spinal fluid to check for brain or spinal infection.",risk:"Invasive: a needle into the spinal canal. Can cause headache, bleeding or infection."}
+};
+const A = (id, kind, result, o = {}) => ({id, kind, result, ...LIB[id], ...o});
+
+/* Vital-sign answer cards, reused across Unit 1 */
+const VITAL_OPTS = [
+  {text:"Temperature", info:"Normal adult: 36.1–37.2 °C (97–99 °F). A fever starts at 38.0 °C (100.4 °F). Fever means the body is fighting something, often an infection."},
+  {text:"Heart rate", info:"Normal adult resting pulse: 60–100 beats per minute. Above 100 is tachycardia; below 60 is bradycardia (fit athletes can normally sit in the 50s)."},
+  {text:"Respiratory rate", info:"Normal adult: 12–20 breaths per minute. Fast breathing (tachypnea) can come from lung problems, fever, pain or anxiety."},
+  {text:"Blood pressure", info:"Normal: below 120/80 mmHg. 130/80 or higher is high blood pressure, and above 180/120 is a crisis level. Below 90/60 is usually considered low."},
+  {text:"Oxygen saturation", info:"Normal: 95–100%. Below about 92% means the blood isn't carrying enough oxygen to the organs."}
+];
+
+/* ---------- Units ---------- */
+const UNITS = [
+{ id:"u1", name:"Unit 1: Patient history & vital signs",
+  blurb:"How doctors and nurses gather a history, how each vital sign is measured, and what the normal values are.",
+  brief:`<h2>Unit 1 briefing: history & vital signs</h2>
+  <p>Most diagnoses start with two things that need no machine: <b>talking to the patient</b> and <b>measuring the vital signs</b>.</p>
+  <h3>Taking a patient history</h3>
+  <ol>
+    <li><b>Chief complaint</b>: the main problem, in the patient's own words. "My chest hurts."</li>
+    <li><b>History of present illness</b>: the details, using <b>OLDCARTS</b>: Onset, Location, Duration, Character, Aggravating/Alleviating factors, Radiation, Timing, Severity (0–10).</li>
+    <li><b>Past medical history</b>: earlier illnesses, ongoing conditions, surgeries.</li>
+    <li><b>Medications & allergies</b>: always ask before any medicine is given.</li>
+    <li><b>Family history</b>: conditions that run in the family.</li>
+    <li><b>Social history</b>: work, home, activity, smoking, alcohol.</li>
+  </ol>
+  <div class="callout"><b>In an emergency, use SAMPLE:</b> Signs & symptoms, Allergies, Medications, Past history, Last oral intake, Events leading up to it.</div>
+  <h3>The vital signs</h3>
+  <table class="stack">
+    <thead><tr><th>Vital sign</th><th>Normal adult (at rest)</th><th>How it's measured</th></tr></thead>
+    <tbody>
+      <tr><td>Temperature</td><td>36.1–37.2 °C (97–99 °F). Fever: 38.0 °C (100.4 °F) or higher</td><td>Thermometer by mouth, ear, forehead, armpit or rectum</td></tr>
+      <tr><td>Pulse (heart rate)</td><td>60–100 beats per minute</td><td>Two fingers on the radial artery (thumb side of the wrist). Count 30 seconds × 2, or a full minute if irregular. Never use your thumb: it has its own pulse.</td></tr>
+      <tr><td>Respiratory rate</td><td>12–20 breaths per minute</td><td>Count chest rises for 30 seconds × 2, without telling the patient. Often done while "still taking the pulse."</td></tr>
+      <tr><td>Blood pressure</td><td>Below 120/80 mmHg. 130/80+ is high; above 180/120 is a crisis</td><td>Cuff on the bare upper arm at heart level, seated, feet flat, after 5 minutes' rest. Systolic (heart squeezing) over diastolic (heart relaxing).</td></tr>
+      <tr><td>Oxygen saturation</td><td>95–100%</td><td>Pulse oximeter on a fingertip. Cold fingers or dark nail polish can give false low readings.</td></tr>
+      <tr><td>Pain</td><td>0 (none) to 10 (worst imaginable)</td><td>Ask the patient to rate it. Often called the "fifth vital sign."</td></tr>
+    </tbody>
+  </table>
+  <p class="note">Children have faster normal heart and breathing rates than adults. These ranges are for adults.</p>
+  <h3>What to look for in this unit</h3>
+  <p>In each case, one vital sign is the most important clue. Take a full set of vitals, compare each to the normal range, and use the history to explain <i>why</i> it's abnormal.</p>`
+},
+{ id:"u2", name:"Unit 2: The skeletal system",
+  blurb:"Bones, joints and fractures: how injuries happen, how to examine them safely, and how to tell one break from another.",
+  brief:`<h2>Unit 2 briefing: the skeletal system</h2>
+  <p>The adult skeleton has <b>206 bones</b>. They support the body, protect organs, work with muscles to move us, make blood cells in the red marrow, and store calcium.</p>
+  <h3>Two divisions</h3>
+  <ul>
+    <li><b>Axial skeleton (80 bones)</b>: skull, vertebral column, ribs and sternum. It protects the brain, spinal cord, heart and lungs.</li>
+    <li><b>Appendicular skeleton (126 bones)</b>: arms, legs, shoulder girdle and pelvic girdle. It's built for movement.</li>
+  </ul>
+  <h3>Types of bone</h3>
+  <table class="stack">
+    <thead><tr><th>Type</th><th>Examples</th><th>Job</th></tr></thead>
+    <tbody>
+      <tr><td>Long</td><td>Femur, radius, tibia</td><td>Levers for movement; carry weight</td></tr>
+      <tr><td>Short</td><td>Carpals (wrist), tarsals (ankle)</td><td>Stability with some movement</td></tr>
+      <tr><td>Flat</td><td>Skull, sternum, ribs</td><td>Protect organs</td></tr>
+      <tr><td>Irregular</td><td>Vertebrae</td><td>Complex shapes for support and protection</td></tr>
+      <tr><td>Sesamoid</td><td>Patella (kneecap)</td><td>Sit inside tendons and improve leverage</td></tr>
+    </tbody>
+  </table>
+  <h3>Joints</h3>
+  <p><b>Fibrous</b> joints don't move (skull sutures). <b>Cartilaginous</b> joints move slightly (between vertebrae). <b>Synovial</b> joints move freely (knee, shoulder, wrist).</p>
+  <h3>Fractures</h3>
+  <ul>
+    <li><b>Closed</b> (skin intact) or <b>open</b> (bone breaks through the skin).</li>
+    <li><b>Displaced</b> (the pieces have moved) or <b>non-displaced</b>.</li>
+    <li><b>Stress fracture</b>: a small crack from repeated force, not one big impact.</li>
+    <li>Signs: pain, swelling, bruising, deformity, and not being able to use or bear weight on the part.</li>
+  </ul>
+  <div class="callout"><b>Examining a possible fracture:</b> ask how it happened, look before you touch, check <b>circulation, movement and sensation</b> beyond the injury, and <b>never force it to move</b>. An X-ray is the first imaging test.</div>
+  <h3>Bone health</h3>
+  <p>Bone constantly breaks down and rebuilds. In <b>osteoporosis</b>, bone loses density and breaks easily. This is common in older adults, especially at the hip, wrist and spine.</p>`
+},
+{ id:"u3", name:"Organ systems (preview)",
+  blurb:"Early sample cases from later units: digestive, cardiovascular and respiratory.", brief:null }
+];
+
+/* ---------- Cases ---------- */
+const CASES = [
+/* ===== UNIT 1 ===== */
+{ id:"dizzy-race", unit:"u1", title:"Dizzy after the race", level:"Case 1.1",
+  patient:{name:"Maya T.", age:29, sex:"F"},
+  story:"Maya just finished a half marathon on a hot, humid morning. Twenty minutes later she felt dizzy and lightheaded, especially when she stood up. She's sitting in the medical tent, pale and sweaty.",
+  actions:[
+    A("cc","key","“I feel dizzy, like I might faint. It started about 20 minutes after I finished.”"),
+    A("hpi","key","“The room isn't spinning. I just feel lightheaded. It's worse when I stand and better lying down. Maybe a 5 out of 10.”"),
+    A("meds","key","Takes no daily medications. Allergic to penicillin (rash)."),
+    A("pmh","ok","Healthy. No heart or lung problems. Has never fainted before."),
+    A("intake","key","“I skipped the water stations so I wouldn't slow down. I had one coffee at 6 a.m.”"),
+    A("fam","ok","Parents both have high blood pressure. No sudden deaths in the family."),
+    A("temp","key","37.4 °C (99.3 °F). Normal to slightly warm after exercise."),
+    A("pulse","key","122 beats per minute, regular but weak."),
+    A("resp","key","18 breaths per minute, regular."),
+    A("bp","key","108/70 mmHg, sitting."),
+    A("spo2","key","98%."),
+    {id:"ct",group:T,label:"CT scan of the head",about:"Detailed X-ray images of the brain.",risk:"Radiation dose. Means an ambulance trip to the hospital.",kind:"extra",result:"Normal. The ambulance ride and three-hour wait meant Maya went even longer without fluids."},
+    A("lp","harm","Normal fluid. Now Maya has a pounding headache and a sore back on top of her dizziness.")
+  ],
+  q1:{short:"Vital sign", prompt:"Which vital sign is outside the normal adult range?", options:VITAL_OPTS, answer:"Heart rate"},
+  q2:{short:"Cause", prompt:"What is the most likely cause of Maya's dizziness?", options:[{text:"Dehydration after exercise in the heat"},{text:"Heart attack"},{text:"Brain infection (meningitis)"},{text:"Asthma attack"},{text:"Food poisoning"}], answer:"Dehydration after exercise in the heat"},
+  debrief:{
+    body:"Sweat removes water from the blood, so there's less blood for the heart to pump. The heart beats faster to keep blood pressure up. When Maya stands, gravity pulls blood toward her legs, less reaches her brain, and she feels lightheaded.",
+    clue:"A fast, weak pulse and dizziness that's worse on standing, after a long race in the heat with no water.",
+    mistake:"Not taking a full set of vitals. Heart rate was the only abnormal number. A student who checked temperature and stopped would have missed it."}
+},
+{ id:"fever-cough", unit:"u1", title:"Hot, then freezing", level:"Case 1.2",
+  patient:{name:"Walter B.", age:67, sex:"M"},
+  story:"Walter's daughter brought him in. He has had a cough for three days, and today he seems more tired and short of breath. He says he feels “hot, then freezing.”",
+  actions:[
+    A("cc","key","“I've got this cough I can't shake, and I can't get a full breath.”"),
+    A("hpi","key","The cough started 3 days ago and now brings up yellow-green mucus. Sharp pain on the right side of his chest when he breathes deeply. Worse each day."),
+    A("meds","key","Takes a daily blood pressure pill. No known allergies."),
+    A("pmh","ok","High blood pressure. Got a flu shot last year, but not this year."),
+    A("social","ok","Retired bus driver. Quit smoking 10 years ago. Lives with his wife."),
+    A("temp","key","38.9 °C (102 °F)."),
+    A("pulse","key","104 beats per minute, regular."),
+    A("resp","key","26 breaths per minute, shallow."),
+    A("bp","key","128/78 mmHg."),
+    A("spo2","key","91% on room air."),
+    A("cxr","key","A white, cloudy patch in the lower right lung."),
+    {id:"stairs",group:E,label:"Walk him up two flights of stairs",about:"An informal test of how breathless he gets with effort.",risk:"Hard exercise when his oxygen may already be low.",kind:"harm",result:"Halfway up the first flight, Walter's oxygen drops to 84% and he nearly collapses. A nurse wheels him back."},
+    {id:"allergy",group:T,label:"Skin allergy testing",about:"Small pricks of possible allergens on the skin, to look for reactions.",risk:"Itchy. Takes time to arrange.",kind:"extra",result:"No allergies found. It took an hour and told you nothing about his fever."}
+  ],
+  q1:{short:"Most urgent", prompt:"Which vital sign is the most urgent concern right now?", options:VITAL_OPTS, answer:"Oxygen saturation"},
+  q2:{short:"Diagnosis", prompt:"What is the most likely problem?", options:[{text:"Pneumonia (lung infection)"},{text:"Common cold"},{text:"Asthma attack"},{text:"Heart attack"},{text:"Seasonal allergies"}], answer:"Pneumonia (lung infection)"},
+  debrief:{
+    body:"In pneumonia, the tiny air sacs (alveoli) in part of a lung fill with fluid and pus. Oxygen can't cross into the blood there, so oxygen saturation falls, and the body breathes faster to make up for it.",
+    clue:"Fever, a cough bringing up mucus, and low oxygen. The 91% reading turns “a bad cold” into “needs treatment today.”",
+    mistake:"Treating the fever as the main problem. Fever medicine would make Walter feel better while his oxygen kept dropping."}
+},
+{ id:"headache-bp", unit:"u1", title:"The pounding headache", level:"Case 1.3",
+  patient:{name:"Grace A.", age:52, sex:"F"},
+  story:"Grace has had a pounding headache at the back of her head since this morning. Her vision is a little blurry and she feels “just not right.” She came to urgent care on her lunch break.",
+  actions:[
+    A("cc","key","“My head is pounding. It's the worst headache I've had in a long time.”"),
+    A("hpi","ok","Started this morning at the back of her head. Throbbing, 7 out of 10. No injury, no fever, no stiff neck."),
+    A("meds","key","Was prescribed a blood pressure medicine, but stopped taking it two weeks ago because she “felt fine.” No allergies."),
+    A("pmh","key","Diagnosed with high blood pressure last year."),
+    A("fam","ok","Her father had a stroke at 60."),
+    A("temp","key","36.9 °C (98.4 °F)."),
+    A("pulse","key","84 beats per minute, regular."),
+    A("resp","key","16 breaths per minute."),
+    A("bp","key","182/112 mmHg."),
+    A("spo2","key","98%."),
+    {id:"recheck",group:V,label:"Recheck BP after 5 minutes' rest",about:"Stress or rushing can push a reading up. A repeat, done properly, confirms the number.",kind:"key",result:"180/110 mmHg. Still very high."},
+    {id:"mri",group:T,label:"MRI of the brain",about:"Detailed magnetic images of the brain.",risk:"No radiation, but expensive and slow to schedule.",kind:"extra",result:"Normal. It took four hours, and her blood pressure stayed dangerously high the whole time."},
+    A("lp","harm","The spinal fluid is normal, with no infection. Grace's headache gets worse and she has to lie flat for an hour.")
+  ],
+  q1:{short:"Vital sign", prompt:"Which vital sign is outside the normal adult range?", options:VITAL_OPTS, answer:"Blood pressure"},
+  q2:{short:"Cause", prompt:"What is the most likely cause of the headache?", options:[{text:"Severely high blood pressure after stopping her medicine"},{text:"Migraine"},{text:"Brain infection (meningitis)"},{text:"Dehydration"},{text:"Sinus infection"}], answer:"Severely high blood pressure after stopping her medicine"},
+  debrief:{
+    body:"Blood pressure is the force of blood pushing on artery walls. At 180/110 and above, that force can damage blood vessels in the brain, eyes, heart and kidneys. That causes headaches and blurry vision, and raises the risk of stroke.",
+    clue:"The medication history: she stopped her blood pressure pill two weeks ago. The history explains the vital sign.",
+    mistake:"Not asking about medications, or trusting one reading. A rechecked reading plus a good medication history solves this case."}
+},
+/* ===== UNIT 2 ===== */
+{ id:"wrist", unit:"u2", title:"Skateboard fall", level:"Case 2.1",
+  patient:{name:"Ava L.", age:24, sex:"F"},
+  story:"Ava fell off her skateboard and landed on her outstretched right hand. Her wrist is swollen, and she's holding it against her chest. She says it hurts to move her fingers.",
+  actions:[
+    A("mech","key","“I fell forward and caught myself with my hand flat on the ground.”"),
+    A("where","key","She points to the thumb side of her wrist, just above the joint. Pain 8 out of 10."),
+    A("meds","ok","No medications. No allergies."),
+    A("pinj","ok","Broke her collarbone at age 10. Otherwise healthy."),
+    {id:"inspect",group:E,label:"Look at the wrist",about:"Inspect for swelling, bruising, deformity or broken skin before touching.",kind:"key",result:"Swollen, with a bump on the back of the wrist that makes it look like an upside-down dinner fork. The skin is intact (a closed injury)."},
+    {id:"cms",group:E,label:"Check circulation, movement & sensation",about:"Feel the pulse beyond the injury, and check color, warmth and feeling in the fingers.",kind:"key",result:"Radial pulse present. Fingers pink and warm. She can feel light touch on every finger."},
+    {id:"snuff",group:E,label:"Press the anatomical snuffbox",about:"Pressing the hollow at the base of the thumb checks for a scaphoid (wrist bone) fracture.",kind:"ok",result:"Only mild tenderness there. The worst pain is about 2 cm higher, over the radius."},
+    {id:"force",group:E,label:"Bend the wrist through its full range",about:"Move the joint as far as it goes in every direction to see how it moves.",risk:"Moving a possibly broken bone can shift the pieces and damage nerves and blood vessels.",kind:"harm",result:"Ava screams. You feel a grinding under your fingers, and her fingers go briefly numb. You may have moved the broken ends."},
+    {id:"xray",group:T,label:"X-ray of the wrist",about:"The first and fastest imaging test for a suspected fracture.",risk:"Very small radiation dose.",kind:"key",result:"A fracture of the radius about 2 cm above the wrist joint, with the broken end tilted toward the back of the hand."},
+    {id:"mri",group:T,label:"MRI of the wrist",about:"Detailed images of bone and soft tissue.",risk:"Expensive and slow to schedule.",kind:"extra",result:"It shows the same radius fracture an X-ray would have shown, three days later and at many times the cost."}
+  ],
+  q1:{short:"Bone", prompt:"Which bone is injured?", options:[
+    {text:"Radius", info:"The forearm bone on the thumb side. Its wide lower end forms most of the wrist joint, so it takes most of the force when you land on your hand."},
+    {text:"Ulna", info:"The forearm bone on the pinky side. It forms the point of the elbow and is narrow at the wrist."},
+    {text:"Scaphoid", info:"A small, boat-shaped carpal (wrist) bone at the base of the thumb. Tenderness in the snuffbox hollow suggests it's broken."},
+    {text:"Humerus", info:"The single long bone of the upper arm, from shoulder to elbow."},
+    {text:"Clavicle", info:"The collarbone, connecting the sternum to the shoulder blade. Usually broken by a fall onto the shoulder."}], answer:"Radius"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Distal radius fracture (broken wrist)"},{text:"Wrist sprain"},{text:"Scaphoid fracture"},{text:"Elbow dislocation"},{text:"Carpal tunnel syndrome"}], answer:"Distal radius fracture (broken wrist)"},
+  debrief:{
+    body:"The radius carries most of the load from the hand into the forearm. Landing on an outstretched hand bends the hand backward, and the lower end of the radius snaps and tilts, making the “dinner fork” shape. This is often called a Colles fracture.",
+    clue:"A fall onto an outstretched hand, pain just above the wrist on the thumb side, and a visible deformity.",
+    mistake:"Moving the injured joint to “test” it. A suspected fracture is splinted in the position it's found, then X-rayed."}
+},
+{ id:"hip", unit:"u2", title:"Slip in the kitchen", level:"Case 2.2",
+  patient:{name:"Eleanor P.", age:81, sex:"F"},
+  story:"Eleanor slipped on her kitchen floor and landed on her left side. She couldn't get up, so her neighbor called an ambulance. She's lying on the stretcher in pain.",
+  actions:[
+    A("mech","key","“My foot slid out and I came down hard on my left hip.”"),
+    A("where","key","Pain in the left groin and hip. She can't lift her leg off the bed. 9 out of 10."),
+    A("meds","key","Takes a medicine for osteoporosis (thin bones) and a blood thinner for an irregular heartbeat. No allergies."),
+    A("pmh","ok","Osteoporosis diagnosed 5 years ago. Irregular heartbeat (atrial fibrillation)."),
+    A("vitals","ok","Temp 36.8 °C, pulse 96 and irregular, breathing 18, BP 146/88, oxygen 96%. Pulse and blood pressure are a little high, likely from pain."),
+    {id:"inspect",group:E,label:"Look at both legs",about:"Compare the injured leg to the other: length, position, swelling, bruising.",kind:"key",result:"Her left leg is shorter than the right, and the foot is turned outward."},
+    {id:"cms",group:E,label:"Check circulation, movement & sensation",about:"Check the pulses in the foot, plus color, warmth and feeling in the toes.",kind:"key",result:"Foot pulses present. Toes warm. Normal feeling."},
+    {id:"walk",group:E,label:"Help her stand and walk",about:"See whether she can bear weight on the leg.",risk:"Putting weight on a broken hip can shift the fracture and make surgery harder.",kind:"harm",result:"Eleanor cries out and her leg gives way. You and the paramedic catch her. The broken ends may have moved apart."},
+    {id:"xray",group:T,label:"X-ray of the pelvis and hip",about:"The first imaging test for a suspected hip fracture.",risk:"Small radiation dose.",kind:"key",result:"A fracture through the neck of the left femur, just below the ball of the hip joint."},
+    {id:"dexa",group:T,label:"Bone density scan (DEXA)",about:"Measures how dense the bones are, to diagnose osteoporosis.",risk:"Not urgent. Doesn't show a fresh fracture.",kind:"extra",result:"It confirms thin bones, which you already knew from her history. Meanwhile she waited two more hours in pain."}
+  ],
+  q1:{short:"Bone", prompt:"Which bone is broken?", options:[
+    {text:"Femur", info:"The thigh bone, the longest and strongest bone in the body. Its rounded head fits into the hip socket, joined to the shaft by a narrow “neck.”"},
+    {text:"Pelvis", info:"The ring of hip bones (ilium, ischium, pubis) that forms the hip socket. Pelvic fractures hurt, but don't usually turn the leg outward."},
+    {text:"Tibia", info:"The shinbone, the main weight-bearing bone of the lower leg."},
+    {text:"Patella", info:"The kneecap, a sesamoid bone inside the tendon at the front of the knee."},
+    {text:"Lumbar vertebra", info:"One of the five large bones of the lower back. A fracture there causes back pain, not a shortened leg."}], answer:"Femur"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Hip fracture (femoral neck)"},{text:"Hip dislocation"},{text:"Arthritis flare"},{text:"Pelvic fracture"},{text:"Knee sprain"}], answer:"Hip fracture (femoral neck)"},
+  debrief:{
+    body:"The femoral neck is a narrow bridge between the ball of the hip joint and the shaft of the thigh bone. Osteoporosis makes bone thin and porous, so even a simple fall can snap it. The muscles then pull the leg shorter and turn it outward.",
+    clue:"An older adult with osteoporosis falls onto her side, can't bear weight, and has a shortened, outward-turned leg.",
+    mistake:"Asking her to stand “to see if she can walk.” Never test weight-bearing on a suspected hip fracture."}
+},
+{ id:"shin", unit:"u2", title:"The runner's shin", level:"Case 2.3",
+  patient:{name:"Marcus D.", age:17, sex:"M"},
+  story:"Marcus runs cross-country and doubled his weekly miles to get ready for the state meet. For three weeks his left shin has hurt during runs. Now it aches even when he's walking to class.",
+  actions:[
+    A("train","key","“I went from 25 to 50 miles a week in about a month. New shoes, too.”"),
+    A("where","key","“It's one spot on the inside of my shin, right here.” He points to a small area on the lower third of the tibia."),
+    A("meds","ok","Takes ibuprofen before runs. No allergies."),
+    A("pinj","ok","Sprained his ankle last year. No broken bones."),
+    {id:"palp",group:E,label:"Press along the shin bone",about:"Feel along the tibia for tenderness: is it one sharp spot, or a long sore stretch?",kind:"key",result:"Sharp pain at one spot about the size of a fingertip, with mild swelling there."},
+    {id:"cms",group:E,label:"Check circulation, movement & sensation",about:"Check foot pulses, feeling in the foot, and whether the calf is soft or tight.",kind:"ok",result:"Strong foot pulses, normal feeling, and the calf is soft (not tight)."},
+    {id:"mile",group:E,label:"Have him run a timed mile",about:"Reproduce the pain under real running conditions.",risk:"Running on a stressed bone can turn a small crack into a complete break.",kind:"harm",result:"Half a mile in, Marcus limps to a stop. The pain is now 9 out of 10, and the small crack may have gotten worse."},
+    {id:"xray",group:T,label:"X-ray of the shin",about:"The first imaging test for bone pain.",risk:"Very small radiation dose.",kind:"ok",result:"Normal. Early stress fractures often don't show on X-ray for 2–3 weeks."},
+    {id:"mri",group:T,label:"MRI of the shin",about:"Shows bone swelling and tiny cracks that X-rays can miss.",risk:"No radiation. More expensive.",kind:"key",result:"A small stress fracture in the tibia, with swelling of the bone around it."},
+    {id:"ct",group:T,label:"CT scan of both legs",about:"Detailed X-ray images in slices.",risk:"Much more radiation than a plain X-ray.",kind:"extra",result:"A faint line in the left tibia. An MRI would have shown it more clearly, with no radiation."}
+  ],
+  q1:{short:"Bone", prompt:"Which bone is injured?", options:[
+    {text:"Tibia", info:"The shinbone, on the inner side of the lower leg. It carries most of the body's weight, so repeated pounding stresses it."},
+    {text:"Fibula", info:"The thin bone on the outer side of the lower leg. It carries little weight and mostly anchors muscles."},
+    {text:"Femur", info:"The thigh bone, from hip to knee."},
+    {text:"Patella", info:"The kneecap, which protects the front of the knee joint."},
+    {text:"Talus", info:"The ankle bone that connects the leg to the foot."}], answer:"Tibia"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Tibial stress fracture"},{text:"Shin splints (irritated tissue along the bone)"},{text:"Compartment syndrome"},{text:"Calf muscle strain"},{text:"Ankle sprain"}], answer:"Tibial stress fracture"},
+  debrief:{
+    body:"Bone is always remodeling: small damage from exercise gets repaired during rest. When training increases faster than bone can repair itself, tiny cracks add up into a stress fracture.",
+    clue:"Pain at one fingertip-sized spot (not a long sore stretch), getting worse over weeks, after a sudden jump in mileage. A normal X-ray doesn't rule it out.",
+    mistake:"Calling it shin splints. Shin splints hurt along a long stretch of the bone. A stress fracture hurts at one point."}
+},
+/* ===== PREVIEW: ORGAN SYSTEMS ===== */
+{ id:"ruq-pain", unit:"u3", title:"Pain after dinner", level:"Digestive",
+  patient:{name:"Dana R.", age:45, sex:"F"},
+  story:"Dana comes to the emergency department with pain in the upper right side of her abdomen. It started about an hour after a large, fatty dinner and has lasted six hours. The pain spreads to her right shoulder blade. She feels nauseous and warm.",
+  actions:[
+    A("vitals","key","Temp 38.4 °C (fever). Heart rate 104 (fast). BP 132/84. Breathing normal."),
+    {id:"exam",group:E,label:"Abdominal exam",about:"Look at and gently press each part of the abdomen to find where it's tender.",kind:"key",result:"Tender in the right upper abdomen. When you press under her right ribs, she stops breathing in sharply from pain (a positive Murphy's sign)."},
+    A("cbc","ok","White blood cells 14,500: raised, suggesting inflammation or infection."),
+    {id:"lipase",group:T,label:"Lipase (pancreas)",about:"Blood test for an enzyme that rises when the pancreas is inflamed.",risk:"One needle stick.",kind:"ok",result:"Normal. The pancreas is unlikely to be the main problem."},
+    {id:"us",group:T,label:"Ultrasound, right upper abdomen",about:"Sound waves make a picture of the liver, gallbladder and bile ducts.",risk:"None. No radiation.",kind:"key",result:"Gallstones present. The gallbladder wall is thickened, with fluid around it."},
+    A("ecg","ok","Normal rhythm, no signs of heart damage."),
+    A("cxr","extra","Clear lungs. No air under the diaphragm."),
+    {id:"surgery",group:T,label:"Exploratory surgery",about:"Open the abdomen to look at the organs directly.",risk:"Major surgery under general anesthesia: bleeding, infection, long recovery.",kind:"harm",result:"Surgeons find an inflamed gallbladder that an ultrasound would have shown in 15 minutes. Dana now has a large incision and a much longer recovery."}
+  ],
+  q1:{short:"Structure", prompt:"Which structure is the problem?", options:[
+    {text:"Liver", info:"The large organ in the upper right abdomen. It makes bile, processes nutrients and filters the blood."},
+    {text:"Gallbladder", info:"A small pouch under the liver that stores bile and squeezes it into the intestine after fatty meals."},
+    {text:"Pancreas", info:"Lies behind the stomach. It makes digestive enzymes and insulin. Its pain is usually central and spreads to the back."},
+    {text:"Stomach", info:"The upper-left and central pouch that churns food with acid."},
+    {text:"Appendix", info:"A small tube off the large intestine in the lower right abdomen."}], answer:"Gallbladder"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Acute cholecystitis (inflamed gallbladder)"},{text:"Acute pancreatitis"},{text:"Hepatitis"},{text:"Peptic ulcer"},{text:"Appendicitis"}], answer:"Acute cholecystitis (inflamed gallbladder)"},
+  debrief:{
+    body:"The gallbladder sits under the liver and stores bile. A fatty meal makes it squeeze. If a gallstone blocks its outlet (the cystic duct), bile gets trapped and the gallbladder wall becomes inflamed.",
+    clue:"Right upper pain after fatty food, spreading to the right shoulder blade, plus a positive Murphy's sign. The ultrasound confirms it.",
+    mistake:"Choosing pancreatitis. The pancreas is nearby, but a normal lipase makes it unlikely."}
+},
+{ id:"chest-pressure", unit:"u3", title:"Pressure in the chest", level:"Cardiovascular",
+  patient:{name:"Luis M.", age:58, sex:"M"},
+  story:"Luis was shoveling snow when he felt heavy pressure in the center of his chest, “like someone sitting on me.” It has lasted 40 minutes and spreads to his left arm and jaw. He is sweating and short of breath. He smokes and takes medicine for high blood pressure.",
+  actions:[
+    A("vitals","key","Heart rate 98. BP 150/92. Oxygen 95%. Temp normal."),
+    {id:"exam",group:E,label:"Heart and lung exam",about:"Listen to the heart and lungs and look at the skin.",kind:"ok",result:"Sweaty and pale. Heart sounds regular. Lungs clear."},
+    A("ecg","key","ST elevation in leads II, III and aVF: a pattern of injury to the bottom (inferior) wall of the heart."),
+    A("trop","key","Raised. Troponin leaks out of damaged heart muscle cells."),
+    {id:"ddimer",group:T,label:"D-dimer (clots)",about:"Blood test that rises when the body is breaking down blood clots.",risk:"One needle stick.",kind:"extra",result:"Normal. A blood clot in the lungs is unlikely."},
+    A("cxr","ok","Normal heart size. Lungs clear. Normal width of the aorta."),
+    {id:"stress",group:T,label:"Treadmill stress test",about:"Exercise on a treadmill while the ECG is watched, to see if the heart gets enough blood under effort.",risk:"Dangerous during active chest pain: it makes the heart work harder.",kind:"harm",result:"Within a minute Luis's pain becomes crushing and his heart rhythm goes irregular. The test is stopped and the team rushes in."}
+  ],
+  q1:{short:"Structure", prompt:"Which structure is the problem?", options:[
+    {text:"Heart", info:"A muscular pump fed by its own blood supply, the coronary arteries."},
+    {text:"Lungs", info:"Where oxygen enters the blood. Lung pain is usually sharp and worse with breathing."},
+    {text:"Esophagus", info:"The food tube behind the heart. Acid reflux can cause burning chest pain."},
+    {text:"Aorta", info:"The body's largest artery. A tear (dissection) causes sudden tearing pain into the back."},
+    {text:"Stomach", info:"Below the diaphragm. Stomach pain is usually in the upper abdomen."}], answer:"Heart"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Myocardial infarction (heart attack)"},{text:"Pulmonary embolism"},{text:"Acid reflux"},{text:"Aortic dissection"},{text:"Panic attack"}], answer:"Myocardial infarction (heart attack)"},
+  debrief:{
+    body:"The heart muscle gets its blood from the coronary arteries. When one is blocked, the muscle it feeds runs out of oxygen and starts to die. The inferior wall is usually supplied by the right coronary artery.",
+    clue:"Crushing central chest pressure during exertion, spreading to the arm and jaw, with sweating. The ECG and troponin confirm heart muscle injury.",
+    mistake:"Ordering everything before the ECG. In a real emergency the ECG comes within minutes, because treatment is time-critical."}
+},
+{ id:"sudden-breath", unit:"u3", title:"Sudden shortness of breath", level:"Respiratory",
+  patient:{name:"Jordan K.", age:19, sex:"M"},
+  story:"Jordan is tall and thin. While sitting in class, he felt a sudden sharp pain on the left side of his chest, and now he can't catch his breath. The pain gets worse when he breathes in. He has no fever and no cough.",
+  actions:[
+    A("vitals","key","Breathing rate 24 (fast). Oxygen 92% (low). Heart rate 110. Temp normal."),
+    {id:"lungs",group:E,label:"Lung exam",about:"Listen to both sides of the chest and tap (percuss) to hear how hollow it sounds.",kind:"key",result:"Breath sounds much quieter on the left. Tapping the left chest sounds hollow (hyperresonant)."},
+    A("cxr","key","On the left, a thin line at the edge of the lung with no lung markings beyond it. The left lung has partly collapsed."),
+    A("ecg","ok","Fast but normal rhythm. No signs of heart damage."),
+    A("trop","extra","Normal."),
+    A("cbc","extra","Normal. No sign of infection."),
+    {id:"spiro",group:T,label:"Spirometry (forceful breathing test)",about:"Breathe in fully, then blow out as hard and fast as possible to measure lung function.",risk:"Forceful breathing can make an air leak worse.",kind:"harm",result:"Jordan can barely blow. Afterward he's more breathless and his oxygen drops to 89%."}
+  ],
+  q1:{short:"Structure", prompt:"Which structure is the problem?", options:[
+    {text:"Lungs and pleura", info:"Each lung is wrapped in two thin layers (the pleura). Low pressure between them keeps the lung open."},
+    {text:"Heart", info:"Heart pain is usually pressure-like and doesn't change much with breathing."},
+    {text:"Ribs", info:"A rib injury hurts at one spot when pressed, usually after a hit or fall."},
+    {text:"Diaphragm", info:"The dome-shaped breathing muscle under the lungs."},
+    {text:"Trachea", info:"The windpipe, carrying air from the throat to the lungs."}], answer:"Lungs and pleura"},
+  q2:{short:"Diagnosis", prompt:"What is the diagnosis?", options:[{text:"Spontaneous pneumothorax (collapsed lung)"},{text:"Pneumonia"},{text:"Asthma attack"},{text:"Heart attack"},{text:"Rib fracture"}], answer:"Spontaneous pneumothorax (collapsed lung)"},
+  debrief:{
+    body:"Low pressure in the space between the two pleural layers keeps the lung stretched open. If air leaks into that space, the lung collapses away from the chest wall.",
+    clue:"A tall, thin young person with sudden one-sided pain, quiet breath sounds, and a hollow sound when that side of the chest is tapped.",
+    mistake:"Choosing pneumonia. Pneumonia usually builds over days with fever and cough. This came on suddenly, with neither."}
+}];
+
+/* ---------- Patient illustrations ---------- */
+const LOOKS = {
+  "dizzy-race":   {skin:"#a86b4a", hair:"bun",   hc:"#2b1b14", shirt:"#c83803", bib:true},
+  "fever-cough":  {skin:"#e8b896", hair:"bald",  hc:"#c9c9c9", shirt:"#6b7a4a", glasses:true},
+  "headache-bp":  {skin:"#6b4229", hair:"curly", hc:"#1a1414", shirt:"#6a4a9a"},
+  "wrist":        {skin:"#e0b08a", hair:"short", hc:"#b5432a", shirt:"#2f6f8f", sling:true},
+  "hip":          {skin:"#f0c9a8", hair:"curly", hc:"#ececec", shirt:"#8fa8c8", glasses:true},
+  "shin":         {skin:"#8d5a3b", hair:"crop",  hc:"#1b120d", shirt:"#0b162a", jersey:true},
+  "ruq-pain":     {skin:"#c99273", hair:"long",  hc:"#5a3a22", shirt:"#3a6ea5"},
+  "chest-pressure":{skin:"#b97f5a",hair:"short", hc:"#5b5b5b", shirt:"#8b2b2b", stache:true},
+  "sudden-breath":{skin:"#e2b48f", hair:"curly", hc:"#6b4a2b", shirt:"#555f6e"},
+  okafor:         {skin:"#5a3620", hair:"bun",   hc:"#111111", shirt:"#ffffff", coat:true}
+};
+function shade(hex, f){ const n = parseInt(hex.slice(1),16); const c = [n>>16, n>>8&255, n&255].map(v => Math.max(0, Math.min(255, Math.round(v*f)))); return "#" + c.map(v => v.toString(16).padStart(2,"0")).join(""); }
+function avatar(L, mood = "hurt"){
+  const sk = L.skin, skD = shade(sk, .82), hc = L.hc;
+  let back = "", top = "";
+  if (L.hair === "long") back = `<path d="M34 50 Q32 20 60 20 Q88 20 86 50 L90 96 Q60 104 30 96 Z" fill="${hc}"/>`;
+  if (L.hair === "short" || L.hair === "bun" || L.hair === "long") top = `<path d="M36 52 Q34 20 60 20 Q86 20 84 52 Q80 34 60 33 Q42 33 36 52 Z" fill="${hc}"/>`;
+  if (L.hair === "crop") top = `<path d="M38 46 Q38 24 60 24 Q82 24 82 46 Q76 32 60 32 Q44 32 38 46 Z" fill="${hc}"/>`;
+  if (L.hair === "bun") top += `<circle cx="60" cy="15" r="10" fill="${hc}"/>`;
+  if (L.hair === "bald") top = `<ellipse cx="39" cy="46" rx="5" ry="9" fill="${hc}"/><ellipse cx="81" cy="46" rx="5" ry="9" fill="${hc}"/>`;
+  if (L.hair === "curly") { for (let a = 160; a >= 20; a -= 20) { const r = a*Math.PI/180; top += `<circle cx="${(60+25*Math.cos(r)).toFixed(1)}" cy="${(44-24*Math.sin(r)).toFixed(1)}" r="9" fill="${hc}"/>`; } }
+  const brows = mood === "happy" ? `<path d="M46 43 Q51 40 56 43 M64 43 Q69 40 74 43" stroke="${shade(hc==="#ececec"||hc==="#c9c9c9"?"#888888":hc,1)}" stroke-width="2.4" fill="none" stroke-linecap="round"/>`
+    : mood === "ok" ? `<path d="M46 44 L56 44 M64 44 L74 44" stroke="#3a2a20" stroke-width="2.4" stroke-linecap="round"/>`
+    : `<path d="M46 46 L56 42 M64 42 L74 46" stroke="#3a2a20" stroke-width="2.4" stroke-linecap="round"/>`;
+  const eyes = mood === "critical" ? `<path d="M48 50 l6 4 M54 50 l-6 4 M66 50 l6 4 M72 50 l-6 4" stroke="#1a1a1a" stroke-width="2.2" stroke-linecap="round"/>`
+    : mood === "happy" ? `<path d="M48 53 Q51 49 54 53 M66 53 Q69 49 72 53" stroke="#1a1a1a" stroke-width="2.4" fill="none" stroke-linecap="round"/>`
+    : `<circle cx="51" cy="52" r="2.8" fill="#1a1a1a"/><circle cx="69" cy="52" r="2.8" fill="#1a1a1a"/>`;
+  const mouth = mood === "happy" ? `<path d="M50 63 Q60 74 70 63 Z" fill="#7a2a22"/>`
+    : mood === "ok" ? `<path d="M53 65 Q60 69 67 65" stroke="#6a2a22" stroke-width="2.4" fill="none" stroke-linecap="round"/>`
+    : mood === "critical" ? `<ellipse cx="60" cy="67" rx="4.5" ry="5.5" fill="#5a1f1a"/>`
+    : `<path d="M52 68 Q60 61 68 68" stroke="#6a2a22" stroke-width="2.4" fill="none" stroke-linecap="round"/>`;
+  const sweat = (mood === "worse" || mood === "critical") ? `<path d="M82 36 Q86 44 82 47 Q78 44 82 36 Z" fill="#6fb6ff"/>` : "";
+  const pale = mood === "critical" ? `<ellipse cx="60" cy="52" rx="22" ry="26" fill="#cfe3d0" opacity=".45"/>` : mood === "worse" ? `<ellipse cx="60" cy="52" rx="22" ry="26" fill="#ffffff" opacity=".15"/>` : "";
+  const blush = mood === "happy" ? `<circle cx="45" cy="60" r="4" fill="#ff8a7a" opacity=".45"/><circle cx="75" cy="60" r="4" fill="#ff8a7a" opacity=".45"/>` : "";
+  const glasses = L.glasses ? `<g stroke="#2a2a2a" stroke-width="1.8" fill="none"><circle cx="51" cy="52" r="6.5"/><circle cx="69" cy="52" r="6.5"/><path d="M57.5 52h5"/></g>` : "";
+  const stache = L.stache ? `<path d="M50 61 Q60 56 70 61 Q60 63 50 61 Z" fill="${hc}"/>` : "";
+  let body = `<path d="M14 120 Q16 92 42 88 L78 88 Q104 92 106 120 Z" fill="${L.shirt}"/>`;
+  if (L.coat) body = `<path d="M14 120 Q16 92 42 88 L78 88 Q104 92 106 120 Z" fill="#f5f7fa" stroke="#c7ced9"/><path d="M52 88 L60 104 L68 88" fill="#1c3d73"/><path d="M46 90 Q42 108 54 112 M74 90 Q78 106 70 110" stroke="#333" stroke-width="2.2" fill="none"/><circle cx="70" cy="112" r="4" fill="#9aa3ad" stroke="#333" stroke-width="1.5"/>`;
+  if (L.bib) body += `<rect x="47" y="98" width="26" height="18" rx="2" fill="#fff"/><text x="60" y="111" font-size="10" font-weight="700" text-anchor="middle" fill="#0b162a" font-family="sans-serif">213</text>`;
+  if (L.jersey) body += `<path d="M14 120 Q16 92 42 88 L46 88 L46 120 Z M106 120 Q104 92 78 88 L74 88 L74 120 Z" fill="#c83803"/><text x="60" y="114" font-size="14" font-weight="800" text-anchor="middle" fill="#fff" font-family="sans-serif">7</text>`;
+  if (L.sling) body += `<path d="M30 96 L92 120" stroke="#f5f5f5" stroke-width="9" stroke-linecap="round"/><rect x="62" y="104" width="30" height="14" rx="6" fill="#f5f5f5" stroke="#c9ced6"/>`;
+  return `<svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Illustration">
+    ${back}${body}<rect x="52" y="72" width="16" height="18" rx="4" fill="${skD}"/>
+    <circle cx="38" cy="55" r="5.5" fill="${skD}"/><circle cx="82" cy="55" r="5.5" fill="${skD}"/>
+    <ellipse cx="60" cy="52" rx="22" ry="26" fill="${sk}"/>${pale}${top}${brows}${eyes}${glasses}${blush}${stache}${mouth}${sweat}</svg>`;
+}
+const look = c => LOOKS[c.id] || {skin:"#d9a77f", hair:"short", hc:"#3a2a20", shirt:"#1c3d73"};
+const moodFor = cond => cond >= 80 ? "hurt" : cond >= 50 ? "worse" : "critical";
+const tag = c => c.unit === "u3" ? c.level : c.level.replace("Case", "Assignment");
+
+/* ---------- Judgement lines ---------- */
+const LINES = {
+  hero:[
+    n=>`${n} will make a full recovery thanks to your medical brilliance. They've announced that all of their future children will be named after you. Even the goldfish.`,
+    n=>`${n} is going home healthy. The nurses are printing your face on the break-room mugs, and the hospital is considering a statue.`,
+    n=>`Textbook medicine. ${n} has started a fan club in your honor. Current membership: the entire fourth floor.`
+  ],
+  mixed:[
+    n=>`${n} will recover, no thanks to all the extra poking and prodding. They left the hospital a one-star review: “Doctor knew things. Also did unnecessary things.”`,
+    n=>`${n} survives. Your attending has assigned you to read the textbook aloud to the hospital cafeteria. All of it.`,
+    n=>`${n} is fine, eventually. Their insurance company, however, has questions about your choices and has sent a strongly worded letter.`
+  ],
+  fail:[
+    n=>`Your care has caused irreparable harm. ${n} is suing you AND the hospital, and their lawyer just bought a billboard. Keep harming your patients and you will lose your medical license.`,
+    n=>`${n}'s family has hired three lawyers and one very angry aunt. The hospital board would like a word, in a small room, with no snacks. Keep this up and your license is gone.`,
+    n=>`The legal department has your name on a whiteboard, circled twice. ${n} is suing. One more case like this and you'll be practicing medicine on stuffed animals.`
+  ]
+};
+const TITLES = {hero:"Full recovery!", mixed:"Recovered, with complaints", fail:"Lawsuit filed"};
+const CHIPS = {hero:"Full recovery", mixed:"Complaints", fail:"Lawsuit"};
+const LIC = ["License: good standing","License: warning (1 strike)","License: final warning (2 strikes)","License: SUSPENDED"];
+
+/* ---------- Storage (optional, per browser) ---------- */
+const store = {
+  get(k, d){ try { const v = localStorage.getItem(k); return v == null ? d : JSON.parse(v); } catch(e){ return d; } },
+  set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
+};
+let strikes = store.get("dtp-strikes", 0);
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[ch]));
+let S = null;
+
+function renderLicense(){
+  const s = Math.min(strikes, 3);
+  $("#lic").textContent = LIC[s];
+  $("#lic").className = "lic s" + s;
+  $("#reinstate").hidden = strikes < 3;
+}
+function show(view){
+  for (const id of ["home","how","brief","game"]) $("#" + id).hidden = id !== view;
+  window.scrollTo({top:0});
+}
+
+function renderHome(){
+  const best = store.get("dtp-best", {}), verd = store.get("dtp-verdict", {});
+  const seated = CASES.filter(c => c.unit !== "u3");
+  $("#bench").innerHTML = seated.map(c => `<div class="seat">${avatar(look(c), best[c.id] != null ? (verd[c.id] === "hero" ? "happy" : verd[c.id] === "fail" ? "critical" : "ok") : "hurt")}<b>${c.patient.name}</b></div>`).join("");
+  const next = seated.find(c => best[c.id] == null);
+  $("#nextBtn").textContent = next ? `Start ${tag(next)}` : "Replay an assignment";
+  $("#nextBtn").dataset.target = next ? next.id : seated[0].id;
+  $("#units").innerHTML = UNITS.map(u => {
+    const cs = CASES.filter(c => c.unit === u.id), done = cs.filter(c => best[c.id] != null).length;
+    return `<section class="unit">
+      <div class="unit-head">
+        <div><h2>${u.name}</h2><p>${u.blurb}</p>
+          <div class="prog"><i><b style="width:${done/cs.length*100}%"></b></i>${done} of ${cs.length} complete</div></div>
+        ${u.brief ? `<button data-brief="${u.id}">Read the unit briefing</button>` : ""}
+      </div>
+      <div class="cases">${cs.map(c => {
+        const v = verd[c.id];
+        return `<button class="card" data-id="${c.id}">
+          <div class="pic">${avatar(look(c), v === "hero" ? "happy" : v === "fail" ? "critical" : v ? "ok" : "hurt")}</div>
+          <div><span class="tag">${tag(c)}</span><h3>${c.title}</h3>
+          <div>${c.patient.name}, ${c.patient.age}${c.patient.sex}</div>
+          <span class="chip ${v || "none"}">${best[c.id] != null ? CHIPS[v] + " · best " + best[c.id] + "/100" : "Not started"}</span></div>
+        </button>`;}).join("")}</div>
+    </section>`;}).join("");
+  try { $("#sname").value = store.get("dtp-name", ""); } catch(e){}
+  show("home");
+}
+
+function start(id){
+  const c = CASES.find(x => x.id === id);
+  S = {c, ordered:[], review:null, stage:"investigate", q1:null, q2:null, cond:100};
+  $("#debrief").hidden = true;
+  $("#pname").textContent = c.patient.name;
+  $("#pmeta").textContent = `${tag(c)} · ${c.patient.age} years · ${c.patient.sex === "F" ? "Female" : "Male"}`;
+  $("#story").textContent = c.story;
+  renderChart(); renderPanel(); show("game");
+}
+
+function renderChart(mood){
+  const pct = Math.max(0, S.cond);
+  const cls = pct < 50 ? "low" : pct < 80 ? "mid" : "";
+  const word = pct >= 80 ? "Stable" : pct >= 50 ? "Worsening" : "Critical";
+  $("#ppic").innerHTML = avatar(look(S.c), mood || moodFor(pct));
+  $("#cond").className = "cond " + cls;
+  $("#cond").innerHTML = `<span>Patient condition</span><span><b>${word}</b> · ${pct}%</span><i><b style="width:${pct}%"></b></i>`;
+  const items = S.ordered.map(id => S.c.actions.find(t => t.id === id));
+  $("#findings").innerHTML = items.length
+    ? items.map(t => `<li class="${t.kind === "harm" ? "hurt" : ""}"><div class="lab">${t.label}${t.kind === "harm" ? " · patient harmed" : ""}</div>${t.result}</li>`).join("")
+    : `<li class="empty">Nothing on the chart yet. Choose from the orders panel.</li>`;
+}
+
+function stepBar(done){
+  const c = S.c, order = ["investigate","q1","q2"];
+  const names = ["1 · Investigate","2 · " + c.q1.short,"3 · " + c.q2.short];
+  const at = done ? 3 : order.indexOf(S.stage);
+  return `<div class="track">${names.map((l,i) => `<span class="${i === at ? "on" : i < at ? "past" : ""}">${l}</span>`).join("")}</div>`;
+}
+
+function renderPanel(){
+  const p = $("#panel"), c = S.c;
+  if (S.stage === "investigate"){
+    const groups = [...new Set(c.actions.map(t => t.group))];
+    const r = S.review && c.actions.find(t => t.id === S.review);
+    p.innerHTML = stepBar() + `
+      <div><h3>Investigate</h3><p class="note" style="margin:0">Click anything to review it first. Ordering is what counts.</p>
+      ${r ? `<div class="review" id="review" tabindex="-1" style="margin-top:12px"><b>${r.label}</b><p>${r.about}</p>${r.risk ? `<p class="risk"><b>Risk:</b> ${r.risk}</p>` : ""}
+        <div class="row" style="margin-top:10px"><button class="link" data-cancel>Cancel</button><button class="primary" data-order="${r.id}">Order this</button></div></div>` : ""}
+      ${groups.map(g => `<p class="group">${g}</p><div class="tests">${c.actions.filter(t => t.group === g).map(t => {
+        const done = S.ordered.includes(t.id);
+        return `<button data-test="${t.id}" class="${done ? "done" : ""} ${S.review === t.id ? "viewing" : ""}" ${done ? "disabled" : ""}>${done ? "✓ " : ""}${t.label}</button>`;
+      }).join("")}</div>`).join("")}</div>
+      <div class="row"><span class="note">${S.ordered.length} ordered</span><button class="primary" data-go="q1" ${S.ordered.length ? "" : "disabled"}>I'm ready to decide →</button></div>`;
+    if (r) $("#review").focus();
+  } else {
+    const q = c[S.stage], pick = S[S.stage];
+    const sel = pick != null ? q.options.find(o => o.text === pick) : null;
+    p.innerHTML = stepBar() + `<div><h3>${q.prompt}</h3>
+      <p class="note" style="margin:0 0 10px">${q.options.some(o => o.info) ? "Click an answer to read about it. You can change your mind before moving on." : "Choose the best answer."}</p>
+      <div class="opts">${q.options.map((o,i) =>
+        `<button data-pick="${i}" class="${pick === o.text ? "sel" : ""}" aria-pressed="${pick === o.text}">${o.text}</button>`).join("")}</div>
+      ${sel && sel.info ? `<div class="info" style="margin-top:12px"><b>${sel.text}</b><p>${sel.info}</p></div>` : ""}</div>
+      <div class="row"><button class="link" data-go="${S.stage === "q1" ? "investigate" : "q1"}">← Back</button>
+      <button class="primary" data-go="${S.stage === "q1" ? "q2" : "done"}" ${pick != null ? "" : "disabled"}>${S.stage === "q1" ? "Next →" : "Submit diagnosis"}</button></div>`;
+  }
+}
+
+function order(id){
+  if (S.ordered.includes(id)) return;
+  const t = S.c.actions.find(x => x.id === id);
+  S.ordered.push(id); S.review = null;
+  if (t.kind === "extra") S.cond -= 10;
+  if (t.kind === "harm") S.cond -= 30;
+  renderChart(); renderPanel();
+}
+
+function scoreCase(){
+  const c = S.c, acts = c.actions, by = k => acts.filter(t => t.kind === k).map(t => t.id);
+  const missed = by("key").filter(k => !S.ordered.includes(k));
+  const extra = S.ordered.filter(id => by("extra").includes(id));
+  const harm = S.ordered.filter(id => by("harm").includes(id));
+  const q2Pts = S.q2 === c.q2.answer ? 40 : 0;
+  const q1Pts = S.q1 === c.q1.answer ? 30 : 0;
+  const care = Math.max(0, 30 - 4 * missed.length - 4 * extra.length - 15 * harm.length);
+  let tier = "mixed";
+  if (!q2Pts || S.cond < 50) tier = "fail";
+  else if (q1Pts && !harm.length && missed.length <= 1 && extra.length <= 1) tier = "hero";
+  return {q1Pts, q2Pts, care, total:q1Pts + q2Pts + care, missed, extra, harm, tier};
+}
+
+function finish(){
+  const c = S.c, r = scoreCase();
+  const best = store.get("dtp-best", {}), verd = store.get("dtp-verdict", {});
+  if (best[c.id] == null || r.total > best[c.id]) { best[c.id] = r.total; verd[c.id] = r.tier; store.set("dtp-best", best); store.set("dtp-verdict", verd); }
+  if (r.tier === "fail") strikes++;
+  if (r.tier === "hero" && strikes > 0 && strikes < 3) strikes--;
+  store.set("dtp-strikes", strikes); renderLicense();
+  const pmood = r.tier === "hero" ? "happy" : r.tier === "mixed" ? "ok" : "critical";
+  renderChart(pmood);
+
+  const label = id => c.actions.find(t => t.id === id).label;
+  const lines = LINES[r.tier];
+  const line = lines[Math.floor(Math.random() * lines.length)](c.patient.name);
+  const notes = [];
+  if (!r.q2Pts) notes.push(`Wrong diagnosis. It was ${c.q2.answer.charAt(0).toLowerCase() + c.q2.answer.slice(1)}.`);
+  if (!r.q1Pts) notes.push(`Step 2 missed. The answer was ${c.q1.answer.toLowerCase()}.`);
+  if (r.harm.length) notes.push(`Harmful order: ${r.harm.map(label).join(", ")}.`);
+  if (r.missed.length) notes.push(`Skipped key steps: ${r.missed.map(label).join(", ")}.`);
+  if (r.extra.length) notes.push(`Unnecessary orders: ${r.extra.map(label).join(", ")}.`);
+  if (S.cond < 50 && r.q2Pts) notes.push("Right diagnosis, but the patient's condition fell to critical on your watch.");
+  if (!notes.length) notes.push("Clean, careful work. No notes.");
+  const licLine = strikes >= 3 ? `<p style="font-family:inherit;font-size:15px"><b>Your medical license is suspended.</b> Review How to Play to be reinstated.</p>`
+    : r.tier === "fail" ? `<p style="font-family:inherit;font-size:15px"><b>Strike ${strikes} of 3</b> on your medical license.</p>`
+    : r.tier === "hero" ? `<p style="font-family:inherit;font-size:15px">Great cases earn back strikes. ${LIC[strikes]}.</p>` : "";
+  const okMood = r.tier === "hero" ? "happy" : r.tier === "mixed" ? "ok" : "hurt";
+  const name = store.get("dtp-name", "") || "(no name entered)";
+  const report = [
+    "SORE! Second Opinion Required: Emergency",
+    `Student: ${name}`,
+    `${tag(c)}: ${c.title} (patient ${c.patient.name})`,
+    `Score: ${r.total}/100 (Diagnosis ${r.q2Pts}/40, ${c.q1.short} ${r.q1Pts}/30, Patient care ${r.care}/30)`,
+    `Verdict: ${TITLES[r.tier]}`,
+    `Final patient condition: ${Math.max(0, S.cond)}%`,
+    `Orders: ${S.ordered.map(label).join(", ")}`,
+    `Diagnosis given: ${S.q2}`,
+    `Completed: ${new Date().toLocaleString()}`
+  ].join("\n");
+
+  S.result = {r, notes, line, report};
+  const bar = (nm, v, max) => `<div class="bar"><span>${nm}</span><i><b style="width:${v/max*100}%"></b></i><span>${v} / ${max}</span></div>`;
+  $("#debrief").innerHTML = `
+    <div class="judge ${r.tier}">
+      <div class="duo"><div>${avatar(LOOKS.okafor, okMood)}Dr. Okafor</div><div>${avatar(look(c), pmood)}${c.patient.name}</div></div>
+      <div>
+        <div class="who">The attending physician's judgement</div>
+        <h3>${TITLES[r.tier]}</h3>
+        <p>${line}</p>
+        <ul>${notes.map(n => `<li>${n}</li>`).join("")}</ul>
+        ${licLine}
+        ${strikes >= 3 ? `<button class="danger" data-how style="margin-top:10px">Go to How to Play</button>` : ""}
+      </div>
+    </div>
+    <div class="score"><div><div class="big">${r.total}</div><div class="note">out of 100</div></div>
+      <div class="bars">${bar("Diagnosis", r.q2Pts, 40)}${bar(c.q1.short, r.q1Pts, 30)}${bar("Patient care", r.care, 30)}</div></div>
+    <div class="verdicts">
+      <div class="v ${r.q1Pts ? "good" : "bad"}"><b>${r.q1Pts ? "Correct: " + c.q1.short.toLowerCase() : c.q1.short + ": not quite"}</b><p>You chose ${S.q1}.${r.q1Pts ? "" : " Answer: " + c.q1.answer + "."}</p></div>
+      <div class="v ${r.q2Pts ? "good" : "bad"}"><b>${r.q2Pts ? "Correct diagnosis" : "Diagnosis: not quite"}</b><p>You chose ${S.q2}.${r.q2Pts ? "" : " Answer: " + c.q2.answer + "."}</p></div>
+      <div class="v ${r.care >= 24 ? "good" : "bad"}"><b>Patient care: ${r.care} / 30</b><p>Final patient condition: ${Math.max(0, S.cond)}%.</p></div>
+    </div>
+    <div class="teach">
+      <div><h3>What's happening in the body</h3><p>${c.debrief.body}</p></div>
+      <div><h3>The key clue</h3><p>${c.debrief.clue}</p></div>
+      <div><h3>Common wrong turn</h3><p>${c.debrief.mistake}</p></div>
+    </div>
+    <div class="turnin">
+      <h3 style="margin:0 0 4px">Turn in this assignment</h3>
+      <ol class="note" style="margin:0 0 12px;padding-left:1.2em;font-size:14px"><li>Check your name, then download your case report (PDF).</li><li>Open the matching assignment in Google Classroom.</li><li>Choose <b>Add or create → File</b>, upload the PDF, and press <b>Turn in</b>.</li></ol>
+      <div class="namebox" style="margin:0 0 10px"><label for="rname" style="max-width:360px">Your name<input id="rname" autocomplete="name" placeholder="First and last name" value="${esc(store.get("dtp-name", ""))}" style="background:var(--paper);color:var(--ink);border-color:var(--line)"></label></div>
+      <div class="hbtns"><button class="primary" id="pdfBtn">Download PDF report</button><button id="copyRes">Copy my results</button><a href="https://classroom.google.com" target="_blank" rel="noopener" style="font-weight:700;color:var(--blue);padding:10px 4px">Open Google Classroom ↗</a></div>
+      <p class="note" id="dlMsg" role="status" style="margin:8px 0 0"></p>
+      <details style="margin-top:12px;padding:10px 14px"><summary>Show results as text</summary><textarea id="resText" readonly>${esc(report)}</textarea></details>
+    </div>
+    <div class="row" style="margin-top:22px"><button data-retry>Try this case again</button><button class="primary" data-home>Back to all assignments</button></div>`;
+  $("#debrief").hidden = false;
+  $("#panel").innerHTML = stepBar(true) + `<p style="margin:0"><b>Case submitted.</b> The attending's judgement and your debrief are below.</p>`;
+  $("#debrief").scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"});
+}
+
+
+/* ---------- PDF case report ---------- */
+const pdfSafe = s => String(s).replace(/[“”]/g,'"').replace(/[‘’]/g,"'").replace(/[–—−]/g,"-").replace(/[•·]/g,"-").replace(/→/g,"->").replace(/↗/g,"").replace(/[^\x09\x0A\x0D\x20-\x7E\xA0-\xFF]/g,"");
+function svgToPng(svg, px = 240){
+  return new Promise(res => {
+    const done = v => { clearTimeout(tm); res(v); };
+    const tm = setTimeout(() => res(null), 2000);
+    try {
+      const img = new Image();
+      img.onload = () => { try {
+        const cv = document.createElement("canvas"); cv.width = cv.height = px;
+        const g = cv.getContext("2d");
+        g.beginPath(); g.arc(px/2, px/2, px/2, 0, Math.PI*2); g.fillStyle = "#dfe6f1"; g.fill(); g.clip();
+        g.drawImage(img, 0, 0, px, px);
+        done(cv.toDataURL("image/png"));
+      } catch(e){ done(null); } };
+      img.onerror = () => done(null);
+      img.src = "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg.replace("<svg ", `<svg width="${px}" height="${px}" `));
+    } catch(e){ done(null); }
+  });
+}
+async function buildPDF(){
+  const J = window.jspdf && window.jspdf.jsPDF; if (!J) throw new Error("nolib");
+  const c = S.c, {r, notes, line} = S.result, name = store.get("dtp-name", "");
+  const label = id => c.actions.find(t => t.id === id);
+  const doc = new J({unit:"pt", format:"letter"}), W = 612, M = 48, TW = W - 2*M;
+  let y = 0;
+  const T = (txt, x, yy, o) => doc.text(pdfSafe(txt), x, yy, o);
+  const para = (txt, size = 11, gap = 4, color = [11,22,42], x = M, w = TW) => {
+    doc.setFontSize(size); doc.setTextColor(...color);
+    const lines = doc.splitTextToSize(pdfSafe(txt), w);
+    for (const ln of lines){ if (y > 740){ doc.addPage(); y = 60; } doc.text(ln, x, y); y += size * 1.3; }
+    y += gap;
+  };
+  const head = txt => { if (y > 700){ doc.addPage(); y = 60; } y += 8; doc.setFont("helvetica","bold"); doc.setFontSize(13); doc.setTextColor(200,56,3); T(txt, M, y); y += 6; doc.setDrawColor(217,223,232); doc.line(M, y, W-M, y); y += 16; doc.setFont("helvetica","normal"); };
+  doc.setFillColor(11,22,42); doc.rect(0,0,W,74,"F"); doc.setFillColor(200,56,3); doc.rect(0,74,W,6,"F");
+  doc.setFont("helvetica","bold"); doc.setFontSize(30); doc.setTextColor(255,255,255); T("SORE!", M, 48);
+  doc.setFont("helvetica","normal"); doc.setFontSize(11); T("Second Opinion Required: Emergency", M + doc.getTextWidth("SORE!")*30/11 + 12, 46);
+  doc.setFontSize(11); T("Case report", W - M, 46, {align:"right"});
+  const png = await svgToPng(avatar(look(c), r.tier === "hero" ? "happy" : r.tier === "mixed" ? "ok" : "critical"));
+  y = 112;
+  const rows = [["Student", name || "(no name entered)"], [tag(c), c.title], ["Patient", `${c.patient.name}, ${c.patient.age} years`], ["Completed", new Date().toLocaleString()]];
+  for (const [k, v] of rows){ doc.setFont("helvetica","bold"); doc.setFontSize(11); doc.setTextColor(86,97,118); T(k, M, y); doc.setFont("helvetica","normal"); doc.setTextColor(11,22,42); T(v, M + 90, y); y += 18; }
+  if (png) { try { doc.addImage(png, "PNG", W - M - 96, 96, 96, 96); } catch(e){} }
+  y += 10;
+  doc.setFont("helvetica","bold"); doc.setFontSize(40); doc.setTextColor(200,56,3); T(`${r.total}`, M, y + 30);
+  const sw = doc.getTextWidth(`${r.total}`); doc.setFontSize(14); doc.setTextColor(86,97,118); T("/ 100", M + sw + 6, y + 30);
+  doc.setFont("helvetica","normal"); doc.setFontSize(11); doc.setTextColor(11,22,42);
+  const bx = M + 150;
+  [["Diagnosis", r.q2Pts, 40], [c.q1.short, r.q1Pts, 30], ["Patient care", r.care, 30]].forEach(([n, v, mx], i) => {
+    const yy = y + 6 + i*16; T(n, bx, yy); doc.setFillColor(217,223,232); doc.rect(bx + 90, yy - 8, 180, 8, "F");
+    doc.setFillColor(11,22,42); if (v) doc.rect(bx + 90, yy - 8, 180*v/mx, 8, "F"); T(`${v} / ${mx}`, W - M, yy, {align:"right"});
+  });
+  y += 58;
+  const fill = {hero:[226,243,234], mixed:[252,239,217], fail:[251,229,227]}[r.tier], ink = {hero:[29,107,69], mixed:[138,83,0], fail:[179,38,30]}[r.tier];
+  doc.setFontSize(11); const vl = doc.splitTextToSize(pdfSafe(line), TW - 24);
+  const bh = 40 + vl.length * 14.3;
+  doc.setFillColor(...fill); doc.roundedRect(M, y, TW, bh, 8, 8, "F");
+  doc.setFont("helvetica","bold"); doc.setFontSize(9); doc.setTextColor(86,97,118); T("DR. OKAFOR, ATTENDING PHYSICIAN: JUDGEMENT", M + 12, y + 16);
+  doc.setFontSize(15); doc.setTextColor(...ink); T(TITLES[r.tier], M + 12, y + 34);
+  doc.setFont("helvetica","normal"); doc.setFontSize(11); doc.setTextColor(11,22,42); vl.forEach((ln, i) => doc.text(ln, M + 12, y + 52 + i*14.3 - 4));
+  y += bh + 10;
+  head("Attending's notes"); notes.forEach(n => para("- " + n, 11, 2));
+  head("Your answers");
+  para(`${c.q1.prompt}  You chose: ${S.q1}  ${r.q1Pts ? "(correct)" : "(incorrect - answer: " + c.q1.answer + ")"}`, 11, 4);
+  para(`${c.q2.prompt}  You chose: ${S.q2}  ${r.q2Pts ? "(correct)" : "(incorrect - answer: " + c.q2.answer + ")"}`, 11, 4);
+  head(`Orders, in sequence (final patient condition: ${Math.max(0, S.cond)}%)`);
+  S.ordered.forEach((id, i) => { const a = label(id); para(`${i+1}. ${a.label}${a.kind === "harm" ? "  [HARMFUL]" : a.kind === "extra" ? "  [unnecessary]" : ""}`, 11, 1, a.kind === "harm" ? [179,38,30] : [11,22,42]); });
+  if (r.missed.length) para("Key steps skipped: " + r.missed.map(id => label(id).label).join(", "), 11, 4, [138,83,0]);
+  head("The key clue"); para(c.debrief.clue, 11, 4);
+  const pages = doc.getNumberOfPages();
+  for (let p = 1; p <= pages; p++){ doc.setPage(p); doc.setFontSize(8); doc.setTextColor(120,130,145); T(`SORE! - educational simulation, not medical advice - page ${p} of ${pages}`, W/2, 770, {align:"center"}); }
+  return doc.output("blob");
+}
+async function savePDF(btn){
+  const msg = $("#dlMsg"), nm = ($("#rname").value || "").trim();
+  if (!nm){ msg.textContent = "Type your name first so your teacher knows whose report it is."; $("#rname").focus(); return; }
+  store.set("dtp-name", nm);
+  btn.disabled = true; msg.textContent = "Building your report…";
+  let blob;
+  try { blob = await buildPDF(); }
+  catch(e){ btn.disabled = false; msg.textContent = "The PDF tool didn't load (check your internet). Use Copy my results instead."; return; }
+  const file = `SORE_${tag(S.c).replace(/\s+/g,"-")}_${nm.replace(/[^A-Za-z0-9]+/g,"-").replace(/^-|-$/g,"")}.pdf`;
+  let ok = false;
+  try {
+    if (window.claude && typeof window.claude.use === "function"){
+      const dl = await window.claude.use("downloads");
+      if (dl){ await dl.save({filename:file, data:blob}); ok = true; }
+    }
+  } catch(e){
+    btn.disabled = false;
+    msg.textContent = e && e.code === "declined" ? "Download cancelled. Press the button again when you're ready." : "Download isn't available here. Use Copy my results and paste into Classroom.";
+    return;
+  }
+  if (!ok){
+    try { const url = URL.createObjectURL(blob); const a = document.createElement("a"); a.href = url; a.download = file; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 5000); ok = true; } catch(e){}
+  }
+  btn.disabled = false;
+  msg.textContent = ok ? `Saved as ${file}. Now upload it to your Google Classroom assignment.` : "Download isn't available here. Use Copy my results and paste into Classroom.";
+}
+
+/* ---------- Events ---------- */
+document.addEventListener("click", async e => {
+  const el = e.target.closest("button"); if (!el) return;
+  if (el.hasAttribute("data-home")) return renderHome();
+  if (el.hasAttribute("data-how")) return show("how");
+  if (el.id === "nextBtn") return start(el.dataset.target);
+  if (el.dataset.brief){ $("#briefBody").innerHTML = UNITS.find(u => u.id === el.dataset.brief).brief + `<div class="row" style="margin-top:22px"><span></span><button class="primary" data-home>Back to the assignments</button></div>`; return show("brief"); }
+  if (el.dataset.id) return start(el.dataset.id);
+  if (el.hasAttribute("data-retry")) return start(S.c.id);
+  if (el.id === "reinstate"){ strikes = 0; store.set("dtp-strikes", 0); renderLicense(); return; }
+  if (el.id === "pdfBtn") return savePDF(el);
+  if (el.id === "copyRes"){
+    const ta = $("#resText");
+    try { await navigator.clipboard.writeText(ta.value); el.textContent = "Copied!"; }
+    catch(err){ ta.focus(); ta.select(); el.textContent = "Selected: press Ctrl+C"; }
+    return;
+  }
+  if (el.id === "copy"){
+    try { await navigator.clipboard.writeText($("#schema").textContent); el.textContent = "Copied"; }
+    catch(err){ el.textContent = "Select the text to copy"; }
+    return;
+  }
+  if (!S) return;
+  if (el.dataset.test){ S.review = el.dataset.test; renderPanel(); return; }
+  if (el.hasAttribute("data-cancel")){ S.review = null; renderPanel(); return; }
+  if (el.dataset.order){ order(el.dataset.order); return; }
+  if (el.dataset.pick != null){ S[S.stage] = S.c[S.stage].options[+el.dataset.pick].text; renderPanel(); return; }
+  if (el.dataset.go){ if (el.dataset.go === "done") finish(); else { S.stage = el.dataset.go; S.review = null; renderPanel(); } }
+});
+document.addEventListener("input", e => {
+  if (e.target.id === "sname" || e.target.id === "rname"){
+    store.set("dtp-name", e.target.value.trim());
+    const ta = $("#resText"); if (ta) ta.value = ta.value.replace(/^Student: .*$/m, "Student: " + (e.target.value.trim() || "(no name entered)"));
+  }
+});
+$("#schema").textContent = JSON.stringify({...CASES[3], actions: CASES[3].actions.slice(0, 3).concat(CASES[3].actions.slice(7, 8))}, null, 2);
+renderLicense(); renderHome();
+}
+</script>
+</body>
+</html>
