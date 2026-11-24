@@ -227,6 +227,24 @@ pre{overflow-x:auto;background:var(--bg);padding:14px;border-radius:8px;font-siz
 .land-cta{background:var(--navy)}
 .land-cta .wrap{justify-content:space-between}
 @media(max-width:760px){.land-hero .wrap{grid-template-columns:minmax(0,1fr);min-height:0}.faces-wall{grid-template-columns:repeat(4,minmax(0,1fr));order:-1}}
+.crisis-card{background:radial-gradient(120% 120% at 90% 0%,#1d3a6b 0%,#0b162a 65%);color:#fff;border-radius:18px;padding:clamp(20px,3vw,34px);border-top:6px solid var(--orange)}
+.crisis-in{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:24px;align-items:center}
+.crisis-card h2{color:#fff;font-size:clamp(28px,3.4vw,38px)}
+.crisis-card p{color:#d6deeb;max-width:60ch}
+.crisis-card .note{color:#c9d3e3}
+.crisis-status{margin:8px 0 0}
+.moon{width:46px;height:46px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#fff8e1,#f2d58a 60%,#d9b860);box-shadow:0 0 24px rgba(242,213,138,.6);margin-bottom:10px}
+.crisis-actions{display:grid;gap:12px;justify-items:start}
+.crisis-actions .ghost{background:transparent;color:#fff;border-color:#3a4f78}
+.codebox{display:grid;gap:6px;font-size:14px;font-weight:600}
+.codebox input{width:7.5em;min-height:44px;font:700 20px/1 "Barlow Condensed",sans-serif;letter-spacing:3px;text-transform:uppercase;text-align:center;border-radius:8px;border:1px solid #3a4f78;background:#0f1f3d;color:#fff}
+.crisis-card .faces span{background:#dfe6f1}
+.toast{position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:60;width:min(600px,94vw);background:#c62828;color:#fff;border-radius:14px;padding:14px 16px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;box-shadow:0 14px 40px rgba(0,0,0,.35);animation:drop .35s ease}
+.toast i{opacity:.9}
+.toast button{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.75);font-weight:700}
+@keyframes drop{from{transform:translate(-50%,-30px);opacity:0}to{transform:translate(-50%,0);opacity:1}}
+@media(prefers-reduced-motion:reduce){.toast{animation:none}}
+@media(max-width:760px){.crisis-in{grid-template-columns:minmax(0,1fr)}.toast{grid-template-columns:minmax(0,1fr)}.toast svg{display:none}}
 </style>
 <script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script>
 </head>
@@ -268,6 +286,7 @@ pre{overflow-x:auto;background:var(--bg);padding:14px;border-radius:8px;font-siz
   </div></main>
 </section>
 
+<div id="toast" class="toast" hidden role="alert"></div>
 <section id="landing" hidden>
   <div class="land-hero band"><div class="wrap">
     <div>
@@ -304,6 +323,7 @@ pre{overflow-x:auto;background:var(--bg);padding:14px;border-radius:8px;font-siz
           <tr><td><span class="lv lv4">4 Non-urgent</span></td><td>360 min</td><td>Walking, mild pain, a problem for days or weeks</td></tr>
         </tbody>
       </table>
+      <p><b>Crisis ER: Full Moon Shift</b> mixes 12 random patients from every system you've studied. Expect surprise ambulances mid-shift and one shared CT scanner: if it's busy, you wait. Your teacher can give the whole class a <b>shift code</b> so everyone gets the same patients.</p>
       <p class="note">Real emergency departments use scales like the Emergency Severity Index (ESI). The game's levels and times are simplified and run on game minutes.</p>
     </div>
     <div>
@@ -2526,15 +2546,38 @@ function renderHome(){
           <div>${c.patient.name}, ${c.patient.age}${c.patient.sex}</div>
           <span class="chip ${v || "none"}">${best[c.id] != null ? CHIPS[v] + " · best " + best[c.id] + "/100" : "Not started"}</span></div>
         </button>`;}).join("")}</div>
-    </section>`;}).join("");
+    </section>`;}).join("") + crisisCard();
   try { $("#sname").value = store.get("dtp-name", ""); } catch(e){}
   show("home");
+}
+
+function crisisCard(){
+  const st = store.get("sore-shift-crisis", null), live = st && st.phase !== "done";
+  const sc = st && st.phase === "done" ? shiftScore("crisis", st) : null;
+  const faces = st ? unitCases("crisis", st).filter(c => arr(c.id, st) <= st.clock || st.seen[c.id]).map(c => `<span title="${c.patient.name}">${avatar(look(c), st.seen[c.id] ? (st.seen[c.id].tier === "hero" ? "happy" : st.seen[c.id].tier === "fail" ? "critical" : "ok") : "hurt")}</span>`).join("") : "";
+  return `<section class="unit crisis-card">
+    <div class="crisis-in">
+      <div>
+        <div class="moon" aria-hidden="true"></div>
+        <h2>Crisis ER: Full Moon Shift</h2>
+        <p>Twelve random patients from <b>every body system</b>. No briefing, so recognize the system from the triage card. <b>Surprise ambulances</b> roll in mid-shift, and the hospital has <b>one CT scanner</b>. If it's busy, you wait.</p>
+        ${st ? `<p class="crisis-status">${live ? `Shift <b>${st.code}</b> in progress: ${Object.keys(st.seen).length} seen · clock ${fmtClock(st.clock)}` : `Last shift <b>${st.code}</b>: ${sc.total}/100`}</p><div class="faces">${faces}</div>` : ""}
+      </div>
+      <div class="crisis-actions">
+        ${live ? `<button class="primary bigbtn" data-shift="crisis">Resume shift ${st.code}</button>` : st ? `<button class="primary" data-shift="crisis">View last report</button>` : ""}
+        <button class="${live ? "ghost" : "primary bigbtn"}" data-crisisnew>${live ? "Start a new random shift" : "Start a random shift"}</button>
+        <div class="codebox"><label for="crisisCode">Have a shift code from your teacher?</label>
+          <div class="row" style="justify-content:flex-start;gap:8px"><input id="crisisCode" maxlength="4" placeholder="RX7Q" autocomplete="off" spellcheck="false"><button class="ghost" data-crisiscode>Start this code</button></div>
+          <p class="note" id="crisisMsg" role="status"></p></div>
+      </div>
+    </div>
+  </section>`;
 }
 
 function start(id, inShift){
   const c = CASES.find(x => x.id === id);
   S = {c, ordered:[], review:null, stage:"investigate", q1:null, q2:null, cond:100, shift:!!inShift};
-  if (inShift){ S.wait = SH.clock; S.startCond = startCond(c.triage.level, S.wait); S.cond = S.startCond; }
+  if (inShift){ S.wait = waitOf(c); S.startCond = startCond(c.triage.level, S.wait); S.cond = S.startCond; }
   $("#gameBack").hidden = !!inShift;
   $("#debrief").hidden = true;
   $("#pname").textContent = c.patient.name;
@@ -2550,10 +2593,10 @@ function renderChart(mood){
   $("#ppic").innerHTML = avatar(look(S.c), mood || moodFor(pct));
   $("#cond").className = "cond " + cls;
   $("#cond").innerHTML = `<span>Patient condition</span><span><b>${word}</b> · ${pct}%</span><i><b style="width:${pct}%"></b></i>`
-    + (S.shift ? `<span style="grid-column:1/-1;opacity:.85">Waited ${S.wait} min${S.startCond < 100 ? ` (past target: arrived in worse condition)` : ""} · Shift clock ${fmtClock(SH.clock)}</span>` : "");
+    + (S.shift ? `<span style="grid-column:1/-1;opacity:.85">Waited ${S.wait} min${S.startCond < 100 ? ` (past target: arrived in worse condition)` : ""} · Shift clock ${fmtClock(SH.clock)}${SH.ct ? ` · CT scanner: ${ctStatus()}` : ""}</span>` : "");
   const items = S.ordered.map(id => S.c.actions.find(t => t.id === id));
   $("#findings").innerHTML = items.length
-    ? items.map(t => `<li class="${t.kind === "harm" ? "hurt" : ""}"><div class="lab">${t.label}${t.kind === "harm" ? " · patient harmed" : ""}</div>${t.result}</li>`).join("")
+    ? items.map(t => `<li class="${t.kind === "harm" ? "hurt" : ""}"><div class="lab">${t.label}${t.kind === "harm" ? " · patient harmed" : ""}</div>${S.ctWait && S.ctWait[t.id] ? `<div class="note" style="color:var(--red)">Waited ${S.ctWait[t.id]} min for the CT scanner.</div>` : ""}${t.result}</li>`).join("")
     : `<li class="empty">Nothing on the chart yet. Choose from the orders panel.</li>`;
 }
 
@@ -2571,7 +2614,7 @@ function renderPanel(){
     const r = S.review && c.actions.find(t => t.id === S.review);
     p.innerHTML = stepBar() + `
       <div><h3>Investigate</h3><p class="note" style="margin:0">Click anything to review it first. Ordering is what counts.</p>
-      ${r ? `<div class="review" id="review" tabindex="-1" style="margin-top:12px"><b>${r.label}</b><p>${r.about}</p>${r.risk ? `<p class="risk"><b>Risk:</b> ${r.risk}</p>` : ""}${S.shift ? `<p class="note"><b>Time:</b> about ${mins(r)} min of your shift</p>` : ""}
+      ${r ? `<div class="review" id="review" tabindex="-1" style="margin-top:12px"><b>${r.label}</b><p>${r.about}</p>${r.risk ? `<p class="risk"><b>Risk:</b> ${r.risk}</p>` : ""}${S.shift ? `<p class="note"><b>Time:</b> about ${mins(r)} min of your shift</p>` : ""}${S.shift && SH.ct && isCT(r) ? (ctBusyUntil(SH.clock) > SH.clock ? `<p class="risk"><b>CT scanner busy</b> until ${fmtClock(ctBusyUntil(SH.clock))}. Ordering now means waiting about ${ctBusyUntil(SH.clock) - SH.clock} min first, while everyone else waits too.</p>` : `<p class="note"><b>CT scanner:</b> free right now.</p>`) : ""}
         <div class="row" style="margin-top:10px"><button class="link" data-cancel>Cancel</button><button class="primary" data-order="${r.id}">Order this</button></div></div>` : ""}
       ${groups.map(g => `<p class="group">${g}</p><div class="tests">${c.actions.filter(t => t.group === g).map(t => {
         const done = S.ordered.includes(t.id);
@@ -2598,7 +2641,11 @@ function order(id){
   S.ordered.push(id); S.review = null;
   if (t.kind === "extra") S.cond -= 10;
   if (t.kind === "harm") S.cond -= 30;
-  if (S.shift){ SH.clock += mins(t); saveShift(); }
+  if (S.shift){
+    let m = mins(t);
+    if (SH.ct && isCT(t)){ const w = ctBusyUntil(SH.clock) - SH.clock; if (w > 0){ S.ctWait = S.ctWait || {}; S.ctWait[id] = w; m += w; } }
+    advance(m);
+  }
   renderChart(); renderPanel();
 }
 
@@ -2621,10 +2668,11 @@ function finish(){
   const best = store.get("dtp-best", {}), verd = store.get("dtp-verdict", {});
   if (best[c.id] == null || r.total > best[c.id]) { best[c.id] = r.total; verd[c.id] = r.tier; store.set("dtp-best", best); store.set("dtp-verdict", verd); }
   if (S.shift){
-    SH.clock += NOTES_MIN;
+    advance(NOTES_MIN);
     SH.seen[c.id] = {wait:S.wait, startCond:S.startCond, total:r.total, tier:r.tier, cond:Math.max(0, S.cond), at:SH.clock, harm:r.harm.length, extra:r.extra.length, q1:!!r.q1Pts, q2:!!r.q2Pts, orders:S.ordered.length};
     saveShift();
   }
+  { const done = new Set(store.get("sore-done-cases", [])); done.add(c.id); store.set("sore-done-cases", [...done]); }
   if (r.tier === "fail") strikes++;
   if (r.tier === "hero" && strikes > 0 && strikes < 3) strikes--;
   store.set("dtp-strikes", strikes); renderLicense();
@@ -2697,7 +2745,7 @@ function finish(){
     </div>
 `}
     ${S.shift
-      ? `<div class="row" style="margin-top:22px"><span class="note">Shift clock: ${fmtClock(SH.clock)} · ${Object.keys(SH.seen).length} of ${unitCases(SU).length} seen</span><button class="primary" data-board>${Object.keys(SH.seen).length >= CASES.filter(x => x.unit === SU).length ? "Finish shift & see report" : "Back to the waiting room"}</button></div>`
+      ? `<div class="row" style="margin-top:22px"><span class="note">Shift clock: ${fmtClock(SH.clock)} · ${Object.keys(SH.seen).length} of ${unitCases(SU).length} seen</span><button class="primary" data-board>${Object.keys(SH.seen).length >= unitCases(SU).length ? "Finish shift & see report" : "Back to the waiting room"}</button></div>`
       : `<div class="row" style="margin-top:22px"><button data-retry>Try this case again</button><button class="primary" data-home>Back to all assignments</button></div>`}`;
   $("#debrief").hidden = false;
   $("#panel").innerHTML = stepBar(true) + `<p style="margin:0"><b>Case submitted.</b> The attending's judgement and your debrief are below.</p>`;
@@ -2809,72 +2857,145 @@ async function savePDF(btn){
 /* ---------- ER shift: triage, board, report ---------- */
 let SH = null, SU = null;
 const saveShift = () => { if (SU) store.set("sore-shift-" + SU, SH); };
-const unitCases = uid => CASES.filter(c => c.unit === uid);
+const CRISIS = {id:"crisis", name:"Crisis ER", shiftName:"Full Moon Shift", mode:"shift"};
+const getUnit = id => id === "crisis" ? CRISIS : UNITS.find(x => x.id === id);
+const unitCases = (uid, st = SH) => uid === "crisis" ? ((st && st.cases) || []).map(id => CASES.find(c => c.id === id)).filter(Boolean) : CASES.filter(c => c.unit === uid);
+const arr = (id, st = SH) => (st && st.arrive && st.arrive[id]) || 0;
+const arrived = c => arr(c.id) <= SH.clock;
+const waitOf = c => Math.max(0, SH.clock - arr(c.id));
+const sysName = uid => { const u = UNITS.find(x => x.id === uid); const n = u ? u.name.replace(/^Unit \d+: The /, "").replace(/ system$/, "") : uid; return n.charAt(0).toUpperCase() + n.slice(1); };
+
+/* ---------- Crisis ER: codes, patient draw, ambulances, CT scanner ---------- */
+const CODE_ABC = "ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+const codeToSeed = code => [...code].reduce((s, ch) => s * 31 + CODE_ABC.indexOf(ch), 0);
+const randomCode = () => Array.from({length:4}, () => CODE_ABC[Math.floor(Math.random() * CODE_ABC.length)]).join("");
+const validCode = code => /^[A-Z0-9]{4}$/.test(code) && [...code].every(ch => CODE_ABC.includes(ch));
+function rng(seed){ let a = (seed * 2654435761) >>> 0; return () => { a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; }; }
+const QUOTA = {1:2, 2:3, 3:3, 4:4};
+function buildCrisis(code){
+  const R = rng(codeToSeed(code));
+  const mix = list => list.map(x => [R(), x]).sort((a, b) => a[0] - b[0]).map(x => x[1]);
+  const pool = CASES.filter(c => c.triage && (getUnit(c.unit) || {}).mode === "shift");
+  const shuffled = mix(pool), need = {...QUOTA}, pick = [];
+  for (const s of mix([...new Set(pool.map(c => c.unit))])){
+    const c = shuffled.find(c => c.unit === s && need[c.triage.level] > 0 && !pick.includes(c));
+    if (c){ pick.push(c); need[c.triage.level]--; }
+  }
+  for (const c of shuffled){ if (pick.length >= 12) break; if (!pick.includes(c) && need[c.triage.level] > 0){ pick.push(c); need[c.triage.level]--; } }
+  const arrive = {};
+  const amb1 = pick.filter(c => c.triage.level === 1)[1], amb2 = pick.filter(c => c.triage.level === 2)[2];
+  if (amb1) arrive[amb1.id] = 70 + Math.floor(R() * 110);
+  if (amb2) arrive[amb2.id] = 100 + Math.floor(R() * 120);
+  const ct = []; let t = 25 + Math.floor(R() * 35);
+  for (let i = 0; i < 4; i++){ const len = 20 + Math.floor(R() * 21); ct.push([t, t + len]); t += len + 45 + Math.floor(R() * 50); }
+  const walkins = mix(pick.filter(c => !arrive[c.id])).map(c => c.id), later = pick.filter(c => arrive[c.id]).sort((a, b) => arrive[a.id] - arrive[b.id]).map(c => c.id);
+  return {phase:"triage", tri:{}, clock:0, seen:{}, code, cases:[...walkins, ...later], arrive, ct, announced:{}};
+}
+function freshCode(){
+  const done = new Set(store.get("sore-done-cases", []));
+  let best = null, bestN = -1;
+  for (let i = 0; i < 40; i++){ const code = randomCode(), n = buildCrisis(code).cases.filter(id => !done.has(id)).length; if (n > bestN){ best = code; bestN = n; } if (n === 12) break; }
+  return best;
+}
+const isCT = a => /\bCT\b/.test(a.label);
+const ctBusyUntil = t => { for (const [s, e] of (SH && SH.ct) || []) if (t >= s && t < e) return e; return t; };
+const ctStatus = () => { const u = ctBusyUntil(SH.clock); return u > SH.clock ? `Busy until ${fmtClock(u)}` : "Free"; };
+const AMB_SVG = `<svg viewBox="0 0 48 32" width="48" height="32" aria-hidden="true"><rect x="2" y="8" width="30" height="16" rx="2" fill="#fff"/><path d="M32 12h7l6 7v5H32z" fill="#fff"/><rect x="34" y="14" width="5" height="4" fill="#9fc3ff"/><path d="M14 11v10M9 16h10" stroke="#c62828" stroke-width="3"/><circle cx="11" cy="26" r="4" fill="#0b162a" stroke="#fff" stroke-width="2"/><circle cx="37" cy="26" r="4" fill="#0b162a" stroke="#fff" stroke-width="2"/><rect x="12" y="4" width="8" height="4" rx="1" fill="#ff6a2b"/></svg>`;
+function toast(html){ const el = $("#toast"); el.innerHTML = `${AMB_SVG}<div>${html}</div><button data-toastclose>Got it</button>`; el.hidden = false; }
+function checkArrivals(){
+  if (!SH || !SH.arrive) return;
+  SH.announced = SH.announced || {};
+  for (const c of unitCases(SU)){ const t = arr(c.id); if (t > 0 && t <= SH.clock && !SH.announced[c.id]){ SH.announced[c.id] = true;
+    toast(`<b>Ambulance arriving, ${fmtClock(t)}</b><br>${c.patient.name}, ${c.patient.age}${c.patient.sex}: ${c.triage.complaint} <i>Triage them on the board as soon as you finish your current patient.</i>`); } }
+}
+const advance = m => { SH.clock += m; checkArrivals(); saveShift(); };
 
 function shiftScore(uid, st){
-  const cs = unitCases(uid);
+  const cs = unitCases(uid, st);
   let tri = 0;
   cs.forEach(c => { const a = st.tri[c.id], tl = c.triage.level; if (a === tl) tri += 1; else if (a && Math.abs(a - tl) === 1) tri += .5; });
   const seen = cs.filter(c => st.seen[c.id]);
   const onTime = seen.filter(c => st.seen[c.id].wait <= LEVELS[c.triage.level].target).length;
-  const triPts = Math.round(20 * tri / cs.length);
-  const outPts = Math.round(60 * seen.reduce((s, c) => s + st.seen[c.id].total * st.seen[c.id].startCond / 100, 0) / (100 * cs.length));
-  const timePts = Math.round(20 * onTime / cs.length);
+  const n = Math.max(1, cs.length);
+  const triPts = Math.round(20 * tri / n);
+  const outPts = Math.round(60 * seen.reduce((s, c) => s + st.seen[c.id].total * st.seen[c.id].startCond / 100, 0) / (100 * n));
+  const timePts = Math.round(20 * onTime / n);
   return {triPts, outPts, timePts, total: triPts + outPts + timePts, triExact: cs.filter(c => st.tri[c.id] === c.triage.level).length, onTime, seenN: seen.length, n: cs.length};
+}
+function systemBreakdown(st){
+  const rows = {};
+  for (const c of unitCases(SU, st)){
+    const r = rows[c.unit] = rows[c.unit] || {sys: sysName(c.unit), n:0, tri:0, dx:0, sum:0};
+    const s = st.seen[c.id]; r.n++; if (st.tri[c.id] === c.triage.level) r.tri++; if (s && s.q2) r.dx++; r.sum += s ? s.total * s.startCond / 100 : 0;
+  }
+  return Object.values(rows).map(r => { const avg = Math.round(r.sum / r.n), why = [];
+    if (r.tri < r.n / 2) why.push("triage"); if (r.dx < r.n) why.push("diagnosis"); if (avg < 80) why.push("outcomes");
+    return {...r, avg, why}; }).sort((a, b) => a.avg - b.avg);
 }
 
 function openShift(uid){
   SU = uid;
-  SH = store.get("sore-shift-" + uid, null) || {phase:"triage", tri:{}, clock:0, seen:{}};
+  SH = store.get("sore-shift-" + uid, null) || (uid === "crisis" ? buildCrisis(freshCode()) : {phase:"triage", tri:{}, clock:0, seen:{}});
   saveShift(); renderShift(); show("shift");
 }
+function openCrisis(code){ SU = "crisis"; SH = buildCrisis(code); saveShift(); renderShift(); show("shift"); }
 
 function renderShift(){
-  const u = UNITS.find(x => x.id === SU), cs = unitCases(SU);
-  const seenN = Object.keys(SH.seen).length, triN = Object.keys(SH.tri).length;
-  $("#shTitle").textContent = u.shiftName;
-  $("#shPhase").textContent = SH.phase === "triage" ? "Step 1: Triage every patient" : SH.phase === "treat" ? "Step 2: See your patients" : "Shift complete";
+  const u = getUnit(SU), cs = unitCases(SU), crisis = SU === "crisis";
+  const present = cs.filter(arrived), seenN = Object.keys(SH.seen).length;
+  const initial = cs.filter(c => arr(c.id) === 0), triN = initial.filter(c => SH.tri[c.id]).length;
+  $("#shTitle").textContent = u.shiftName + (crisis ? ` · code ${SH.code}` : "");
+  $("#shPhase").textContent = (crisis ? "Crisis ER · " : "") + (SH.phase === "triage" ? "Step 1: Triage every patient" : SH.phase === "treat" ? "Step 2: See your patients" : "Shift complete");
   $("#shClock").innerHTML = `${fmtClock(SH.clock)}<small>Shift clock · started 7:00 AM</small>`;
-  const late = cs.filter(c => !SH.seen[c.id] && SH.tri[c.id] && SH.clock > LEVELS[SH.tri[c.id]].target).length;
-  $("#shStats").innerHTML = `<div><b>${cs.length - seenN}</b>waiting</div><div><b>${seenN}</b>seen</div>` + (SH.phase === "treat" ? `<div><b style="color:${late ? "#ff7b72" : "#fff"}">${late}</b>past target</div>` : `<div><b>${triN}/${cs.length}</b>triaged</div>`);
+  const late = present.filter(c => !SH.seen[c.id] && SH.tri[c.id] && waitOf(c) > LEVELS[SH.tri[c.id]].target).length;
+  $("#shStats").innerHTML = `<div><b>${present.length - present.filter(c => SH.seen[c.id]).length}</b>waiting</div><div><b>${seenN}</b>seen</div>`
+    + (SH.phase === "treat" ? `<div><b style="color:${late ? "#ff7b72" : "#fff"}">${late}</b>past target</div>` : `<div><b>${triN}/${initial.length}</b>triaged</div>`)
+    + (crisis && SH.phase !== "done" ? `<div><b style="font-size:20px">${ctStatus()}</b>CT scanner</div>` : "");
   const legend = `<div class="legend">${[1,2,3,4].map(n => `<div>${lvBadge(n)}<p>See within ${LEVELS[n].target} min</p></div>`).join("")}</div>`;
+  const crisisNote = crisis ? ` <b>Crisis rules:</b> patients come from every body system, ambulances can arrive at any moment, and the hospital has <b>one CT scanner</b> shared with the whole building. If it's busy, you wait.` : "";
+  const triButtons = c => `<div class="lvbtns" role="group" aria-label="Triage level for ${c.patient.name}">${[1,2,3,4].map(n => `<button class="l${n} ${SH.tri[c.id] === n ? "on" : ""}" aria-pressed="${SH.tri[c.id] === n}" data-tri="${c.id}:${n}">${n} ${LEVELS[n].name}</button>`).join("")}</div>`;
+  const tcard = c => { const T = c.triage, a = SH.tri[c.id];
+    return `<article class="tcard ${a ? "l" + a : ""}">
+      <div class="thead"><div class="pic">${avatar(look(c), "hurt")}</div><div><h3>${c.patient.name}</h3><div class="note">${c.patient.age} years · ${c.patient.sex === "F" ? "Female" : "Male"} · ${T.arrival}</div></div></div>
+      <p class="quote">${T.complaint}</p>
+      <div class="tv"><b>Triage vitals:</b> ${T.vitals}</div>
+      <div style="font-size:15px"><b>You see:</b> ${T.sign}</div>
+      ${triButtons(c)}
+    </article>`; };
 
   if (SH.phase === "triage"){
     $("#shBody").innerHTML = `
-      <div class="callout"><b>The waiting room is full and you're the only doctor.</b> Read each triage card and assign a level. Each triage takes ${TRIAGE_MIN} minute. Patients who wait past their level's target get worse, so put the most dangerous patients first. The correct levels are revealed in your shift report.</div>
+      <div class="callout"><b>The waiting room is full and you're the only doctor.</b> Read each triage card and assign a level. Each triage takes ${TRIAGE_MIN} minute. Patients who wait past their level's target get worse, so put the most dangerous patients first. The correct levels are revealed in your shift report.${crisisNote}</div>
       ${legend}
-      <div class="tgrid">${cs.map(c => { const T = c.triage, a = SH.tri[c.id];
-        return `<article class="tcard ${a ? "l" + a : ""}">
-          <div class="thead"><div class="pic">${avatar(look(c), "hurt")}</div><div><h3>${c.patient.name}</h3><div class="note">${c.patient.age} years · ${c.patient.sex === "F" ? "Female" : "Male"} · ${T.arrival}</div></div></div>
-          <p class="quote">${T.complaint}</p>
-          <div class="tv"><b>Triage vitals:</b> ${T.vitals}</div>
-          <div style="font-size:15px"><b>You see:</b> ${T.sign}</div>
-          <div class="lvbtns" role="group" aria-label="Triage level for ${c.patient.name}">${[1,2,3,4].map(n => `<button class="l${n} ${a === n ? "on" : ""}" aria-pressed="${a === n}" data-tri="${c.id}:${n}">${n} ${LEVELS[n].name}</button>`).join("")}</div>
-        </article>`; }).join("")}</div>
-      <div class="sticky row"><span>${triN} of ${cs.length} triaged · clock ${fmtClock(SH.clock)}</span><button class="primary" data-endtriage ${triN < cs.length ? "disabled" : ""}>Finish triage & open the board →</button></div>`;
+      <div class="tgrid">${initial.map(tcard).join("")}</div>
+      <div class="sticky row"><span>${triN} of ${initial.length} triaged · clock ${fmtClock(SH.clock)}</span><button class="primary" data-endtriage ${triN < initial.length ? "disabled" : ""}>Finish triage & open the board →</button></div>`;
     return;
   }
 
   if (SH.phase === "treat"){
-    const order = [...cs].sort((x, y) => (SH.tri[x.id] - SH.tri[y.id]) || (cs.indexOf(x) - cs.indexOf(y)));
-    const unseen = order.filter(c => !SH.seen[c.id]);
+    const newbies = present.filter(c => !SH.tri[c.id]);
+    const order = present.filter(c => SH.tri[c.id]).sort((x, y) => (SH.tri[x.id] - SH.tri[y.id]) || (cs.indexOf(x) - cs.indexOf(y)));
+    const unseen = cs.filter(c => !SH.seen[c.id]), waitingNow = present.filter(c => !SH.seen[c.id]);
+    const pending = cs.filter(c => !arrived(c));
     $("#shBody").innerHTML = `
-      <div class="callout">Pick who to see next. The board is sorted by <b>your</b> triage levels. Every order you make moves the clock for everyone still waiting. Watch their faces: a patient who's sweating or worse is getting sicker.</div>
+      <div class="callout">Pick who to see next. The board is sorted by <b>your</b> triage levels. Every order you make moves the clock for everyone still waiting. Watch their faces: a patient who's sweating or worse is getting sicker.${crisis ? ` CT scanner: <b>${ctStatus()}</b>.` : ""}</div>
+      ${newbies.length ? `<h3 style="margin:18px 0 8px;color:var(--red)">New arrival${newbies.length > 1 ? "s" : ""}: triage now</h3><div class="tgrid" style="margin-bottom:18px">${newbies.map(tcard).join("")}</div>` : ""}
       ${legend}
       <div class="board">${order.map(c => {
-        const a = SH.tri[c.id], s = SH.seen[c.id];
+        const a = SH.tri[c.id], s = SH.seen[c.id], amb = arr(c.id) > 0 ? ` <span class="lv lv0">Ambulance ${fmtClock(arr(c.id))}</span>` : "";
         if (s) return `<div class="brow seen l${a}"><div class="pic">${avatar(look(c), s.tier === "hero" ? "happy" : s.tier === "fail" ? "critical" : "ok")}</div>
           <div><h3>${c.patient.name}</h3><div class="note">${c.triage.complaint}</div></div>
           <div class="wait">Seen at ${fmtClock(s.at - NOTES_MIN)} · waited ${s.wait} min</div>
           <div class="act"><span class="chip ${s.tier}">${CHIPS[s.tier]} · ${s.total}/100</span></div></div>`;
-        const tgt = LEVELS[a].target, w = SH.clock, cond = startCond(c.triage.level, w);
+        const tgt = LEVELS[a].target, w = waitOf(c), cond = startCond(c.triage.level, w);
         const cls = w > tgt ? "late" : w > tgt * .75 ? "close" : "";
         return `<div class="brow l${a}"><div class="pic">${avatar(look(c), moodFor(cond))}</div>
-          <div><h3>${c.patient.name} <span class="note" style="font:400 14px 'Source Sans 3'">${c.patient.age}${c.patient.sex}</span></h3><div class="note">${c.triage.complaint}</div><div style="margin-top:4px">${lvBadge(a)}</div></div>
+          <div><h3>${c.patient.name} <span class="note" style="font:400 14px 'Source Sans 3'">${c.patient.age}${c.patient.sex}</span></h3><div class="note">${c.triage.complaint}</div><div style="margin-top:4px">${lvBadge(a)}${amb}</div></div>
           <div class="wait ${cls}">${w > tgt ? `Over target by ${w - tgt} min` : `Waiting ${w} min · see within ${tgt}`}<i><b style="width:${Math.min(100, w / tgt * 100)}%"></b></i></div>
           <div class="act"><button class="primary" data-see="${c.id}">See patient</button></div></div>`;
       }).join("")}</div>
-      <div class="sticky row"><span>${unseen.length ? `${unseen.length} still waiting` : "Everyone has been seen."}</span>
+      ${!waitingNow.length && pending.length ? `<div class="callout" style="margin-top:16px"><b>The waiting room is empty… for now.</b> Something tells you it won't stay quiet. <button class="primary" data-ffwd style="margin-left:8px">Wait for the next arrival</button></div>` : ""}
+      <div class="sticky row"><span>${waitingNow.length ? `${waitingNow.length} waiting` : unseen.length ? "Nobody waiting right now." : "Everyone has been seen."}</span>
         <button class="${unseen.length ? "danger" : "primary"}" data-endshift>${unseen.length ? (SH.confirmEnd ? `Really end? ${unseen.length} unseen patient(s) score 0` : "End shift early") : "Finish shift & see report"}</button></div>`;
     return;
   }
@@ -2892,6 +3013,12 @@ function renderShiftReport(){
       <div class="score"><div><div class="big">${sc.total}</div><div class="note">out of 100</div></div>
         <div class="bars">${bar("Triage", sc.triPts, 20)}${bar("Outcomes", sc.outPts, 60)}${bar("On time", sc.timePts, 20)}</div></div>
       <p>You triaged <b>${sc.triExact} of ${sc.n}</b> patients exactly right, saw <b>${sc.seenN} of ${sc.n}</b>, and <b>${sc.onTime}</b> were seen within their target time. Shift ended at <b>${fmtClock(SH.clock)}</b>.</p>
+      ${SU === "crisis" ? (() => { const sb = systemBreakdown(SH), weak = sb.filter(r => r.why.length);
+        return `<h3 style="margin-top:20px">By body system</h3>
+      <table class="stack rtable"><thead><tr><th>System</th><th>Patients</th><th>Triaged right</th><th>Correct diagnosis</th><th>Average outcome</th></tr></thead><tbody>
+        ${sb.map(r => `<tr><td><b>${r.sys}</b></td><td>${r.n}</td><td>${r.tri} of ${r.n}</td><td>${r.dx} of ${r.n}</td><td>${r.avg}/100</td></tr>`).join("")}
+      </tbody></table>
+      <p>${weak.length ? `<b>Study next:</b> ${weak.map(r => `${r.sys} (${r.why.join(", ")})`).join("; ")}. Reread ${weak.length > 1 ? "those unit briefings" : "that unit briefing"} and replay the shift.` : "<b>Strong across every system.</b> Nice work."} <span class="note">Shift code ${SH.code}: anyone who enters this code gets the same patients.</span></p>`; })() : ""}
       <h3 style="margin-top:20px">Triage review</h3>
       <table class="stack rtable"><thead><tr><th>Patient</th><th>Your level</th><th>Correct level</th><th>Why</th></tr></thead><tbody>
         ${cs.map(c => `<tr><td><b>${c.patient.name}</b></td><td>${lvBadge(SH.tri[c.id])}</td><td>${lvBadge(c.triage.level)}${SH.tri[c.id] === c.triage.level ? " ✓" : ""}</td><td>${c.triage.why}</td></tr>`).join("")}
@@ -2899,7 +3026,7 @@ function renderShiftReport(){
       <h3 style="margin-top:20px">Patients</h3>
       <table class="stack rtable"><thead><tr><th>Patient</th><th>Waited</th><th>Target</th><th>Arrived at</th><th>Result</th></tr></thead><tbody>
         ${cs.map(c => { const s = SH.seen[c.id], tg = LEVELS[c.triage.level].target;
-          return `<tr><td><b>${c.patient.name}</b> · ${c.title}</td><td>${s ? s.wait + " min" : "Not seen"}</td><td>${tg} min</td><td>${s ? s.startCond + "%" : ""}</td><td>${s ? `<span class="chip ${s.tier}">${CHIPS[s.tier]} · ${s.total}/100</span>` : `<span class="chip fail">Not seen · 0</span>`}</td></tr>`; }).join("")}
+          return `<tr><td><b>${c.patient.name}</b> · ${c.title}${SU === "crisis" ? ` <span class="note">(${sysName(c.unit)}${arr(c.id) ? ", ambulance" : ""})</span>` : ""}</td><td>${s ? s.wait + " min" : "Not seen"}</td><td>${tg} min</td><td>${s ? s.startCond + "%" : ""}</td><td>${s ? `<span class="chip ${s.tier}">${CHIPS[s.tier]} · ${s.total}/100</span>` : `<span class="chip fail">Not seen · 0</span>`}</td></tr>`; }).join("")}
       </tbody></table>
       <div class="turnin">
         <h3 style="margin:0 0 4px">Turn in your shift</h3>
@@ -2914,11 +3041,12 @@ function renderShiftReport(){
 }
 
 function shiftText(){
-  const cs = unitCases(SU), sc = shiftScore(SU, SH), u = UNITS.find(x => x.id === SU);
-  return ["SORE! Second Opinion Required: Emergency", `Student: ${store.get("dtp-name", "") || "(no name entered)"}`, `${u.name}: ${u.shiftName}`,
+  const cs = unitCases(SU), sc = shiftScore(SU, SH), u = getUnit(SU);
+  return ["SORE! Second Opinion Required: Emergency", `Student: ${store.get("dtp-name", "") || "(no name entered)"}`, `${u.name}: ${u.shiftName}${SU === "crisis" ? ` (code ${SH.code})` : ""}`,
     `Shift score: ${sc.total}/100 (Triage ${sc.triPts}/20, Outcomes ${sc.outPts}/60, On time ${sc.timePts}/20)`,
     `Triaged exactly right: ${sc.triExact}/${sc.n} · Seen: ${sc.seenN}/${sc.n} · On time: ${sc.onTime} · Shift ended ${fmtClock(SH.clock)}`, "",
-    ...cs.map(c => { const s = SH.seen[c.id]; return `${c.patient.name}: triaged ${SH.tri[c.id] || "-"} (correct ${c.triage.level}); ${s ? `waited ${s.wait} min, ${CHIPS[s.tier]}, ${s.total}/100` : "not seen"}`; }),
+    ...(SU === "crisis" ? [...systemBreakdown(SH).map(r => `${r.sys}: ${r.n} patient(s), triaged right ${r.tri}, correct diagnosis ${r.dx}, average outcome ${r.avg}/100${r.why.length ? ` (study: ${r.why.join(", ")})` : ""}`), ""] : []),
+    ...cs.map(c => { const s = SH.seen[c.id]; return `${c.patient.name}${SU === "crisis" ? ` (${sysName(c.unit)})` : ""}: triaged ${SH.tri[c.id] || "-"} (correct ${c.triage.level}); ${s ? `waited ${s.wait} min, ${CHIPS[s.tier]}, ${s.total}/100` : "not seen"}`; }),
     "", `Completed: ${new Date().toLocaleString()}`].join("\n");
 }
 
@@ -2934,14 +3062,14 @@ async function saveBlob(blob, file){
 
 async function buildShiftPDF(){
   const J = window.jspdf && window.jspdf.jsPDF; if (!J) throw new Error("nolib");
-  const cs = unitCases(SU), sc = shiftScore(SU, SH), u = UNITS.find(x => x.id === SU), name = store.get("dtp-name", "");
+  const cs = unitCases(SU), sc = shiftScore(SU, SH), u = getUnit(SU), name = store.get("dtp-name", "");
   const doc = new J({unit:"pt", format:"letter"}), W = 612, M = 44, TW = W - 2*M;
   const T = (s, x, y, o) => doc.text(pdfSafe(s), x, y, o);
   doc.setFillColor(11,22,42); doc.rect(0,0,W,74,"F"); doc.setFillColor(200,56,3); doc.rect(0,74,W,6,"F");
   doc.setFont("helvetica","bold"); doc.setFontSize(30); doc.setTextColor(255,255,255); T("SORE!", M, 48);
   doc.setFont("helvetica","normal"); doc.setFontSize(11); T("Second Opinion Required: Emergency", M + 104, 46); T("Shift report", W - M, 46, {align:"right"});
   let y = 110;
-  [["Student", name || "(no name entered)"], ["Unit", `${u.name}`], ["Shift", `${u.shiftName} · ended ${fmtClock(SH.clock)}`], ["Completed", new Date().toLocaleString()]].forEach(([k, v]) => {
+  [["Student", name || "(no name entered)"], ["Unit", `${u.name}`], ["Shift", `${u.shiftName}${SU === "crisis" ? ` · code ${SH.code}` : ""} · ended ${fmtClock(SH.clock)}`], ["Completed", new Date().toLocaleString()]].forEach(([k, v]) => {
     doc.setFont("helvetica","bold"); doc.setFontSize(11); doc.setTextColor(86,97,118); T(k, M, y); doc.setFont("helvetica","normal"); doc.setTextColor(11,22,42); T(v, M + 80, y); y += 17; });
   y += 8;
   doc.setFont("helvetica","bold"); doc.setFontSize(40); doc.setTextColor(200,56,3); T(String(sc.total), M, y + 30);
@@ -2962,13 +3090,24 @@ async function buildShiftPDF(){
     if (y > 735){ doc.addPage(); y = 60; }
     const s = SH.seen[c.id], a = SH.tri[c.id];
     doc.setTextColor(11,22,42); T(c.patient.name, cols[0], y);
+    if (SU === "crisis"){ doc.setFontSize(8); doc.setTextColor(86,97,118); T(sysName(c.unit) + (arr(c.id) ? " · ambulance" : ""), cols[0], y + 9); doc.setFontSize(10); doc.setTextColor(11,22,42); }
     if (a){ doc.setFillColor(...LVC[a]); doc.circle(cols[1] + 4, y - 3.5, 4, "F"); T(String(a), cols[1] + 12, y); }
     doc.setFillColor(...LVC[c.triage.level]); doc.circle(cols[2] + 4, y - 3.5, 4, "F"); T(String(c.triage.level) + (a === c.triage.level ? "  ok" : ""), cols[2] + 12, y);
     T(s ? `${s.wait} min` : "-", cols[3], y); T(s ? `${s.startCond}%` : "-", cols[4], y);
     if (!s) doc.setTextColor(179,38,30); else if (s.tier === "fail") doc.setTextColor(179,38,30); else if (s.tier === "hero") doc.setTextColor(29,107,69); else doc.setTextColor(138,83,0);
     T(s ? `${CHIPS[s.tier]} · ${s.total}/100` : "Not seen · 0", cols[5], y);
-    y += 17;
+    y += SU === "crisis" ? 22 : 17;
   });
+  if (SU === "crisis"){
+    if (y > 640){ doc.addPage(); y = 60; }
+    y += 8; doc.setFont("helvetica","bold"); doc.setFontSize(13); doc.setTextColor(200,56,3); T("By body system", M, y); y += 8; doc.setDrawColor(217,223,232); doc.line(M, y, W - M, y); y += 16;
+    doc.setFontSize(10); doc.setTextColor(86,97,118); ["System", "Patients", "Triaged right", "Correct diagnosis", "Avg outcome"].forEach((h, i) => T(h, [M, M + 140, M + 210, M + 300, M + 410][i], y)); y += 16;
+    doc.setFont("helvetica","normal"); doc.setTextColor(11,22,42);
+    const sb = systemBreakdown(SH);
+    sb.forEach(r => { [r.sys, String(r.n), `${r.tri} of ${r.n}`, `${r.dx} of ${r.n}`, `${r.avg}/100`].forEach((v, i) => T(v, [M, M + 140, M + 210, M + 300, M + 410][i], y)); y += 16; });
+    const weak = sb.filter(r => r.why.length); y += 4; doc.setFontSize(10);
+    doc.splitTextToSize(pdfSafe(weak.length ? `Study next: ${weak.map(r => `${r.sys} (${r.why.join(", ")})`).join("; ")}.` : "Strong across every system."), TW).forEach(l => { T(l, M, y); y += 13; }); y += 2;
+  }
   y += 10; doc.setTextColor(86,97,118); doc.setFontSize(9);
   doc.splitTextToSize(`Levels: ${[1,2,3,4].map(n => `${n} ${LEVELS[n].name} (see within ${LEVELS[n].target} min)`).join(", ")}. Arrived at = patient condition when seen; patients who wait past target get worse, and their outcome points shrink to match. Game times are simplified.`, TW).forEach(l => { T(l, M, y); y += 12; });
   const pages = doc.getNumberOfPages();
@@ -2981,7 +3120,7 @@ async function saveShiftPDF(btn){
   if (!nm){ msg.textContent = "Type your name first so your teacher knows whose report it is."; $("#shName").focus(); return; }
   store.set("dtp-name", nm); btn.disabled = true; msg.textContent = "Building your shift report…";
   let blob; try { blob = await buildShiftPDF(); } catch(e){ btn.disabled = false; msg.textContent = "The PDF tool didn't load (check your internet). Use Copy my results instead."; return; }
-  const file = `SORE_${(UNITS.find(x => x.id === SU).shiftName).replace(/[^A-Za-z0-9]+/g,"-")}_${nm.replace(/[^A-Za-z0-9]+/g,"-").replace(/^-|-$/g,"")}.pdf`;
+  const file = `SORE_${(getUnit(SU).shiftName).replace(/[^A-Za-z0-9]+/g,"-")}_${nm.replace(/[^A-Za-z0-9]+/g,"-").replace(/^-|-$/g,"")}.pdf`;
   const res = await saveBlob(blob, file); btn.disabled = false;
   msg.textContent = res === "ok" ? `Saved as ${file}. Now upload it to your Google Classroom assignment.` : res === "declined" ? "Download cancelled. Press the button again when you're ready." : "Download isn't available here. Use Copy my results and paste into Classroom.";
 }
@@ -2989,7 +3128,7 @@ async function saveShiftPDF(btn){
 /* ---------- Events ---------- */
 document.addEventListener("click", async e => {
   const el = e.target.closest("button"); if (!el) return;
-  if (el.hasAttribute("data-home")) return renderHome();
+  if (el.hasAttribute("data-home")){ $("#toast").hidden = true; return renderHome(); }
   if (el.hasAttribute("data-landing")) return show("landing");
   if (el.hasAttribute("data-how")){ show("landing"); const hw = $("#howto"); if (hw) hw.scrollIntoView(); return; }
   if (el.id === "nextBtn" && !el.dataset.shift) return start(el.dataset.target);
@@ -3002,7 +3141,21 @@ document.addEventListener("click", async e => {
     store.set("sore-shift-" + el.dataset.newshift, null); try { localStorage.removeItem("sore-shift-" + el.dataset.newshift); } catch(e){}
     return openShift(el.dataset.newshift);
   }
-  if (el.dataset.tri){ const [pid, lv] = el.dataset.tri.split(":"); if (!SH.tri[pid]) SH.clock += TRIAGE_MIN; SH.tri[pid] = +lv; saveShift(); const y = window.scrollY; renderShift(); window.scrollTo({top:y}); return; }
+  if (el.dataset.tri){ const [pid, lv] = el.dataset.tri.split(":"); const first = !SH.tri[pid]; SH.tri[pid] = +lv; if (first) advance(TRIAGE_MIN); else saveShift(); const y = window.scrollY; renderShift(); window.scrollTo({top:y}); return; }
+  if (el.hasAttribute("data-toastclose")){ $("#toast").hidden = true; return; }
+  if (el.hasAttribute("data-ffwd")){ const next = Math.min(...unitCases(SU).filter(c => !arrived(c)).map(c => arr(c.id))); if (isFinite(next) && next > SH.clock) advance(next - SH.clock); renderShift(); return; }
+  if (el.hasAttribute("data-crisisnew")){
+    const st = store.get("sore-shift-crisis", null);
+    if (st && st.phase !== "done" && el.dataset.armed !== "1"){ el.dataset.armed = "1"; el.textContent = "Click again: this erases your shift in progress"; return; }
+    return openCrisis(freshCode());
+  }
+  if (el.hasAttribute("data-crisiscode")){
+    const code = ($("#crisisCode").value || "").trim().toUpperCase(), msg = $("#crisisMsg");
+    if (!validCode(code)){ msg.textContent = "Shift codes are 4 letters or numbers, like RX7Q."; return; }
+    const st = store.get("sore-shift-crisis", null);
+    if (st && st.phase !== "done" && el.dataset.armed !== "1"){ el.dataset.armed = "1"; el.textContent = "Click again: this erases your shift in progress"; return; }
+    return openCrisis(code);
+  }
   if (el.hasAttribute("data-endtriage")){ SH.phase = "treat"; saveShift(); renderShift(); window.scrollTo({top:0}); return; }
   if (el.dataset.see) return start(el.dataset.see, true);
   if (el.hasAttribute("data-board")){ if (Object.keys(SH.seen).length >= unitCases(SU).length) SH.phase = "done"; saveShift(); renderShift(); show("shift"); return; }
