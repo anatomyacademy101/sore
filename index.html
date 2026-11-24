@@ -53,12 +53,11 @@ button:disabled{cursor:default;opacity:.5}
 .namebox{display:flex;flex-wrap:wrap;gap:10px;align-items:end;margin-bottom:16px}
 .namebox label{display:grid;gap:4px;font-size:14px;font-weight:600;flex:1;min-width:200px;max-width:320px}
 .namebox input{min-height:44px;font-size:16px;border-radius:8px;border:1px solid #3a4f78;background:#0f1f3d;color:#fff;padding:8px 12px}
-.room{position:relative;border-radius:16px;overflow:hidden;background:linear-gradient(180deg,#dfe6f1 0%,#cfd9e8 72%,#0b162a 72%,#0b162a 100%);padding:54px 16px 0;min-height:300px}
+.room{position:relative;border-radius:16px;overflow:hidden;background:linear-gradient(180deg,#dfe6f1 0%,#cfd9e8 72%,#0b162a 72%,#0b162a 100%);padding:54px 16px 0;min-height:250px}
 .room .sign{position:absolute;top:14px;left:18px;background:#c83803;color:#fff;font:700 15px/1 "Barlow Condensed",sans-serif;padding:7px 12px;border-radius:6px;letter-spacing:.5px}
 .room .clock{position:absolute;top:12px;right:18px;width:34px;height:34px}
 .room .row-p{position:relative;z-index:1;display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px;align-items:end}
 .room .seat svg{display:block;width:100%;height:auto}
-.room .seat b{display:block;text-align:center;font-size:12px;color:#0b162a;margin-top:-2px}
 .bench{position:relative;height:30px;margin:0 -4px;background:#c83803;border-radius:8px 8px 3px 3px;box-shadow:inset 0 -6px 0 #9e2c02}
 .legs{display:flex;justify-content:space-around;height:26px}
 .legs i{width:8px;background:#e8edf5;opacity:.5}
@@ -428,7 +427,7 @@ const LIB = {
 };
 const A = (id, kind, result, o = {}) => ({id, kind, result, ...LIB[id], ...o});
 
-/* Vital-sign answer cards, reused across Unit 1 */
+/* Vital-sign answer cards, reused across the Medical School Refresher */
 const VITAL_OPTS = [
   {text:"Temperature", info:"Normal adult: 36.1–37.2 °C (97–99 °F). A fever starts at 38.0 °C (100.4 °F). Fever means the body is fighting something, often an infection."},
   {text:"Heart rate", info:"Normal adult resting pulse: 60–100 beats per minute. Above 100 is tachycardia; below 60 is bradycardia (fit athletes can normally sit in the 50s)."},
@@ -439,9 +438,9 @@ const VITAL_OPTS = [
 
 /* ---------- Units ---------- */
 const UNITS = [
-{ id:"u1", name:"Unit 1: Patient history & vital signs",
+{ id:"u1", name:"Medical School Refresher",
   blurb:"How doctors and nurses gather a history, how each vital sign is measured, and what the normal values are.",
-  brief:`<h2>Unit 1 briefing: history & vital signs</h2>
+  brief:`<h2>Medical School Refresher briefing: history & vital signs</h2>
   <p>Most diagnoses start with two things that need no machine: <b>talking to the patient</b> and <b>measuring the vital signs</b>.</p>
   <h3>Taking a patient history</h3>
   <ol>
@@ -469,9 +468,9 @@ const UNITS = [
   <h3>What to look for in this unit</h3>
   <p>In each case, one vital sign is the most important clue. Take a full set of vitals, compare each to the normal range, and use the history to explain <i>why</i> it's abnormal.</p>`
 },
-{ id:"u2", name:"Unit 2: The skeletal system", mode:"shift", shiftName:"Skeletal ER shift",
+{ id:"u2", name:"Unit 1: The skeletal system", mode:"shift", shiftName:"Skeletal ER shift",
   blurb:"A full ER shift: 12 patients with bone and joint injuries arrive at once. Triage them, then see them before they get worse.",
-  brief:`<h2>Unit 2 briefing: the skeletal system</h2>
+  brief:`<h2>Unit 1 briefing: the skeletal system</h2>
   <p>The adult skeleton has <b>206 bones</b>. They support the body, protect organs, work with muscles to move us, make blood cells in the red marrow, and store calcium.</p>
   <h3>Two divisions</h3>
   <ul>
@@ -502,9 +501,9 @@ const UNITS = [
   <h3>Bone health</h3>
   <p>Bone constantly breaks down and rebuilds. In <b>osteoporosis</b>, bone loses density and breaks easily. This is common in older adults, especially at the hip, wrist and spine.</p>`
 },
-{ id:"skin", name:"Unit 3: The integumentary system", mode:"shift", shiftName:"Integumentary ER shift",
+{ id:"skin", name:"Unit 2: The integumentary system", mode:"shift", shiftName:"Integumentary ER shift",
   blurb:"A full ER shift: 12 patients with burns, rashes, wounds and skin infections. Triage them, then see them before they get worse.",
-  brief:`<h2>Unit 3 briefing: the integumentary system</h2>
+  brief:`<h2>Unit 2 briefing: the integumentary system</h2>
   <p>The integumentary system is the <b>skin</b> plus its <b>hair, nails and glands</b>. Skin is the body's largest organ, covering about 2 square meters in an adult.</p>
   <h3>What skin does</h3>
   <ul>
@@ -566,7 +565,7 @@ const UNITS = [
 /* ---------- Cases ---------- */
 const CASES = [
 /* ===== UNIT 1 ===== */
-{ id:"dizzy-race", unit:"u1", title:"Dizzy after the race", level:"Case 1.1",
+{ id:"dizzy-race", unit:"u1", title:"Dizzy after the race", level:"Refresher 1",
   patient:{name:"Maya T.", age:29, sex:"F"},
   story:"Maya just finished a half marathon on a hot, humid morning. Twenty minutes later she felt dizzy and lightheaded, especially when she stood up. She's sitting in the medical tent, pale and sweaty.",
   actions:[
@@ -591,7 +590,7 @@ const CASES = [
     clue:"A fast, weak pulse and dizziness that's worse on standing, after a long race in the heat with no water.",
     mistake:"Not taking a full set of vitals. Heart rate was the only abnormal number. A student who checked temperature and stopped would have missed it."}
 },
-{ id:"fever-cough", unit:"u1", title:"Hot, then freezing", level:"Case 1.2",
+{ id:"fever-cough", unit:"u1", title:"Hot, then freezing", level:"Refresher 2",
   patient:{name:"Walter B.", age:67, sex:"M"},
   story:"Walter's daughter brought him in. He has had a cough for three days, and today he seems more tired and short of breath. He says he feels “hot, then freezing.”",
   actions:[
@@ -616,7 +615,7 @@ const CASES = [
     clue:"Fever, a cough bringing up mucus, and low oxygen. The 91% reading turns “a bad cold” into “needs treatment today.”",
     mistake:"Treating the fever as the main problem. Fever medicine would make Walter feel better while his oxygen kept dropping."}
 },
-{ id:"headache-bp", unit:"u1", title:"The pounding headache", level:"Case 1.3",
+{ id:"headache-bp", unit:"u1", title:"The pounding headache", level:"Refresher 3",
   patient:{name:"Grace A.", age:52, sex:"F"},
   story:"Grace has had a pounding headache at the back of her head since this morning. Her vision is a little blurry and she feels “just not right.” She came to urgent care on her lunch break.",
   actions:[
@@ -642,7 +641,7 @@ const CASES = [
     mistake:"Not asking about medications, or trusting one reading. A rechecked reading plus a good medication history solves this case."}
 },
 /* ===== UNIT 2 ===== */
-{ id:"wrist", unit:"u2", title:"Skateboard fall", level:"Patient 2.1",
+{ id:"wrist", unit:"u2", title:"Skateboard fall", level:"Patient 1.1",
   triage:{level:3, arrival:"Walked in with a friend", complaint:"“I fell off my skateboard. My wrist is wrecked.”", vitals:"Pulse 92 · BP 124/78 · O₂ 99% · Pain 8/10", sign:"Holding a swollen, bent-looking wrist against her chest.", why:"A painful deformity, but circulation to the hand looks fine. Needs care soon, but it isn't life- or limb-threatening right now."},
   patient:{name:"Ava L.", age:24, sex:"F"},
   story:"Ava fell off her skateboard and landed on her outstretched right hand. Her wrist is swollen, and she's holding it against her chest. She says it hurts to move her fingers.",
@@ -670,7 +669,7 @@ const CASES = [
     clue:"A fall onto an outstretched hand, pain just above the wrist on the thumb side, and a visible deformity.",
     mistake:"Moving the injured joint to “test” it. A suspected fracture is splinted in the position it's found, then X-rayed."}
 },
-{ id:"hip", unit:"u2", title:"Slip in the kitchen", level:"Patient 2.2",
+{ id:"hip", unit:"u2", title:"Slip in the kitchen", level:"Patient 1.2",
   triage:{level:2, arrival:"Ambulance", complaint:"“I fell in my kitchen and I can't get up.”", vitals:"Pulse 96, irregular · BP 146/88 · O₂ 96% · Pain 9/10", sign:"81 years old, on a stretcher. Her left leg looks shorter. Takes a blood thinner.", why:"An older adult in severe pain with a likely hip fracture, on a blood thinner. High risk of complications, so she needs to be seen quickly."},
   patient:{name:"Eleanor P.", age:81, sex:"F"},
   story:"Eleanor slipped on her kitchen floor and landed on her left side. She couldn't get up, so her neighbor called an ambulance. She's lying on the stretcher in pain.",
@@ -698,7 +697,7 @@ const CASES = [
     clue:"An older adult with osteoporosis falls onto her side, can't bear weight, and has a shortened, outward-turned leg.",
     mistake:"Asking her to stand “to see if she can walk.” Never test weight-bearing on a suspected hip fracture."}
 },
-{ id:"shin", unit:"u2", title:"The runner's shin", level:"Patient 2.3",
+{ id:"shin", unit:"u2", title:"The runner's shin", level:"Patient 1.3",
   triage:{level:4, arrival:"Walked in after school", complaint:"“My shin has hurt for three weeks when I run.”", vitals:"Pulse 58 · BP 118/70 · O₂ 99% · Pain 3/10", sign:"Walking normally, carrying his backpack.", why:"A weeks-long problem with normal vitals and normal walking. Important, but he can safely wait."},
   patient:{name:"Marcus D.", age:17, sex:"M"},
   story:"Marcus runs cross-country and doubled his weekly miles to get ready for the state meet. For three weeks his left shin has hurt during runs. Now it aches even when he's walking to class.",
@@ -726,7 +725,7 @@ const CASES = [
     clue:"Pain at one fingertip-sized spot (not a long sore stretch), getting worse over weeks, after a sudden jump in mileage. A normal X-ray doesn't rule it out.",
     mistake:"Calling it shin splints. Shin splints hurt along a long stretch of the bone. A stress fracture hurts at one point."}
 },
-{ id:"open-tib", unit:"u2", title:"Motorcycle crash", level:"Patient 2.4",
+{ id:"open-tib", unit:"u2", title:"Motorcycle crash", level:"Patient 1.4",
   patient:{name:"Derek S.", age:34, sex:"M"},
   triage:{level:1, arrival:"Ambulance, from a motorcycle crash", complaint:"“My leg! My leg!”", vitals:"Pulse 118 · BP 104/68 · O₂ 98% · Pain 10/10", sign:"Bone visible through a bleeding wound on his right shin.", why:"An open fracture with active bleeding and signs of blood loss (fast pulse, lowish blood pressure). Life- and limb-threatening: immediate."},
   story:"Derek was thrown from his motorcycle when a car pulled out in front of him. Paramedics wrapped his right lower leg, but blood is soaking through the bandage. He's pale, sweaty and in severe pain.",
@@ -754,7 +753,7 @@ const CASES = [
     clue:"Bone visible in the wound after a high-energy crash. Open fractures need bleeding control, a sterile cover, antibiotics and a tetanus check, then surgery.",
     mistake:"Pushing the bone back in. Cover it as it lies. Surgeons clean it in the operating room."}
 },
-{ id:"kid-elbow", unit:"u2", title:"Monkey bars", level:"Patient 2.5",
+{ id:"kid-elbow", unit:"u2", title:"Monkey bars", level:"Patient 1.5",
   patient:{name:"Sofia G.", age:7, sex:"F"},
   triage:{level:2, arrival:"Carried in by her dad", complaint:"“She fell off the monkey bars and her elbow looks wrong.”", vitals:"Pulse 120 · Breathing 24 · O₂ 99% · Pain 8/10 (faces scale)", sign:"Swollen, oddly bent elbow. She says her fingers feel tingly.", why:"A child with a likely elbow fracture and tingling fingers: nerves or blood vessels may be pinched. The limb is at risk, so she should be seen quickly."},
   story:"Sofia fell from the top of the monkey bars at recess and landed on her outstretched right hand. Her dad carried her in. She's holding her right arm still and crying, and won't let anyone touch it.",
@@ -781,7 +780,7 @@ const CASES = [
     clue:"A young child falls from a height onto a straight arm, then has a swollen, deformed elbow and tingling fingers.",
     mistake:"Straightening the arm to look at it. Splint it in the position it's found and keep checking the pulse."}
 },
-{ id:"skull", unit:"u2", title:"Line drive", level:"Patient 2.6",
+{ id:"skull", unit:"u2", title:"Line drive", level:"Patient 1.6",
   patient:{name:"Tyler W.", age:16, sex:"M"},
   triage:{level:1, arrival:"His coach drove him from a baseball game", complaint:"“My head is killing me and I keep throwing up.”", vitals:"Pulse 58 · BP 158/90 · O₂ 98% · Drowsy", sign:"A swollen bump above his left ear. He was knocked out for a few seconds.", why:"A head injury with loss of consciousness, then a worsening headache, vomiting and drowsiness. There may be bleeding inside the skull: immediate."},
   story:"Tyler was hit on the left side of the head by a line drive during a baseball game. Teammates say he was out cold for a few seconds, then seemed fine. An hour later, his headache is getting worse, he's vomited twice, and he keeps closing his eyes.",
@@ -808,7 +807,7 @@ const CASES = [
     clue:"A blow to the side of the head and a brief knockout, then a worsening headache, vomiting, drowsiness and one enlarged pupil.",
     mistake:"Calling it “just a concussion” and letting him wait. Worsening symptoms after a head injury mean an immediate CT scan."}
 },
-{ id:"clavicle", unit:"u2", title:"Over the handlebars", level:"Patient 2.7",
+{ id:"clavicle", unit:"u2", title:"Over the handlebars", level:"Patient 1.7",
   patient:{name:"Nina C.", age:27, sex:"F"},
   triage:{level:4, arrival:"Walked in", complaint:"“I crashed my bike and landed on my shoulder.”", vitals:"Pulse 88 · BP 120/76 · O₂ 99% · Pain 6/10", sign:"Holding her right arm close to her body. A bump on her collarbone.", why:"Painful but stable: breathing comfortably, good circulation to the arm, skin intact. She can wait."},
   story:"Nina went over her handlebars on a bike trail and landed on her right shoulder. She rode the rest of the way home one-handed, then came in. She's holding her right arm against her body with her left hand.",
@@ -835,7 +834,7 @@ const CASES = [
     clue:"A fall straight onto the shoulder, with pain and a bump in the middle of the collarbone.",
     mistake:"Over-testing. One X-ray confirms it, and most heal in a sling. That's why she could safely wait."}
 },
-{ id:"ankle", unit:"u2", title:"Pickup game", level:"Patient 2.8",
+{ id:"ankle", unit:"u2", title:"Pickup game", level:"Patient 1.8",
   patient:{name:"Kai H.", age:20, sex:"M"},
   triage:{level:4, arrival:"Limped in from a pickup basketball game", complaint:"“I rolled my ankle.”", vitals:"Pulse 76 · BP 122/74 · O₂ 99% · Pain 4/10", sign:"Walking with a limp. The outer ankle is swollen.", why:"He can walk, his vitals are normal and the pain is mild. Lowest priority."},
   story:"Kai came down on another player's foot during a pickup basketball game, and his left ankle rolled inward. He limped off the court, and his friends talked him into getting it checked.",
@@ -862,7 +861,7 @@ const CASES = [
     clue:"He can walk four steps, and none of the bones are tender. Under the Ottawa ankle rules, he doesn't need an X-ray.",
     mistake:"X-raying every ankle injury. The Ottawa rules exist so doctors can safely skip X-rays that won't change treatment."}
 },
-{ id:"vertebra", unit:"u2", title:"The heavy bag", level:"Patient 2.9",
+{ id:"vertebra", unit:"u2", title:"The heavy bag", level:"Patient 1.9",
   patient:{name:"Rosa M.", age:74, sex:"F"},
   triage:{level:3, arrival:"Driven in by her son", complaint:"“My back cracked when I lifted a heavy bag.”", vitals:"Pulse 88 · BP 140/84 · O₂ 97% · Pain 7/10", sign:"Moving very stiffly. Her legs work normally.", why:"Significant pain and a possible fracture in an older adult, but her legs work normally and her vitals are stable. Urgent, not immediate."},
   story:"Rosa was lifting a bag of potting soil out of her car trunk when she felt a sharp “crack” in her mid-back. The pain is worst when she sits up or stands, and she's been lying flat on the couch all morning.",
@@ -889,7 +888,7 @@ const CASES = [
     clue:"An older woman on steroids, sudden back pain after lifting, and tenderness right over one vertebra.",
     mistake:"Calling it a pulled muscle. Pain right over the bone in someone with weak bones means an X-ray."}
 },
-{ id:"ribs", unit:"u2", title:"Off the ladder", level:"Patient 2.10",
+{ id:"ribs", unit:"u2", title:"Off the ladder", level:"Patient 1.10",
   patient:{name:"Frank O.", age:49, sex:"M"},
   triage:{level:3, arrival:"Walked in, holding his side", complaint:"“I fell off a ladder. It hurts to breathe.”", vitals:"Pulse 96 · Breathing 20 · O₂ 96% · Pain 7/10", sign:"Taking short, shallow breaths. Speaking in full sentences.", why:"Possible rib fractures. His oxygen is fine and he isn't struggling to breathe, so he's urgent. If his oxygen were dropping, he'd move up."},
   story:"Frank was cleaning his gutters when the ladder slipped. He fell about six feet and hit the deck railing with his right side. Every breath hurts, and coughing is worse.",
@@ -916,7 +915,7 @@ const CASES = [
     clue:"A fall onto the side, pain with breathing, pinpoint tenderness on the ribs, and normal breath sounds on both sides.",
     mistake:"Wrapping the chest. People with broken ribs need to breathe deeply, with pain control, to keep their lungs open."}
 },
-{ id:"shoulder", unit:"u2", title:"The tackle", level:"Patient 2.11",
+{ id:"shoulder", unit:"u2", title:"The tackle", level:"Patient 1.11",
   patient:{name:"Diego R.", age:19, sex:"M"},
   triage:{level:2, arrival:"Brought in by his coach", complaint:"“My shoulder popped out!”", vitals:"Pulse 104 · BP 132/80 · O₂ 99% · Pain 9/10", sign:"Holding his arm away from his body. The shoulder looks squared off.", why:"Severe pain and a dislocated joint. The sooner it goes back in, the easier it is and the lower the risk to nerves and blood vessels."},
   story:"Diego reached out to make a tackle at football practice, and his right arm was yanked backward. He felt it “pop out.” He's sitting very still, holding his right forearm with his left hand.",
@@ -943,7 +942,7 @@ const CASES = [
     clue:"An arm forced backward, a squared-off shoulder, and a patient holding the arm away from his body.",
     mistake:"Putting it back before checking the nerves and getting an X-ray. Check, image, then put it back."}
 },
-{ id:"scaphoid", unit:"u2", title:"On the ice", level:"Patient 2.12",
+{ id:"scaphoid", unit:"u2", title:"On the ice", level:"Patient 1.12",
   patient:{name:"Lena V.", age:31, sex:"F"},
   triage:{level:4, arrival:"Walked in", complaint:"“I fell skating. My wrist hurts near my thumb.”", vitals:"Pulse 78 · BP 116/72 · O₂ 99% · Pain 4/10", sign:"Mild swelling at the base of her thumb. No deformity.", why:"Mild pain, no deformity, normal vitals. She can wait, but she shouldn't go home without a careful check."},
   story:"Lena slipped at the ice rink yesterday and caught herself with her right hand. It hurt, but she figured it was a sprain. Today, gripping her coffee mug and turning a key both hurt at the base of her thumb.",
@@ -971,7 +970,7 @@ const CASES = [
     mistake:"Trusting a normal first X-ray. Snuffbox tenderness means a thumb splint and more imaging."}
 },
 /* ===== UNIT 3: INTEGUMENTARY ===== */
-{ id:"hives", unit:"skin", title:"Itchy welts", level:"Patient 3.1",
+{ id:"hives", unit:"skin", title:"Itchy welts", level:"Patient 2.1",
   patient:{name:"Chloe B.", age:20, sex:"F"},
   triage:{level:4, arrival:"Walked in", complaint:"“I'm covered in itchy bumps, and they keep moving around.”", vitals:"Pulse 84 · BP 118/74 · O₂ 99% · Pain 2/10, itch 8/10", sign:"Raised red welts on her arms and neck. Talking in full sentences. Lips and eyes look normal.", why:"Hives with normal vitals, normal breathing and no swelling of the lips or tongue. Uncomfortable, but not dangerous right now."},
   story:"Chloe woke up with itchy welts on her arms. By lunchtime they had spread to her neck and back. She was diagnosed with strep throat two days ago.",
@@ -997,7 +996,7 @@ const CASES = [
     clue:"A new medicine two days ago, welts that fade when pressed and move around within hours, and no trouble breathing or swallowing.",
     mistake:"Giving another dose of the trigger. Also skipping the breathing questions: hives plus wheezing, throat tightness or low blood pressure means anaphylaxis, which needs epinephrine right away."}
 },
-{ id:"nec-fasc", unit:"skin", title:"Just a scrape", level:"Patient 3.2",
+{ id:"nec-fasc", unit:"skin", title:"Just a scrape", level:"Patient 2.2",
   patient:{name:"Gary W.", age:56, sex:"M"},
   triage:{level:2, arrival:"Walked in, limping", complaint:"“It's just a scrape, but my leg hurts like crazy.”", vitals:"Temp 38.8 °C · Pulse 116 · BP 104/66 · Pain 9/10", sign:"A small scab on his shin, with swollen purple-red skin around it. He's sweaty and wincing.", why:"Pain far worse than the wound looks, plus a fever, a fast pulse and lowish blood pressure. These can mean a deep infection that is spreading fast. Emergent, even though the wound is small."},
   story:"Two days ago Gary scraped his shin on a rusty trailer hitch. Yesterday it was sore. Overnight the pain became severe, and this morning he had chills. The scrape itself is only 2 cm long.",
@@ -1025,7 +1024,7 @@ const CASES = [
     clue:"Pain out of proportion to a small wound, signs of sepsis, crackling under the skin, and discoloration that crosses your pen line in minutes. Diabetes raises the risk.",
     mistake:"Calling it cellulitis and sending him home, or waiting for a scan. Necrotizing fasciitis is a surgical emergency: every hour of delay raises the risk of death."}
 },
-{ id:"glass-cut", unit:"skin", title:"Broken window", level:"Patient 3.3",
+{ id:"glass-cut", unit:"skin", title:"Broken window", level:"Patient 2.3",
   patient:{name:"Leah M.", age:27, sex:"F"},
   triage:{level:3, arrival:"Walked in with her roommate", complaint:"“I cut my arm on a broken window. I think it's deep.”", vitals:"Pulse 92 · BP 122/80 · O₂ 99% · Pain 5/10", sign:"A towel pressed on her left forearm, lightly stained with blood. The bleeding has stopped.", why:"A cut that needs cleaning, an X-ray and stitches. But the bleeding is controlled and her vitals are normal. Urgent, not emergent."},
   story:"Leah was closing a stuck window when the pane shattered. A shard sliced the back of her left forearm. Her roommate held a towel on it for 15 minutes, and the bleeding stopped.",
@@ -1052,7 +1051,7 @@ const CASES = [
     clue:"Yellow fat at the base of the wound, and a glint of something inside. Glass shows up on X-ray.",
     mistake:"Closing a wound before cleaning it and checking for foreign objects. Glass glued or stitched inside a wound causes infection."}
 },
-{ id:"burn", unit:"skin", title:"Grease fire", level:"Patient 3.4",
+{ id:"burn", unit:"skin", title:"Grease fire", level:"Patient 2.4",
   patient:{name:"Tomás R.", age:41, sex:"M"},
   triage:{level:1, arrival:"Ambulance, from a house fire", complaint:"“My arms… my chest… it burns,” he says in a hoarse voice.", vitals:"Pulse 124 · BP 118/76 · O₂ 93% · Pain 9/10", sign:"Soot around his nose and mouth. Blistered and white patches on both arms and his chest.", why:"Soot and a hoarse voice mean his airway may be burned, and the swelling can close it within hours. Large burns also leak a lot of fluid. Immediate."},
   story:"A pan of oil caught fire in Tomás's kitchen. He tried to carry it outside, and it splashed over his arms and chest. The kitchen filled with smoke before he got out. Paramedics cooled his burns with water on the way in.",
@@ -1079,7 +1078,7 @@ const CASES = [
     clue:"Soot, singed nose hairs and a hoarse voice after a fire in a closed room: airway first. Then size the burn with the rule of nines and judge depth by color, blisters and feeling.",
     mistake:"Putting ice on burns, or starting with the skin before the airway. A burned airway can swell shut while you're dressing the arms."}
 },
-{ id:"mole", unit:"skin", title:"The changing spot", level:"Patient 3.5",
+{ id:"mole", unit:"skin", title:"The changing spot", level:"Patient 2.5",
   patient:{name:"Dale H.", age:58, sex:"M"},
   triage:{level:4, arrival:"Walked in, sent by his wife", complaint:"“My wife says this spot on my back looks different. Probably nothing.”", vitals:"Pulse 72 · BP 128/80 · O₂ 98% · Pain 0/10", sign:"Healthy-looking, tanned and weathered. Points over his shoulder to his upper back.", why:"Normal vitals and no pain. A spot that has changed over months needs prompt follow-up, but not emergency care."},
   story:"Dale has worked as a roofer for 30 years. His wife noticed a dark spot on his upper back last spring. She says it has grown since then, and last week it bled a little after he scratched it.",
@@ -1106,7 +1105,7 @@ const CASES = [
     clue:"ABCDE: an asymmetric, multicolored, 9 mm spot with a ragged border that has changed and bled. Plus a roofer with childhood sunburns and a sister who had melanoma.",
     mistake:"Destroying the spot without a biopsy. The lab needs the whole spot to make the diagnosis and measure its depth."}
 },
-{ id:"frostbite", unit:"skin", title:"The long walk", level:"Patient 3.6",
+{ id:"frostbite", unit:"skin", title:"The long walk", level:"Patient 2.6",
   patient:{name:"Ray K.", age:48, sex:"M"},
   triage:{level:2, arrival:"Brought in by a snowplow driver", complaint:"“I can't feel my toes. I walked for hours.”", vitals:"Temp 35.3 °C · Pulse 58 · BP 134/86 · Pain 4/10", sign:"Shivering, in wet sneakers and jeans. His toes are white-gray and waxy.", why:"Frozen toes can be lost if rewarming is delayed, and his body temperature is low (mild hypothermia). Emergent."},
   story:"Ray's car slid into a ditch on a country road during a blizzard. His phone was dead, so he walked for about three hours in sneakers until a snowplow driver picked him up. It's −18 °C (0 °F) outside.",
@@ -1132,7 +1131,7 @@ const CASES = [
     clue:"Hours at −18 °C in wet sneakers, then white, waxy toes that feel hard. Rewarming in warm water, once there's no chance of them refreezing, is the treatment.",
     mistake:"Rubbing frozen skin, or warming it with dry heat like a heater or fire. Numb skin can't feel itself being burned."}
 },
-{ id:"boil", unit:"skin", title:"The painful lump", level:"Patient 3.7",
+{ id:"boil", unit:"skin", title:"The painful lump", level:"Patient 2.7",
   patient:{name:"Andre J.", age:16, sex:"M"},
   triage:{level:4, arrival:"Walked in with his dad", complaint:"“There's a huge, painful bump on my thigh.”", vitals:"Temp 37.4 °C · Pulse 80 · BP 118/72 · Pain 5/10", sign:"Walking normally. Points to the outside of his right thigh.", why:"A painful lump, but with normal vitals and no fever. It needs one procedure, and it isn't dangerous. Non-urgent."},
   story:"Andre wrestles on his high school team. Four days ago he noticed what looked like a pimple on his thigh. It has grown into a red, painful lump. His dad says a teammate had something similar last month.",
@@ -1158,7 +1157,7 @@ const CASES = [
     clue:"A soft, squishy center with a head of pus, centered on a hair, in an athlete who shares mats and towels.",
     mistake:"Squeezing it, or skipping the drainage. Also skipping the social history: MRSA spreads through teams, so he should keep it covered, stop sharing towels, and check with his athletic trainer before wrestling again."}
 },
-{ id:"petechiae", unit:"skin", title:"Spots that don't fade", level:"Patient 3.8",
+{ id:"petechiae", unit:"skin", title:"Spots that don't fade", level:"Patient 2.8",
   patient:{name:"Kayla S.", age:17, sex:"F"},
   triage:{level:1, arrival:"Helped in by her mother", complaint:"“I feel awful. My legs hurt so much I can't walk, and now there are these spots.”", vitals:"Temp 39.6 °C · Pulse 128 · BP 94/56 · Pain 7/10", sign:"Tiny purple-red dots on her legs and stomach. Her hands and feet are cold and blotchy.", why:"A high fever, a fast pulse, low blood pressure and a spotty purple rash: possibly meningococcal infection in the blood, which can kill within hours. Immediate."},
   story:"Kayla came home from school yesterday with a headache and a fever. Overnight her legs began to ache so badly she couldn't walk. This morning her mother noticed small purple spots on her legs, and more appeared on the car ride in.",
@@ -1184,7 +1183,7 @@ const CASES = [
     clue:"A fever plus a rash that doesn't blanch under a glass. Cold hands, aching legs and slow color return are early signs of sepsis.",
     mistake:"Waiting for tests before giving antibiotics. A spinal tap or a scan can come later; antibiotics can't wait."}
 },
-{ id:"cellulitis", unit:"skin", title:"Red, hot leg", level:"Patient 3.9",
+{ id:"cellulitis", unit:"skin", title:"Red, hot leg", level:"Patient 2.9",
   patient:{name:"Denise O.", age:63, sex:"F"},
   triage:{level:3, arrival:"Walked in with a cane", complaint:"“My leg's red and swollen, and it's getting bigger.”", vitals:"Temp 38.1 °C · Pulse 94 · BP 136/82 · Pain 5/10", sign:"Her lower left leg is red and swollen. The redness has a clear edge.", why:"A spreading skin infection with a low fever, but steady blood pressure and pain that matches what you see. Urgent, not emergent."},
   story:"Denise noticed a red patch on her left shin three days ago. It has spread up her leg, and it's warm and sore. Last night she had a low fever.",
@@ -1211,7 +1210,7 @@ const CASES = [
     clue:"Red, warm, swollen skin with a clear edge, pain that matches what you see, stable vitals, and a way in between the toes.",
     mistake:"Cutting into it: without a soft pocket of pus, there's nothing to drain. Also missing the athlete's foot. If it isn't treated, the cellulitis tends to come back."}
 },
-{ id:"sjs", unit:"skin", title:"Peeling skin", level:"Patient 3.10",
+{ id:"sjs", unit:"skin", title:"Peeling skin", level:"Patient 2.10",
   patient:{name:"Priya N.", age:22, sex:"F"},
   triage:{level:2, arrival:"Walked in, holding a tissue to her eyes", complaint:"“My skin is peeling, and my mouth is full of sores.”", vitals:"Temp 38.6 °C · Pulse 112 · BP 112/70 · Pain 7/10", sign:"Dark red patches with blisters on her chest and back. Crusted, raw lips. Red, watery eyes.", why:"Blistering, peeling skin with sores on the lips and eyes, and a fever. This can spread quickly and needs burn-unit care. Emergent."},
   story:"Ten days ago Priya started an antibiotic (a sulfa drug) for a bladder infection. Three days ago she felt like she had the flu. Yesterday a painful rash appeared on her chest. This morning it blistered, and her lips were raw.",
@@ -1237,7 +1236,7 @@ const CASES = [
     clue:"A new medicine 1 to 3 weeks earlier, a flu-like start, then a painful rash with blisters, and sores on the lips and eyes. The skin slides off with gentle pressure.",
     mistake:"Calling it a viral rash and keeping her on the drug. Stopping the cause quickly is the most important treatment."}
 },
-{ id:"poison-ivy", unit:"skin", title:"Camping souvenir", level:"Patient 3.11",
+{ id:"poison-ivy", unit:"skin", title:"Camping souvenir", level:"Patient 2.11",
   patient:{name:"Owen F.", age:15, sex:"M"},
   triage:{level:4, arrival:"Walked in with his mom", complaint:"“I'm so itchy I can't sleep.”", vitals:"Temp 36.9 °C · Pulse 76 · BP 112/70 · Pain 1/10, itch 9/10", sign:"Red streaks with tiny blisters on both forearms and his left shin. His face is clear.", why:"An itchy rash with normal vitals, and his face, eyes and breathing aren't affected. Non-urgent."},
   story:"Owen got back two days ago from a scout camping trip, where he helped clear brush from a trail. Yesterday his arms and leg began to itch. Now there are streaks of blisters, and he says the rash is “spreading” to new spots.",
@@ -1263,7 +1262,7 @@ const CASES = [
     clue:"Lines and streaks of blisters 1 to 2 days after clearing brush, on uncovered skin. The “spreading” comes from oil still on his jacket, not from the blisters.",
     mistake:"Believing the blister fluid spreads the rash, and breaking the blisters. Wash the oil off the skin and off everything it touched."}
 },
-{ id:"bedsore", unit:"skin", title:"The sore that smells", level:"Patient 3.12",
+{ id:"bedsore", unit:"skin", title:"The sore that smells", level:"Patient 2.12",
   patient:{name:"Harold G.", age:84, sex:"M"},
   triage:{level:3, arrival:"Brought by his daughter, in a wheelchair", complaint:"His daughter: “He has a sore on his tailbone, and it's started to smell.”", vitals:"Temp 37.9 °C · Pulse 92 · BP 128/76 · O₂ 96% · Winces when moved", sign:"Thin and frail, leaning to one side in the chair.", why:"A frail older adult with a deep wound and a slight fever. He needs a full workup, but his vitals are stable. Urgent."},
   story:"Harold had a stroke four months ago and now spends most of the day in bed or in his chair. His daughter cares for him at home. Two weeks ago she noticed a sore on his tailbone. It has grown, and this week it began to smell.",
@@ -1504,7 +1503,7 @@ function renderHome(){
   const shiftU = shiftUs.find(u => { const st = store.get("sore-shift-" + u.id, null); return !st || st.phase !== "done"; }) || shiftUs[shiftUs.length - 1];
   const shSt = shiftU ? store.get("sore-shift-" + shiftU.id, null) : null;
   const benchCases = shiftU ? CASES.filter(c => c.unit === shiftU.id).slice(0, 6) : CASES.slice(0, 6);
-  $("#bench").innerHTML = benchCases.map(c => { const s = shSt && shSt.seen[c.id]; return `<div class="seat">${avatar(look(c), s ? vMood(s.tier) : "hurt")}<b>${c.patient.name}</b></div>`; }).join("");
+  $("#bench").innerHTML = benchCases.map(c => { const s = shSt && shSt.seen[c.id]; return `<div class="seat">${avatar(look(c), s ? vMood(s.tier) : "hurt")}</div>`; }).join("");
   const training = CASES.filter(c => c.unit === "u1");
   const next = training.find(c => best[c.id] == null);
   if (next){ $("#nextBtn").textContent = `Start ${tag(next)}`; $("#nextBtn").dataset.target = next.id; $("#nextBtn").dataset.shift = ""; }

@@ -4,12 +4,12 @@ Interactive anatomy case studies for high school students. Take the history, che
 
 **Play:** https://anatomyacademy101.github.io/sore/
 
-- Unit 1: Patient history & vital signs
-- Unit 2: The skeletal system: a 12-patient ER shift with triage and a game clock
-- Unit 3: The integumentary system: a 12-patient ER shift (burns, rashes, wounds, skin infections)
+- Medical School Refresher: patient history & vital signs (3 training cases)
+- Unit 1: The skeletal system: a 12-patient ER shift with triage and a game clock
+- Unit 2: The integumentary system: a 12-patient ER shift (burns, rashes, wounds, skin infections)
 - Organ systems (preview)
 
-Students turn in a PDF case report (Unit 1) or shift report (system units) through Google Classroom.
+Students turn in a PDF case report (Refresher cases) or shift report (system units) through Google Classroom.
 
 Educational simulation, not medical advice. Patients are fictional.
 
