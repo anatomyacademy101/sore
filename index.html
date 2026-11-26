@@ -245,6 +245,11 @@ pre{overflow-x:auto;background:var(--bg);padding:14px;border-radius:8px;font-siz
 @keyframes drop{from{transform:translate(-50%,-30px);opacity:0}to{transform:translate(-50%,0);opacity:1}}
 @media(prefers-reduced-motion:reduce){.toast{animation:none}}
 @media(max-width:760px){.crisis-in{grid-template-columns:minmax(0,1fr)}.toast{grid-template-columns:minmax(0,1fr)}.toast svg{display:none}}
+.sound{display:flex;align-items:center;gap:8px}
+.sound button{padding:6px 10px;min-width:44px}
+.top .sound button{background:transparent;color:#fff;border-color:#3a4f78}
+#vol{width:96px;accent-color:#ff6a2b;min-height:44px}
+@media(max-width:600px){#vol{display:none}}
 </style>
 <script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script>
 </head>
@@ -252,6 +257,7 @@ pre{overflow-x:auto;background:var(--bg);padding:14px;border-radius:8px;font-siz
 <header class="top"><div class="wrap">
   <button class="brand" data-landing aria-label="SORE! start page"><span class="mark">SORE<span>!</span></span><small>Second Opinion Required: Emergency</small></button>
   <div class="hbtns">
+    <div class="sound"><button id="soundBtn" class="ghost"></button><input id="vol" type="range" min="0" max="1" step="0.05" aria-label="ER sound volume"></div>
     <span class="lic" id="lic"></span>
     <button class="ghost" data-how>How to play</button>
   </div>
@@ -295,6 +301,7 @@ pre{overflow-x:auto;background:var(--bg);padding:14px;border-radius:8px;font-siz
       <h1>The waiting room is full. You're the only doctor on shift.</h1>
       <p>Triage the crowd, take the history, order only what you need, and make the diagnosis before anyone gets worse. Keep your patients alive, and your medical license too.</p>
       <div class="hbtns"><button class="primary bigbtn" data-home>Enter the ER →</button><a class="ghostlink" href="#howto">How to play ↓</a></div>
+      <p class="note" style="color:#c9d3e3;margin-top:14px">The ER has sound: monitors, sirens and a crowded waiting room. Headphones recommended. Mute anytime with the speaker button.</p>
     </div>
     <div class="faces-wall" id="landFaces" aria-hidden="true"></div>
   </div></div>
@@ -2492,6 +2499,141 @@ const store = {
   set(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e){} }
 };
 let strikes = store.get("dtp-strikes", 0);
+
+/* ---------- ER soundscape (all sounds generated live with the Web Audio API; no audio files) ---------- */
+const SND = (() => {
+  let ctx = null, master, amb, fx, verb, noiseBuf, brownBuf, started = false, ambOn = false, timers = [], beatTimer = null, patientCond = null;
+  const pref = store.get("sore-sound", {on:true, vol:0.6});
+  const rnd = (a, b) => a + Math.random() * (b - a);
+  const later = (fn, ms) => { const id = setTimeout(fn, ms); timers.push(id); return id; };
+
+  function build(){
+    const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return false;
+    ctx = new AC();
+    master = ctx.createGain(); master.gain.value = pref.on ? pref.vol : 0; master.connect(ctx.destination);
+    // hospital "room": a short generated reverb
+    verb = ctx.createConvolver(); const len = ctx.sampleRate * 1.6, ir = ctx.createBuffer(2, len, ctx.sampleRate);
+    for (let ch = 0; ch < 2; ch++){ const d = ir.getChannelData(ch); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3); }
+    verb.buffer = ir; const wet = ctx.createGain(); wet.gain.value = .35; verb.connect(wet); wet.connect(master);
+    amb = ctx.createGain(); amb.gain.value = 0; amb.connect(master); amb.connect(verb);
+    fx = ctx.createGain(); fx.gain.value = 1; fx.connect(master); fx.connect(verb);
+    noiseBuf = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate); { const d = noiseBuf.getChannelData(0); for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; }
+    brownBuf = ctx.createBuffer(1, ctx.sampleRate * 4, ctx.sampleRate); { const d = brownBuf.getChannelData(0); let last = 0; for (let i = 0; i < d.length; i++){ last = (last + .02 * (Math.random() * 2 - 1)) / 1.02; d[i] = last * 3.5; } }
+    return true;
+  }
+  const noise = (buf = noiseBuf) => { const s = ctx.createBufferSource(); s.buffer = buf; s.loop = true; return s; };
+  const env = (g, t, peak, a, hold, r) => { g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(peak, t + a); g.gain.setValueAtTime(peak, t + a + hold); g.gain.exponentialRampToValueAtTime(.0001, t + a + hold + r); };
+  const pan = (node, p) => { if (!ctx.createStereoPanner) return node; const sp = ctx.createStereoPanner(); sp.pan.value = p; node.connect(sp); return sp; };
+
+  /* constant beds: air handling hum and a crowd murmur */
+  function beds(){
+    const hum = noise(brownBuf), lp = ctx.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 260;
+    const hg = ctx.createGain(); hg.gain.value = .35; hum.connect(lp); lp.connect(hg); hg.connect(amb); hum.start();
+    const mains = ctx.createOscillator(); mains.frequency.value = 60; const mg = ctx.createGain(); mg.gain.value = .012; mains.connect(mg); mg.connect(amb); mains.start();
+    for (let v = 0; v < 4; v++) voice(rnd(95, 210), rnd(-.8, .8), .05 + v * .01);
+  }
+  /* one distant "talker": a buzzy source through moving vowel formants, in syllables and phrases */
+  const VOWELS = [[800,1200],[400,2200],[450,800],[325,700],[300,2600],[650,1100]];
+  function voice(pitch, p, level){
+    const src = ctx.createOscillator(); src.type = "sawtooth"; src.frequency.value = pitch;
+    const f1 = ctx.createBiquadFilter(), f2 = ctx.createBiquadFilter(); f1.type = f2.type = "bandpass"; f1.Q.value = 6; f2.Q.value = 8;
+    const muffle = ctx.createBiquadFilter(); muffle.type = "lowpass"; muffle.frequency.value = 1500;
+    const g = ctx.createGain(); g.gain.value = 0;
+    src.connect(f1); src.connect(f2); f1.connect(muffle); f2.connect(muffle); muffle.connect(g); pan(g, p).connect(amb); src.start();
+    const syl = () => {
+      if (!ambOn){ later(syl, 800); return; }
+      const t = ctx.currentTime, [a, b] = VOWELS[Math.floor(Math.random() * VOWELS.length)], d = rnd(.09, .22);
+      f1.frequency.setTargetAtTime(a, t, .02); f2.frequency.setTargetAtTime(b, t, .02);
+      src.frequency.setTargetAtTime(pitch * rnd(.85, 1.2), t, .05);
+      g.gain.setTargetAtTime(level, t, .02); g.gain.setTargetAtTime(0, t + d, .03);
+      later(syl, Math.random() < .12 ? rnd(900, 2600) : (d + rnd(.03, .09)) * 1000);
+    };
+    later(syl, rnd(0, 1500));
+  }
+
+  /* heart monitor: tempo follows the patient on screen */
+  function beep(freq = 980, dur = .07, level = .12, dest = amb){
+    const t = ctx.currentTime, o = ctx.createOscillator(), g = ctx.createGain(); o.type = "sine"; o.frequency.value = freq;
+    o.connect(g); g.connect(dest); env(g, t, level, .005, dur, .05); o.start(t); o.stop(t + dur + .1);
+  }
+  function beat(){
+    clearTimeout(beatTimer);
+    if (!ambOn){ beatTimer = setTimeout(beat, 1000); return; }
+    const c = patientCond, bpm = c == null ? 72 : c >= 80 ? 92 : c >= 50 ? 118 : 142;
+    beep(c != null && c < 50 ? 1040 : 980, .06, c == null ? .045 : .11, c == null ? amb : fx);
+    if (c != null && c < 50 && Math.random() < .18) later(() => alarm(.06), 300);
+    beatTimer = setTimeout(beat, 60000 / bpm);
+  }
+  function alarm(level = .12){ [0, .22, .44].forEach(d => later(() => beep(880, .14, level, fx), d * 1000)); }
+
+  /* occasional background events */
+  function chime(){ const t = ctx.currentTime; [[880, 0], [698, .45]].forEach(([f, d]) => { const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.value = f; o.connect(g); g.connect(amb); env(g, t + d, .05, .01, .05, 1.2); o.start(t + d); o.stop(t + d + 1.4); }); }
+  function phone(){ const t = ctx.currentTime; for (let i = 0; i < 2; i++){ [440, 480].forEach(f => { const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.value = f; o.connect(g); pan(g, .7).connect(amb); env(g, t + i * 2.6, .018, .02, 1.6, .1); o.start(t + i * 2.6); o.stop(t + i * 2.6 + 1.9); }); } }
+  function moan(){
+    const t = ctx.currentTime, o = ctx.createOscillator(), f1 = ctx.createBiquadFilter(), f2 = ctx.createBiquadFilter(), g = ctx.createGain(), base = rnd(105, 175);
+    o.type = "sawtooth"; f1.type = f2.type = "bandpass"; f1.frequency.value = 450; f2.frequency.value = 800; f1.Q.value = 7; f2.Q.value = 7;
+    o.frequency.setValueAtTime(base * 1.15, t); o.frequency.linearRampToValueAtTime(base, t + .5); o.frequency.linearRampToValueAtTime(base * .78, t + 1.9);
+    const vib = ctx.createOscillator(), vg = ctx.createGain(); vib.frequency.value = 5; vg.gain.value = 2.5; vib.connect(vg); vg.connect(o.frequency);
+    o.connect(f1); o.connect(f2); f1.connect(g); f2.connect(g); pan(g, rnd(-.9, .9)).connect(amb); env(g, t, .05, .5, .6, 1.1);
+    o.start(t); vib.start(t); o.stop(t + 2.4); vib.stop(t + 2.4);
+  }
+  function siren(level = .03, secs = 9, near = false){
+    const t = ctx.currentTime, o = ctx.createOscillator(), lp = ctx.createBiquadFilter(), g = ctx.createGain();
+    o.type = "square"; lp.type = "lowpass"; lp.frequency.value = near ? 2600 : 1100;
+    const lfo = ctx.createOscillator(), lg = ctx.createGain(); lfo.frequency.value = near ? .45 : .28; lg.gain.value = 330;
+    o.frequency.value = 980; lfo.connect(lg); lg.connect(o.frequency);
+    o.connect(lp); lp.connect(g); pan(g, near ? 0 : rnd(-.6, .6)).connect(near ? fx : amb);
+    g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(level, t + secs * .45); g.gain.linearRampToValueAtTime(level * (near ? .8 : 1), t + secs * .7); g.gain.linearRampToValueAtTime(0, t + secs);
+    o.start(t); lfo.start(t); o.stop(t + secs + .1); lfo.stop(t + secs + .1);
+  }
+  function footsteps(){ const n = 6 + Math.floor(Math.random() * 5), p = rnd(-.8, .8), step = rnd(.42, .55); for (let i = 0; i < n; i++) later(() => {
+    const t = ctx.currentTime, s = noise(), bp = ctx.createBiquadFilter(), g = ctx.createGain(); bp.type = "bandpass"; bp.frequency.value = rnd(900, 1500); bp.Q.value = 1.5;
+    s.connect(bp); bp.connect(g); pan(g, p).connect(amb); env(g, t, .05 * Math.sin(Math.PI * (i + .5) / n), .003, .01, .07); s.start(t); s.stop(t + .12); }, i * step * 1000); }
+  function scheduler(){
+    const events = [[chime, 40, 85], [phone, 50, 110], [moan, 45, 95], [() => siren(), 70, 140], [footsteps, 12, 30]];
+    for (const [fn, a, b] of events){ const loop = () => { if (ambOn && ctx.state === "running") fn(); later(loop, rnd(a, b) * 1000); }; later(loop, rnd(a * .3, b * .6) * 1000); }
+  }
+
+  /* game events */
+  function ctWhir(){
+    const t = ctx.currentTime, o = ctx.createOscillator(), og = ctx.createGain(); o.type = "sawtooth"; o.frequency.setValueAtTime(45, t); o.frequency.exponentialRampToValueAtTime(140, t + 1.6);
+    const lp = ctx.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 500; o.connect(lp); lp.connect(og); og.connect(fx); env(og, t, .07, .4, 1.2, .8); o.start(t); o.stop(t + 2.6);
+    const s = noise(), bp = ctx.createBiquadFilter(), sg = ctx.createGain(); bp.type = "bandpass"; bp.Q.value = 2; bp.frequency.setValueAtTime(300, t); bp.frequency.exponentialRampToValueAtTime(2400, t + 1.8);
+    s.connect(bp); bp.connect(sg); sg.connect(fx); env(sg, t, .05, .5, 1, .9); s.start(t); s.stop(t + 2.6);
+  }
+  function cheer(){
+    const t = ctx.currentTime, s = noise(), bp = ctx.createBiquadFilter(), g = ctx.createGain(); bp.type = "bandpass"; bp.frequency.value = 1200; bp.Q.value = .6;
+    s.connect(bp); bp.connect(g); g.connect(fx); g.gain.setValueAtTime(0, t); [.12, .1, .14, .09, .12, .05, 0].forEach((v, i) => g.gain.linearRampToValueAtTime(v, t + .15 + i * .25)); s.start(t); s.stop(t + 2.2);
+    [523, 659, 784, 1047].forEach((f, i) => { const o = ctx.createOscillator(), og = ctx.createGain(); o.type = "triangle"; o.frequency.value = f; o.connect(og); og.connect(fx); env(og, t + i * .12, .09, .01, .12, .6); o.start(t + i * .12); o.stop(t + i * .12 + .9); });
+  }
+  function gavel(){ [0, .38, .62].forEach(d => { const t = ctx.currentTime + d, o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.setValueAtTime(190, t); o.frequency.exponentialRampToValueAtTime(70, t + .15);
+    o.connect(g); g.connect(fx); env(g, t, .35, .002, .01, .22); o.start(t); o.stop(t + .3);
+    const s = noise(), hp = ctx.createBiquadFilter(), sg = ctx.createGain(); hp.type = "highpass"; hp.frequency.value = 2000; s.connect(hp); hp.connect(sg); sg.connect(fx); env(sg, t, .12, .001, .005, .05); s.start(t); s.stop(t + .08); }); }
+  function meh(){ const t = ctx.currentTime; [[523, 0], [466, .3]].forEach(([f, d]) => { const o = ctx.createOscillator(), g = ctx.createGain(); o.type = "triangle"; o.frequency.value = f; o.connect(g); g.connect(fx); env(g, t + d, .08, .01, .15, .5); o.start(t + d); o.stop(t + d + .8); }); }
+
+  const ready = () => ctx && started && pref.on;
+  return {
+    pref,
+    /* call from a click: creates/resumes audio and fades the ER in */
+    enter(){
+      if (!ctx && !build()) return;
+      if (ctx.state === "suspended") ctx.resume();
+      if (!started){ started = true; beds(); scheduler(); beat(); }
+      ambOn = true; amb.gain.setTargetAtTime(1, ctx.currentTime, .8);
+    },
+    leave(){ if (!ctx) return; ambOn = false; amb.gain.setTargetAtTime(0, ctx.currentTime, .4); },
+    setPatient(c){ patientCond = c; },
+    setOn(on){ pref.on = on; store.set("sore-sound", pref); if (ctx) master.gain.setTargetAtTime(on ? pref.vol : 0, ctx.currentTime, .1); },
+    setVol(v){ pref.vol = v; store.set("sore-sound", pref); if (ctx && pref.on) master.gain.setTargetAtTime(v, ctx.currentTime, .05); },
+    ambulance(){ if (ready()) siren(.09, 6, true); },
+    ct(){ if (ready()) ctWhir(); },
+    harm(){ if (ready()) alarm(.13); },
+    verdict(tier){ if (!ready()) return; tier === "hero" ? cheer() : tier === "fail" ? gavel() : meh(); },
+    _ctx: () => ctx
+  };
+})();
+document.addEventListener("visibilitychange", () => { const c = SND._ctx(); if (!c) return; document.hidden ? c.suspend() : c.resume(); });
+
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[ch]));
 let S = null;
@@ -2504,6 +2646,8 @@ function renderLicense(){
 }
 function show(view){
   for (const id of ["home","landing","brief","game","shift"]) $("#" + id).hidden = id !== view;
+  if (view === "landing") SND.leave();
+  if (view !== "game") SND.setPatient(null);
   window.scrollTo({top:0});
 }
 
@@ -2591,6 +2735,7 @@ function renderChart(mood){
   const cls = pct < 50 ? "low" : pct < 80 ? "mid" : "";
   const word = pct >= 80 ? "Stable" : pct >= 50 ? "Worsening" : "Critical";
   $("#ppic").innerHTML = avatar(look(S.c), mood || moodFor(pct));
+  SND.setPatient(mood ? null : pct);
   $("#cond").className = "cond " + cls;
   $("#cond").innerHTML = `<span>Patient condition</span><span><b>${word}</b> · ${pct}%</span><i><b style="width:${pct}%"></b></i>`
     + (S.shift ? `<span style="grid-column:1/-1;opacity:.85">Waited ${S.wait} min${S.startCond < 100 ? ` (past target: arrived in worse condition)` : ""} · Shift clock ${fmtClock(SH.clock)}${SH.ct ? ` · CT scanner: ${ctStatus()}` : ""}</span>` : "");
@@ -2640,7 +2785,8 @@ function order(id){
   const t = S.c.actions.find(x => x.id === id);
   S.ordered.push(id); S.review = null;
   if (t.kind === "extra") S.cond -= 10;
-  if (t.kind === "harm") S.cond -= 30;
+  if (t.kind === "harm"){ S.cond -= 30; SND.harm(); }
+  if (isCT(t)) SND.ct();
   if (S.shift){
     let m = mins(t);
     if (SH.ct && isCT(t)){ const w = ctBusyUntil(SH.clock) - SH.clock; if (w > 0){ S.ctWait = S.ctWait || {}; S.ctWait[id] = w; m += w; } }
@@ -2673,6 +2819,7 @@ function finish(){
     saveShift();
   }
   { const done = new Set(store.get("sore-done-cases", [])); done.add(c.id); store.set("sore-done-cases", [...done]); }
+  SND.verdict(r.tier);
   if (r.tier === "fail") strikes++;
   if (r.tier === "hero" && strikes > 0 && strikes < 3) strikes--;
   store.set("dtp-strikes", strikes); renderLicense();
@@ -2905,7 +3052,7 @@ const isCT = a => /\bCT\b/.test(a.label);
 const ctBusyUntil = t => { for (const [s, e] of (SH && SH.ct) || []) if (t >= s && t < e) return e; return t; };
 const ctStatus = () => { const u = ctBusyUntil(SH.clock); return u > SH.clock ? `Busy until ${fmtClock(u)}` : "Free"; };
 const AMB_SVG = `<svg viewBox="0 0 48 32" width="48" height="32" aria-hidden="true"><rect x="2" y="8" width="30" height="16" rx="2" fill="#fff"/><path d="M32 12h7l6 7v5H32z" fill="#fff"/><rect x="34" y="14" width="5" height="4" fill="#9fc3ff"/><path d="M14 11v10M9 16h10" stroke="#c62828" stroke-width="3"/><circle cx="11" cy="26" r="4" fill="#0b162a" stroke="#fff" stroke-width="2"/><circle cx="37" cy="26" r="4" fill="#0b162a" stroke="#fff" stroke-width="2"/><rect x="12" y="4" width="8" height="4" rx="1" fill="#ff6a2b"/></svg>`;
-function toast(html){ const el = $("#toast"); el.innerHTML = `${AMB_SVG}<div>${html}</div><button data-toastclose>Got it</button>`; el.hidden = false; }
+function toast(html){ SND.ambulance(); const el = $("#toast"); el.innerHTML = `${AMB_SVG}<div>${html}</div><button data-toastclose>Got it</button>`; el.hidden = false; }
 function checkArrivals(){
   if (!SH || !SH.arrive) return;
   SH.announced = SH.announced || {};
@@ -3132,6 +3279,8 @@ async function saveShiftPDF(btn){
 /* ---------- Events ---------- */
 document.addEventListener("click", async e => {
   const el = e.target.closest("button"); if (!el) return;
+  if (el.id === "soundBtn"){ const on = !SND.pref.on; SND.setOn(on); if (on && $("#landing").hidden) SND.enter(); renderSound(); return; }
+  if (SND.pref.on && (el.hasAttribute("data-home") || el.dataset.shift || el.dataset.id || el.dataset.see || el.hasAttribute("data-crisisnew") || el.hasAttribute("data-crisiscode"))) SND.enter();
   if (el.hasAttribute("data-home")){ $("#toast").hidden = true; return renderHome(); }
   if (el.hasAttribute("data-landing")) return show("landing");
   if (el.hasAttribute("data-how")){ show("landing"); const hw = $("#howto"); if (hw) hw.scrollIntoView(); return; }
@@ -3198,6 +3347,15 @@ document.addEventListener("input", e => {
   }
 });
 $("#schema").textContent = JSON.stringify({...CASES[3], actions: CASES[3].actions.slice(0, 3).concat(CASES[3].actions.slice(7, 8))}, null, 2);
+function renderSound(){
+  const on = SND.pref.on, b = $("#soundBtn");
+  b.setAttribute("aria-pressed", on); b.setAttribute("aria-label", on ? "Sound on. Click to mute" : "Sound off. Click to turn on");
+  b.title = on ? "Mute ER sounds" : "Turn on ER sounds";
+  b.innerHTML = `<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9z" fill="currentColor"/>${on ? '<path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/>' : '<path d="M17 9l5 6M22 9l-5 6"/>'}</svg>`;
+  $("#vol").value = SND.pref.vol; $("#vol").disabled = !on;
+}
+$("#vol").addEventListener("input", e => SND.setVol(+e.target.value));
+renderSound();
 renderLicense(); renderHome();
 { const wall = CASES.filter(c => c.unit !== "u1" && c.unit !== "u3").filter((c, i) => i % 3 === 0).slice(0, 8);
   const moods = ["hurt","worse","happy","hurt","critical","ok","hurt","worse"];
