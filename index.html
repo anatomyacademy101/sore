@@ -249,7 +249,8 @@ pre{overflow-x:auto;background:var(--bg);padding:14px;border-radius:8px;font-siz
 .sound button{padding:6px 10px;min-width:44px}
 .top .sound button{background:transparent;color:#fff;border-color:#3a4f78}
 #vol{width:96px;accent-color:#ff6a2b;min-height:44px}
-@media(max-width:600px){#vol{display:none}}
+@media(max-width:600px){#vol{width:72px}}
+.sndnote{font-size:13px;font-weight:700;color:#0b162a;background:#f2c46b;border-radius:8px;padding:6px 10px}
 </style>
 <script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script>
 </head>
@@ -257,7 +258,7 @@ pre{overflow-x:auto;background:var(--bg);padding:14px;border-radius:8px;font-siz
 <header class="top"><div class="wrap">
   <button class="brand" data-landing aria-label="SORE! start page"><span class="mark">SORE<span>!</span></span><small>Second Opinion Required: Emergency</small></button>
   <div class="hbtns">
-    <div class="sound"><button id="soundBtn" class="ghost"></button><input id="vol" type="range" min="0" max="1" step="0.05" aria-label="ER sound volume"></div>
+    <div class="sound"><button id="soundBtn" class="ghost"></button><input id="vol" type="range" min="0" max="1" step="0.05" aria-label="ER sound volume"><span class="sndnote" id="sndNote" role="status" hidden>Sound blocked: tap the speaker</span></div>
     <span class="lic" id="lic"></span>
     <button class="ghost" data-how>How to play</button>
   </div>
@@ -2510,7 +2511,10 @@ const SND = (() => {
   function build(){
     const AC = window.AudioContext || window.webkitAudioContext; if (!AC) return false;
     ctx = new AC();
-    master = ctx.createGain(); master.gain.value = pref.on ? pref.vol : 0; master.connect(ctx.destination);
+    master = ctx.createGain(); master.gain.value = pref.on ? pref.vol : 0;
+    const comp = ctx.createDynamicsCompressor(); comp.threshold.value = -26; comp.knee.value = 18; comp.ratio.value = 4; comp.attack.value = .01; comp.release.value = .25;
+    const makeup = ctx.createGain(); makeup.gain.value = 1.8;
+    master.connect(comp); comp.connect(makeup); makeup.connect(ctx.destination);
     // hospital "room": a short generated reverb
     verb = ctx.createConvolver(); const len = ctx.sampleRate * 1.6, ir = ctx.createBuffer(2, len, ctx.sampleRate);
     for (let ch = 0; ch < 2; ch++){ const d = ir.getChannelData(ch); for (let i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, 3); }
@@ -2611,17 +2615,34 @@ const SND = (() => {
     const s = noise(), hp = ctx.createBiquadFilter(), sg = ctx.createGain(); hp.type = "highpass"; hp.frequency.value = 2000; s.connect(hp); hp.connect(sg); sg.connect(fx); env(sg, t, .12, .001, .005, .05); s.start(t); s.stop(t + .08); }); }
   function meh(){ const t = ctx.currentTime; [[523, 0], [466, .3]].forEach(([f, d]) => { const o = ctx.createOscillator(), g = ctx.createGain(); o.type = "triangle"; o.frequency.value = f; o.connect(g); g.connect(fx); env(g, t + d, .08, .01, .15, .5); o.start(t + d); o.stop(t + d + .8); }); }
 
+  /* iPhone/iPad: a silent looping <audio> puts the page in "media playback" mode, so the ringer switch doesn't mute the ER */
+  let unlockEl = null;
+  function unlockIOS(){
+    if (unlockEl) { unlockEl.play().catch(() => {}); return; }
+    const n = 8000, buf = new ArrayBuffer(44 + n), v = new DataView(buf), w = (o, s) => [...s].forEach((ch, i) => v.setUint8(o + i, ch.charCodeAt(0)));
+    w(0, "RIFF"); v.setUint32(4, 36 + n, true); w(8, "WAVE"); w(12, "fmt "); v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+    v.setUint32(24, 8000, true); v.setUint32(28, 8000, true); v.setUint16(32, 1, true); v.setUint16(34, 8, true); w(36, "data"); v.setUint32(40, n, true);
+    for (let i = 0; i < n; i++) v.setUint8(44 + i, 128);
+    try { unlockEl = new Audio(URL.createObjectURL(new Blob([buf], {type:"audio/wav"}))); unlockEl.loop = true; unlockEl.setAttribute("playsinline", ""); unlockEl.play().catch(() => {}); } catch(e){}
+  }
+  function wake(){
+    if (!ctx) return;
+    if (ctx.state !== "running") { try { const p = ctx.resume(); if (p && p.then) p.then(status, status); } catch(e){} }
+    setTimeout(status, 900);
+  }
+  function status(){ const n = document.getElementById("sndNote"); if (!n || !ctx) return; n.hidden = !(pref.on && ambOn && ctx.state !== "running"); }
   const ready = () => ctx && started && pref.on;
   return {
     pref,
     /* call from a click: creates/resumes audio and fades the ER in */
     enter(){
       if (!ctx && !build()) return;
-      if (ctx.state === "suspended") ctx.resume();
+      unlockIOS(); wake();
       if (!started){ started = true; beds(); scheduler(); beat(); }
       ambOn = true; amb.gain.setTargetAtTime(1, ctx.currentTime, .8);
     },
-    leave(){ if (!ctx) return; ambOn = false; amb.gain.setTargetAtTime(0, ctx.currentTime, .4); },
+    leave(){ if (!ctx) return; ambOn = false; amb.gain.setTargetAtTime(0, ctx.currentTime, .4); status(); },
+    kick(){ if (ctx && pref.on && ctx.state !== "running"){ unlockIOS(); wake(); } },
     setPatient(c){ patientCond = c; },
     setOn(on){ pref.on = on; store.set("sore-sound", pref); if (ctx) master.gain.setTargetAtTime(on ? pref.vol : 0, ctx.currentTime, .1); },
     setVol(v){ pref.vol = v; store.set("sore-sound", pref); if (ctx && pref.on) master.gain.setTargetAtTime(v, ctx.currentTime, .05); },
@@ -3278,8 +3299,9 @@ async function saveShiftPDF(btn){
 
 /* ---------- Events ---------- */
 document.addEventListener("click", async e => {
+  SND.kick();
   const el = e.target.closest("button"); if (!el) return;
-  if (el.id === "soundBtn"){ const on = !SND.pref.on; SND.setOn(on); if (on && $("#landing").hidden) SND.enter(); renderSound(); return; }
+  if (el.id === "soundBtn"){ const on = !SND.pref.on; SND.setOn(on); if (on && $("#landing").hidden) SND.enter(); if (!on){ const n = $("#sndNote"); if (n) n.hidden = true; } renderSound(); return; }
   if (SND.pref.on && (el.hasAttribute("data-home") || el.dataset.shift || el.dataset.id || el.dataset.see || el.hasAttribute("data-crisisnew") || el.hasAttribute("data-crisiscode"))) SND.enter();
   if (el.hasAttribute("data-home")){ $("#toast").hidden = true; return renderHome(); }
   if (el.hasAttribute("data-landing")) return show("landing");
