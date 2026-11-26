@@ -302,7 +302,7 @@ pre{overflow-x:auto;background:var(--bg);padding:14px;border-radius:8px;font-siz
       <h1>The waiting room is full. You're the only doctor on shift.</h1>
       <p>Triage the crowd, take the history, order only what you need, and make the diagnosis before anyone gets worse. Keep your patients alive, and your medical license too.</p>
       <div class="hbtns"><button class="primary bigbtn" data-home>Enter the ER →</button><a class="ghostlink" href="#howto">How to play ↓</a></div>
-      <p class="note" style="color:#c9d3e3;margin-top:14px">The ER has sound: monitors, sirens and a crowded waiting room. Headphones recommended. Mute anytime with the speaker button.</p>
+      <p class="note" style="color:#c9d3e3;margin-top:14px">The ER has sound: heart monitors, alarms, ambulance sirens and overhead pages. Headphones recommended. Mute anytime with the speaker button.</p>
     </div>
     <div class="faces-wall" id="landFaces" aria-hidden="true"></div>
   </div></div>
@@ -2529,30 +2529,33 @@ const SND = (() => {
   const env = (g, t, peak, a, hold, r) => { g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(peak, t + a); g.gain.setValueAtTime(peak, t + a + hold); g.gain.exponentialRampToValueAtTime(.0001, t + a + hold + r); };
   const pan = (node, p) => { if (!ctx.createStereoPanner) return node; const sp = ctx.createStereoPanner(); sp.pan.value = p; node.connect(sp); return sp; };
 
-  /* constant beds: air handling hum and a crowd murmur */
-  function beds(){
-    const hum = noise(brownBuf), lp = ctx.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 260;
-    const hg = ctx.createGain(); hg.gain.value = .35; hum.connect(lp); lp.connect(hg); hg.connect(amb); hum.start();
-    const mains = ctx.createOscillator(); mains.frequency.value = 60; const mg = ctx.createGain(); mg.gain.value = .012; mains.connect(mg); mg.connect(amb); mains.start();
-    for (let v = 0; v < 4; v++) voice(rnd(95, 210), rnd(-.8, .8), .05 + v * .01);
+  /* overhead paging: randomized doctors, spoken with the device's built-in voice after a PA chime */
+  const DOCS = ["Dr. Aprukuma", "Dr. Patel", "Dr. Nguyen", "Dr. Okonkwo", "Dr. Ramirez", "Dr. Goldberg", "Dr. Kowalski", "Dr. Lindqvist", "Dr. Haddad", "Dr. Fitzgerald", "Dr. Yamamoto", "Dr. Osei", "Dr. Moreau", "Dr. Castillo"];
+  const PAGES = [
+    d => `Paging ${d}. ${d}, please call extension ${digits(4)}.`,
+    d => `${d}, to the emergency department, stat.`,
+    d => `Paging ${d}. ${d}, please pick up line ${1 + Math.floor(Math.random() * 6)}.`,
+    d => `${d}, you are needed in trauma bay ${1 + Math.floor(Math.random() * 8)}.`,
+    d => `Paging ${d} to radiology. ${d} to radiology.`,
+    d => `${d}, please report to the nurses' station.`,
+    d => `Paging ${d}. ${d}, your patient's lab results are ready.`
+  ];
+  const digits = n => Array.from({length:n}, () => 1 + Math.floor(Math.random() * 9)).join(" ");
+  const pickDoc = () => Math.random() < .3 ? DOCS[0] : DOCS[1 + Math.floor(Math.random() * (DOCS.length - 1))];
+  let paVoice = null;
+  function chooseVoice(){
+    const vs = (window.speechSynthesis && speechSynthesis.getVoices()) || [];
+    paVoice = vs.find(v => /en[-_]US/i.test(v.lang) && /Samantha|Google US English|Microsoft (Aria|Jenny|Zira)/i.test(v.name)) || vs.find(v => /en[-_]US/i.test(v.lang)) || vs.find(v => /^en/i.test(v.lang)) || null;
   }
-  /* one distant "talker": a buzzy source through moving vowel formants, in syllables and phrases */
-  const VOWELS = [[800,1200],[400,2200],[450,800],[325,700],[300,2600],[650,1100]];
-  function voice(pitch, p, level){
-    const src = ctx.createOscillator(); src.type = "sawtooth"; src.frequency.value = pitch;
-    const f1 = ctx.createBiquadFilter(), f2 = ctx.createBiquadFilter(); f1.type = f2.type = "bandpass"; f1.Q.value = 6; f2.Q.value = 8;
-    const muffle = ctx.createBiquadFilter(); muffle.type = "lowpass"; muffle.frequency.value = 1500;
-    const g = ctx.createGain(); g.gain.value = 0;
-    src.connect(f1); src.connect(f2); f1.connect(muffle); f2.connect(muffle); muffle.connect(g); pan(g, p).connect(amb); src.start();
-    const syl = () => {
-      if (!ambOn){ later(syl, 800); return; }
-      const t = ctx.currentTime, [a, b] = VOWELS[Math.floor(Math.random() * VOWELS.length)], d = rnd(.09, .22);
-      f1.frequency.setTargetAtTime(a, t, .02); f2.frequency.setTargetAtTime(b, t, .02);
-      src.frequency.setTargetAtTime(pitch * rnd(.85, 1.2), t, .05);
-      g.gain.setTargetAtTime(level, t, .02); g.gain.setTargetAtTime(0, t + d, .03);
-      later(syl, Math.random() < .12 ? rnd(900, 2600) : (d + rnd(.03, .09)) * 1000);
-    };
-    later(syl, rnd(0, 1500));
+  if (window.speechSynthesis){ chooseVoice(); speechSynthesis.onvoiceschanged = chooseVoice; }
+  function say(text){
+    if (!window.speechSynthesis) return;
+    try { const u = new SpeechSynthesisUtterance(text); if (paVoice) u.voice = paVoice; u.lang = paVoice ? paVoice.lang : "en-US"; u.rate = .92; u.pitch = 1; u.volume = Math.min(1, pref.vol * 1.4); speechSynthesis.speak(u); } catch(e){}
+  }
+  function page(){
+    if (window.speechSynthesis && speechSynthesis.speaking) return;
+    chime();
+    later(() => { if (ambOn && pref.on) say(PAGES[Math.floor(Math.random() * PAGES.length)](pickDoc())); }, 1300);
   }
 
   /* heart monitor: tempo follows the patient on screen */
@@ -2564,23 +2567,14 @@ const SND = (() => {
     clearTimeout(beatTimer);
     if (!ambOn){ beatTimer = setTimeout(beat, 1000); return; }
     const c = patientCond, bpm = c == null ? 72 : c >= 80 ? 92 : c >= 50 ? 118 : 142;
-    beep(c != null && c < 50 ? 1040 : 980, .06, c == null ? .045 : .11, c == null ? amb : fx);
+    beep(c != null && c < 50 ? 1040 : 980, .06, c == null ? .06 : .11, c == null ? amb : fx);
     if (c != null && c < 50 && Math.random() < .18) later(() => alarm(.06), 300);
     beatTimer = setTimeout(beat, 60000 / bpm);
   }
   function alarm(level = .12){ [0, .22, .44].forEach(d => later(() => beep(880, .14, level, fx), d * 1000)); }
 
   /* occasional background events */
-  function chime(){ const t = ctx.currentTime; [[880, 0], [698, .45]].forEach(([f, d]) => { const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.value = f; o.connect(g); g.connect(amb); env(g, t + d, .05, .01, .05, 1.2); o.start(t + d); o.stop(t + d + 1.4); }); }
-  function phone(){ const t = ctx.currentTime; for (let i = 0; i < 2; i++){ [440, 480].forEach(f => { const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.value = f; o.connect(g); pan(g, .7).connect(amb); env(g, t + i * 2.6, .018, .02, 1.6, .1); o.start(t + i * 2.6); o.stop(t + i * 2.6 + 1.9); }); } }
-  function moan(){
-    const t = ctx.currentTime, o = ctx.createOscillator(), f1 = ctx.createBiquadFilter(), f2 = ctx.createBiquadFilter(), g = ctx.createGain(), base = rnd(105, 175);
-    o.type = "sawtooth"; f1.type = f2.type = "bandpass"; f1.frequency.value = 450; f2.frequency.value = 800; f1.Q.value = 7; f2.Q.value = 7;
-    o.frequency.setValueAtTime(base * 1.15, t); o.frequency.linearRampToValueAtTime(base, t + .5); o.frequency.linearRampToValueAtTime(base * .78, t + 1.9);
-    const vib = ctx.createOscillator(), vg = ctx.createGain(); vib.frequency.value = 5; vg.gain.value = 2.5; vib.connect(vg); vg.connect(o.frequency);
-    o.connect(f1); o.connect(f2); f1.connect(g); f2.connect(g); pan(g, rnd(-.9, .9)).connect(amb); env(g, t, .05, .5, .6, 1.1);
-    o.start(t); vib.start(t); o.stop(t + 2.4); vib.stop(t + 2.4);
-  }
+  function chime(){ const t = ctx.currentTime; [[880, 0], [698, .45]].forEach(([f, d]) => { const o = ctx.createOscillator(), g = ctx.createGain(); o.frequency.value = f; o.connect(g); g.connect(amb); env(g, t + d, .09, .01, .05, 1.2); o.start(t + d); o.stop(t + d + 1.4); }); }
   function siren(level = .03, secs = 9, near = false){
     const t = ctx.currentTime, o = ctx.createOscillator(), lp = ctx.createBiquadFilter(), g = ctx.createGain();
     o.type = "square"; lp.type = "lowpass"; lp.frequency.value = near ? 2600 : 1100;
@@ -2590,11 +2584,8 @@ const SND = (() => {
     g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(level, t + secs * .45); g.gain.linearRampToValueAtTime(level * (near ? .8 : 1), t + secs * .7); g.gain.linearRampToValueAtTime(0, t + secs);
     o.start(t); lfo.start(t); o.stop(t + secs + .1); lfo.stop(t + secs + .1);
   }
-  function footsteps(){ const n = 6 + Math.floor(Math.random() * 5), p = rnd(-.8, .8), step = rnd(.42, .55); for (let i = 0; i < n; i++) later(() => {
-    const t = ctx.currentTime, s = noise(), bp = ctx.createBiquadFilter(), g = ctx.createGain(); bp.type = "bandpass"; bp.frequency.value = rnd(900, 1500); bp.Q.value = 1.5;
-    s.connect(bp); bp.connect(g); pan(g, p).connect(amb); env(g, t, .05 * Math.sin(Math.PI * (i + .5) / n), .003, .01, .07); s.start(t); s.stop(t + .12); }, i * step * 1000); }
   function scheduler(){
-    const events = [[chime, 40, 85], [phone, 50, 110], [moan, 45, 95], [() => siren(), 70, 140], [footsteps, 12, 30]];
+    const events = [[page, 30, 70]];
     for (const [fn, a, b] of events){ const loop = () => { if (ambOn && ctx.state === "running") fn(); later(loop, rnd(a, b) * 1000); }; later(loop, rnd(a * .3, b * .6) * 1000); }
   }
 
@@ -2638,22 +2629,24 @@ const SND = (() => {
     enter(){
       if (!ctx && !build()) return;
       unlockIOS(); wake();
-      if (!started){ started = true; beds(); scheduler(); beat(); }
+      if (!started){ started = true; scheduler(); beat(); later(page, 6000); }
+      if (window.speechSynthesis){ try { const u = new SpeechSynthesisUtterance(" "); u.volume = 0; speechSynthesis.speak(u); } catch(e){} }
       ambOn = true; amb.gain.setTargetAtTime(1, ctx.currentTime, .8);
     },
-    leave(){ if (!ctx) return; ambOn = false; amb.gain.setTargetAtTime(0, ctx.currentTime, .4); status(); },
+    leave(){ if (window.speechSynthesis) speechSynthesis.cancel(); if (!ctx) return; ambOn = false; amb.gain.setTargetAtTime(0, ctx.currentTime, .4); status(); },
     kick(){ if (ctx && pref.on && ctx.state !== "running"){ unlockIOS(); wake(); } },
     setPatient(c){ patientCond = c; },
-    setOn(on){ pref.on = on; store.set("sore-sound", pref); if (ctx) master.gain.setTargetAtTime(on ? pref.vol : 0, ctx.currentTime, .1); },
+    setOn(on){ if (!on && window.speechSynthesis) speechSynthesis.cancel(); pref.on = on; store.set("sore-sound", pref); if (ctx) master.gain.setTargetAtTime(on ? pref.vol : 0, ctx.currentTime, .1); },
     setVol(v){ pref.vol = v; store.set("sore-sound", pref); if (ctx && pref.on) master.gain.setTargetAtTime(v, ctx.currentTime, .05); },
     ambulance(){ if (ready()) siren(.09, 6, true); },
     ct(){ if (ready()) ctWhir(); },
     harm(){ if (ready()) alarm(.13); },
     verdict(tier){ if (!ready()) return; tier === "hero" ? cheer() : tier === "fail" ? gavel() : meh(); },
+    _page: () => page(),
     _ctx: () => ctx
   };
 })();
-document.addEventListener("visibilitychange", () => { const c = SND._ctx(); if (!c) return; document.hidden ? c.suspend() : c.resume(); });
+document.addEventListener("visibilitychange", () => { if (document.hidden && window.speechSynthesis) speechSynthesis.cancel(); const c = SND._ctx(); if (!c) return; document.hidden ? c.suspend() : c.resume(); });
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[ch]));
